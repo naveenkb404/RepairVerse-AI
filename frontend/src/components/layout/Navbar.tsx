@@ -105,9 +105,12 @@ export default function Navbar({ className }: NavbarProps) {
             ))}
           </ul>
 
-          {/* Action CTA */}
-          <div className="hidden items-center lg:flex">
-            <GlassButton href={CTA_HREF} icon={<Sparkles className="size-4" />}>
+          {/* Action CTAs */}
+          <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/auth/login" variant="secondary" size="sm">
+              Sign In
+            </GlassButton>
+            <GlassButton href={CTA_HREF} size="sm" icon={<Sparkles className="size-4" />}>
               Try AI Diagnosis
             </GlassButton>
           </div>
@@ -188,8 +191,11 @@ export default function Navbar({ className }: NavbarProps) {
                   closed: { opacity: 0, x: -16 },
                 }}
                 transition={{ duration: 0.3, ease: EASE }}
-                className="pt-3"
+                className="pt-3 flex flex-col gap-2"
               >
+                <GlassButton href="/auth/login" variant="secondary" fullWidth onClick={closeMenu}>
+                  Sign In
+                </GlassButton>
                 <GlassButton href={CTA_HREF} fullWidth onClick={closeMenu} icon={<Sparkles className="size-4" />}>
                   Try AI Diagnosis
                 </GlassButton>
