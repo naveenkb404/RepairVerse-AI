@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import GlassButton from "@/components/common/GlassButton";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -247,25 +248,13 @@ export default function Hero({ className }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.34, ease: EASE }}
             className="mt-10 flex w-full flex-col gap-4 sm:w-auto sm:flex-row"
           >
-            <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="#diagnosis"
-                className="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#22C55E] to-[#06B6D4] px-7 py-3.5 text-base font-bold text-white shadow-[0_4px_24px_rgba(34,197,94,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-shadow hover:shadow-[0_0_40px_rgba(34,197,94,0.55),0_8px_32px_rgba(6,182,212,0.25)] sm:w-auto"
-              >
-                <Sparkles className="size-[18px]" aria-hidden />
-                Try AI Diagnosis
-              </Link>
-            </motion.div>
+            <GlassButton href="#ai-demo" size="lg" icon={<Sparkles className="size-[18px]" />}>
+              Try AI Diagnosis
+            </GlassButton>
 
-            <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="#features"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-7 py-3.5 text-base font-semibold text-white backdrop-blur-xl transition-colors hover:border-white/30 hover:bg-white/[0.1] sm:w-auto"
-              >
-                Explore Features
-                <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-0.5" aria-hidden />
-              </Link>
-            </motion.div>
+            <GlassButton href="#features" variant="secondary" size="lg" icon={<ArrowRight className="size-[18px]" />} iconPosition="right">
+              Explore Features
+            </GlassButton>
           </motion.div>
         </div>
 
