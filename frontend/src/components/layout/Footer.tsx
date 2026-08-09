@@ -19,7 +19,7 @@ const QUICK_LINKS = [
 ];
 
 const PLATFORM_LINKS = [
-  { label: "AI Visual Diagnosis", href: "/#ai-demo" },
+  { label: "AI Visual Diagnosis", href: "/diagnosis" },
   { label: "Repair vs Replace", href: "/#features" },
   { label: "Device Passport", href: "/#features" },
   { label: "Carbon Dashboard", href: "/carbon" },
