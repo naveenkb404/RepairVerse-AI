@@ -19,11 +19,11 @@ const QUICK_LINKS = [
 ];
 
 const PLATFORM_LINKS = [
-  { label: "AI Visual Diagnosis", href: "#ai-demo" },
-  { label: "Repair vs Replace", href: "#features" },
-  { label: "Device Passport", href: "#features" },
-  { label: "Carbon Dashboard", href: "#stats" },
-  { label: "Nearby Repair Shops", href: "#features" },
+  { label: "AI Visual Diagnosis", href: "/#ai-demo" },
+  { label: "Repair vs Replace", href: "/#features" },
+  { label: "Device Passport", href: "/#features" },
+  { label: "Carbon Dashboard", href: "/carbon" },
+  { label: "Nearby Repair Shops", href: "/#features" },
 ];
 
 const SOCIAL_LINKS = [
