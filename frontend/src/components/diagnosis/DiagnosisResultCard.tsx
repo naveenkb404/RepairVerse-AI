@@ -192,6 +192,18 @@ export default function DiagnosisResultCard({
                 </div>
               </div>
             )}
+
+            {/* Transition CTA to Phase 8 Recommendation Engine */}
+            <div className="pt-2">
+              <GlassButton
+                href={`/recommendation?diagnosisId=${encodeURIComponent(report.id)}`}
+                fullWidth
+                size="lg"
+                icon={<Sparkles className="size-4" />}
+              >
+                View Repair Plan & Recommendation →
+              </GlassButton>
+            </div>
           </div>
         </div>
       </GlassCard>
