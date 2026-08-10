@@ -10,6 +10,7 @@ import {
   Loader2,
   MapPin as MapPinIcon,
   RefreshCw,
+  ShieldCheck,
   Sparkles,
   Wifi,
   WifiOff,
@@ -375,17 +376,25 @@ function RecommendationContent() {
                 based on this repair specification.
               </p>
             </div>
-            <GlassButton
-              href={`/repair-shops?service=${encodeURIComponent(
-                recommendation.diagnosisReport?.probableIssue
-                  ? "Smartphone Repair"
-                  : "All Services"
-              )}`}
-              icon={<MapPinIcon className="size-4" />}
-              className="shrink-0"
-            >
-              Find Nearby Repair Shops
-            </GlassButton>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <GlassButton
+                href="/devices"
+                variant="secondary"
+                icon={<ShieldCheck className="size-4" />}
+              >
+                Device Passports
+              </GlassButton>
+              <GlassButton
+                href={`/repair-shops?service=${encodeURIComponent(
+                  recommendation.diagnosisReport?.probableIssue
+                    ? "Smartphone Repair"
+                    : "All Services"
+                )}`}
+                icon={<MapPinIcon className="size-4" />}
+              >
+                Find Nearby Repair Shops
+              </GlassButton>
+            </div>
           </div>
         </div>
       )}

@@ -107,6 +107,9 @@ export default function Navbar({ className }: NavbarProps) {
 
           {/* Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/devices" variant="secondary" size="sm">
+              Device Passports
+            </GlassButton>
             <GlassButton href="/auth/login" variant="secondary" size="sm">
               Sign In
             </GlassButton>
