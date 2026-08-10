@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   Loader2,
+  MapPin as MapPinIcon,
   RefreshCw,
   Sparkles,
   Wifi,
@@ -362,6 +363,30 @@ function RecommendationContent() {
             summary={recommendation.plan.summary}
             steps={recommendation.plan.steps}
           />
+
+          {/* Phase 9 CTA — Find Nearby Repair Shops */}
+          <div className="rounded-3xl border border-[#06B6D4]/30 bg-[#06B6D4]/[0.06] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h3 className="text-base font-bold text-white">
+                Need Professional Help?
+              </h3>
+              <p className="mt-1 text-xs text-[#CBD5E1]">
+                Find certified technicians and repair shops near your location
+                based on this repair specification.
+              </p>
+            </div>
+            <GlassButton
+              href={`/repair-shops?service=${encodeURIComponent(
+                recommendation.diagnosisReport?.probableIssue
+                  ? "Smartphone Repair"
+                  : "All Services"
+              )}`}
+              icon={<MapPinIcon className="size-4" />}
+              className="shrink-0"
+            >
+              Find Nearby Repair Shops
+            </GlassButton>
+          </div>
         </div>
       )}
     </div>
