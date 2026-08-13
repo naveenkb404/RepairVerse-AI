@@ -1,6 +1,5 @@
 import { AuthResponse, LoginRequest, RegisterRequest } from "@/lib/types/auth";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+import { apiClient } from "./client";
 
 /**
  * Authentication API Service Layer
@@ -9,78 +8,49 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/a
  * - POST /api/v1/auth/register
  */
 export async function loginUser(credentials: LoginRequest): Promise<AuthResponse> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: credentials.email,
-        password: credentials.password,
-      }),
-    });
+  const result = await apiClient<{ token: string; user: any }>("/auth/login", {
+    method: "POST",
+    body: {
+      email: credentials.email,
+      password: credentials.password,
+    },
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      return {
-        success: false,
-        message: errorData?.message || `Authentication failed with status ${response.status}`,
-      };
-    }
-
-    const data = await response.json();
-    return {
-      success: true,
-      message: data.message || "Login successful",
-      data: data.data || data,
-    };
-  } catch (error) {
-    // Graceful error reporting when Spring Boot backend service is not running
+  if (!result.success) {
     return {
       success: false,
-      message:
-        "Backend authentication server is currently offline or unreachable. Please verify Spring Boot API service at " +
-        API_BASE_URL,
+      message: result.message || "Authentication failed. Backend API server is offline or credentials invalid.",
     };
   }
+
+  return {
+    success: true,
+    message: result.message || "Login successful",
+    data: result.data as any,
+  };
 }
 
 export async function registerUser(userData: RegisterRequest): Promise<AuthResponse> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fullName: userData.fullName,
-        email: userData.email,
-        password: userData.password,
-        role: userData.role || "USER",
-      }),
-    });
+  const result = await apiClient<{ message?: string }>("/auth/register", {
+    method: "POST",
+    body: {
+      fullName: userData.fullName,
+      email: userData.email,
+      password: userData.password,
+      role: userData.role || "USER",
+    },
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      return {
-        success: false,
-        message: errorData?.message || `Registration failed with status ${response.status}`,
-      };
-    }
-
-    const data = await response.json();
-    return {
-      success: true,
-      message: data.message || "Registration successful",
-      data: data.data,
-    };
-  } catch (error) {
+  if (!result.success) {
     return {
       success: false,
-      message:
-        "Backend authentication server is currently offline or unreachable. Please verify Spring Boot API service at " +
-        API_BASE_URL,
+      message: result.message || "Registration failed. Backend API server is offline or data invalid.",
     };
   }
+
+  return {
+    success: true,
+    message: result.message || "Registration successful",
+    data: result.data as any,
+  };
 }

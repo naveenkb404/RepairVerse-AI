@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   AlertCircle,
@@ -12,6 +13,7 @@ import {
   Mail,
   ShieldCheck,
   Sparkles,
+  WifiOff,
 } from "lucide-react";
 
 import Container from "@/components/layout/Container";
@@ -19,10 +21,29 @@ import GlassCard from "@/components/glass/GlassCard";
 import GlassButton from "@/components/common/GlassButton";
 import Logo from "@/components/common/Logo";
 import { loginUser } from "@/lib/api/auth";
+import { useAuth } from "@/lib/context/AuthContext";
+import type { UserProfile } from "@/lib/types/user";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Reference user data for Demo/Offline Mode
+ * Explicitly labeled as demo-offline-token (never a fake JWT token)
+ */
+const DEMO_USER: UserProfile = {
+  id: "demo-user-001",
+  fullName: "Alex Johnson",
+  email: "demo@repairverse.ai",
+  role: "USER",
+  verified: true,
+  joinedAt: "2024-06-15T10:00:00Z",
+  lastLogin: new Date().toISOString(),
+};
+
 export default function LoginPage() {
+  const router = useRouter();
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -53,6 +74,14 @@ export default function LoginPage() {
     return Object.keys(errors).length === 0;
   };
 
+  const handleDemoLogin = () => {
+    setApiError(null);
+    setApiSuccess("Started Demo Session. Redirecting to your dashboard...");
+    const demoToken = "demo-offline-token";
+    login(demoToken, DEMO_USER);
+    setTimeout(() => router.push("/dashboard"), 800);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setApiError(null);
@@ -64,13 +93,30 @@ export default function LoginPage() {
 
     try {
       const result = await loginUser({ email, password, rememberMe });
-      if (result.success) {
-        setApiSuccess(result.message || "Authentication successful!");
+
+      if (result.success && result.data?.token) {
+        // Real Spring Boot backend login
+        login(result.data.token, {
+          ...result.data.user,
+          verified: true,
+          joinedAt: result.data.user.createdAt || new Date().toISOString(),
+        });
+        setApiSuccess("Authentication successful! Redirecting to your dashboard...");
+        setTimeout(() => router.push("/dashboard"), 800);
       } else {
-        setApiError(result.message || "Login failed. Please check your credentials.");
+        // If backend is unreachable or returns error, inform user and allow demo fallback
+        const isOffline = result.message?.includes("Failed to communicate") || result.message?.includes("offline");
+        if (isOffline) {
+          setApiSuccess("Spring Boot backend offline (localhost:8080). Starting Demo Session...");
+          const demoToken = "demo-offline-token";
+          login(demoToken, { ...DEMO_USER, email, fullName: email.split("@")[0] || "Demo User" });
+          setTimeout(() => router.push("/dashboard"), 1000);
+        } else {
+          setApiError(result.message || "Invalid credentials. Please check email and password.");
+        }
       }
-    } catch (err) {
-      setApiError("An unexpected client error occurred. Please try again.");
+    } catch {
+      setApiError("Client communication error. Please try again or launch Demo Mode.");
     } finally {
       setIsSubmitting(false);
     }
@@ -108,7 +154,7 @@ export default function LoginPage() {
           >
             <GlassCard padding="lg" glowColor="green" hoverEffect={false}>
               {/* Form Title & Subtitle */}
-              <div className="mb-8 text-center">
+              <div className="mb-6 text-center">
                 <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-2xl border border-white/15 bg-gradient-to-br from-[#22C55E]/20 to-[#06B6D4]/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
                   <Lock className="size-6 text-[#22C55E]" aria-hidden />
                 </div>
@@ -116,8 +162,27 @@ export default function LoginPage() {
                   Welcome Back
                 </h1>
                 <p className="mt-2 text-xs text-[#CBD5E1] sm:text-sm">
-                  Sign in to access your Device Health Passport & AI Diagnostics
+                  Sign in to access your Device Health Passport &amp; AI Diagnostics
                 </p>
+              </div>
+
+              {/* Demo Mode Banner */}
+              <div className="mb-5 rounded-2xl border border-[#06B6D4]/30 bg-[#06B6D4]/10 p-3 text-xs text-[#06B6D4] flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold flex items-center gap-1.5">
+                    <WifiOff className="size-3.5" /> Backend Offline Mode Supported
+                  </p>
+                  <p className="mt-0.5 text-white/60 text-[11px]">
+                    Spring Boot API target: <code>localhost:8080/api/v1</code>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  className="shrink-0 rounded-xl border border-[#06B6D4]/40 bg-[#06B6D4]/20 px-2.5 py-1 text-[11px] font-bold text-white transition-all hover:bg-[#06B6D4]/30"
+                >
+                  Explore Demo
+                </button>
               </div>
 
               {/* API Alert Banners */}
@@ -143,7 +208,7 @@ export default function LoginPage() {
                 >
                   <ShieldCheck className="size-4 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-white">Success</p>
+                    <p className="font-semibold text-white">Status</p>
                     <p className="mt-0.5 leading-relaxed text-white/90">{apiSuccess}</p>
                   </div>
                 </motion.div>
@@ -154,7 +219,7 @@ export default function LoginPage() {
                 {/* Email Field */}
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="login-email"
                     className="block text-xs font-semibold uppercase tracking-wider text-[#CBD5E1] mb-2"
                   >
                     Email Address
@@ -164,7 +229,7 @@ export default function LoginPage() {
                       <Mail className="size-4" aria-hidden />
                     </div>
                     <input
-                      id="email"
+                      id="login-email"
                       type="email"
                       autoComplete="email"
                       value={email}
@@ -189,7 +254,7 @@ export default function LoginPage() {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label
-                      htmlFor="password"
+                      htmlFor="login-password"
                       className="block text-xs font-semibold uppercase tracking-wider text-[#CBD5E1]"
                     >
                       Password
@@ -198,7 +263,7 @@ export default function LoginPage() {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        alert("Password reset functionality will be enabled when backend mailer service is active.");
+                        alert("Password reset requires active Spring Boot backend mailer service at localhost:8080.");
                       }}
                       className="text-xs font-medium text-[#06B6D4] transition-colors hover:text-[#22C55E]"
                     >
@@ -210,7 +275,7 @@ export default function LoginPage() {
                       <Lock className="size-4" aria-hidden />
                     </div>
                     <input
-                      id="password"
+                      id="login-password"
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
                       value={password}
@@ -253,8 +318,8 @@ export default function LoginPage() {
                   </label>
                 </div>
 
-                {/* Submit Button */}
-                <div className="pt-2">
+                {/* Submit Button & Demo Button */}
+                <div className="pt-2 flex flex-col gap-3">
                   <GlassButton
                     type="submit"
                     fullWidth
@@ -263,6 +328,17 @@ export default function LoginPage() {
                     icon={<Sparkles className="size-4" />}
                   >
                     {isSubmitting ? "Authenticating..." : "Sign In to RepairVerse"}
+                  </GlassButton>
+
+                  <GlassButton
+                    type="button"
+                    variant="secondary"
+                    fullWidth
+                    size="md"
+                    onClick={handleDemoLogin}
+                    icon={<WifiOff className="size-4 text-[#06B6D4]" />}
+                  >
+                    Launch Demo Session (Offline)
                   </GlassButton>
                 </div>
               </form>

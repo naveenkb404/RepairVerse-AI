@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, Sparkles, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
 
 import Logo from "@/components/common/Logo";
 import GlassButton from "@/components/common/GlassButton";
 import Container from "@/components/layout/Container";
+import { useAuth } from "@/lib/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -56,6 +57,7 @@ function NavLink({
 }
 
 export default function Navbar({ className }: NavbarProps) {
+  const { user, isLoggedIn, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -74,6 +76,10 @@ export default function Navbar({ className }: NavbarProps) {
   }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
+
+  const initials = user?.fullName
+    ? user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "U";
 
   return (
     <motion.header
@@ -107,15 +113,46 @@ export default function Navbar({ className }: NavbarProps) {
 
           {/* Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/repair-history" variant="secondary" size="sm">
+              Repair History
+            </GlassButton>
             <GlassButton href="/devices" variant="secondary" size="sm">
               Device Passports
             </GlassButton>
-            <GlassButton href="/auth/login" variant="secondary" size="sm">
-              Sign In
-            </GlassButton>
-            <GlassButton href={CTA_HREF} size="sm" icon={<Sparkles className="size-4" />}>
-              Try AI Diagnosis
-            </GlassButton>
+
+            {isLoggedIn ? (
+              <>
+                <GlassButton href="/dashboard" size="sm" icon={<LayoutDashboard className="size-4" />}>
+                  Dashboard
+                </GlassButton>
+                <div className="flex items-center gap-2 pl-2 border-l border-white/15">
+                  <Link
+                    href="/dashboard/profile"
+                    className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-[#22C55E] to-[#06B6D4] text-xs font-bold text-white shadow-[0_0_12px_rgba(34,197,94,0.3)] hover:scale-105 transition-transform"
+                    title={user?.fullName || "User Profile"}
+                  >
+                    {initials}
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/10 transition-colors focus:outline-none"
+                    title="Sign Out"
+                    aria-label="Sign Out"
+                  >
+                    <LogOut className="size-4" />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <GlassButton href="/auth/login" variant="secondary" size="sm">
+                  Sign In
+                </GlassButton>
+                <GlassButton href={CTA_HREF} size="sm" icon={<Sparkles className="size-4" />}>
+                  Try AI Diagnosis
+                </GlassButton>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -196,12 +233,40 @@ export default function Navbar({ className }: NavbarProps) {
                 transition={{ duration: 0.3, ease: EASE }}
                 className="pt-3 flex flex-col gap-2"
               >
-                <GlassButton href="/auth/login" variant="secondary" fullWidth onClick={closeMenu}>
-                  Sign In
+                <GlassButton href="/repair-history" variant="secondary" fullWidth onClick={closeMenu}>
+                  Repair History
                 </GlassButton>
-                <GlassButton href={CTA_HREF} fullWidth onClick={closeMenu} icon={<Sparkles className="size-4" />}>
-                  Try AI Diagnosis
+                <GlassButton href="/devices" variant="secondary" fullWidth onClick={closeMenu}>
+                  Device Passports
                 </GlassButton>
+
+                {isLoggedIn ? (
+                  <>
+                    <GlassButton href="/dashboard" fullWidth onClick={closeMenu} icon={<LayoutDashboard className="size-4" />}>
+                      User Dashboard ({user?.fullName || "Account"})
+                    </GlassButton>
+                    <GlassButton
+                      variant="secondary"
+                      fullWidth
+                      onClick={() => {
+                        closeMenu();
+                        logout();
+                      }}
+                      icon={<LogOut className="size-4 text-red-400" />}
+                    >
+                      Sign Out
+                    </GlassButton>
+                  </>
+                ) : (
+                  <>
+                    <GlassButton href="/auth/login" variant="secondary" fullWidth onClick={closeMenu}>
+                      Sign In
+                    </GlassButton>
+                    <GlassButton href={CTA_HREF} fullWidth onClick={closeMenu} icon={<Sparkles className="size-4" />}>
+                      Try AI Diagnosis
+                    </GlassButton>
+                  </>
+                )}
               </motion.li>
             </motion.ul>
           </motion.div>
