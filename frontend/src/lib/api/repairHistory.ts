@@ -4,9 +4,9 @@ import {
   RepairHistoryListApiResponse,
   RepairHistorySummary,
 } from "@/lib/types/repairHistory";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+import { apiClient } from "@/lib/api/client";
+import { API_BASE_URL } from "@/lib/config";
+import { isDemoSession } from "@/lib/demo";
 
 // ─── Sample Reference Data for Demo/Offline Mode ─────────────────────────────
 export const SAMPLE_REPAIR_HISTORY: RepairHistoryItem[] = [
@@ -344,91 +344,66 @@ export const SAMPLE_REPAIR_HISTORY: RepairHistoryItem[] = [
 // ─── API Client Functions ─────────────────────────────────────────────────────
 
 export async function fetchRepairHistory(
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<RepairHistoryListApiResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(`${API_BASE_URL}/repair-history`, {
-      method: "GET",
-      headers,
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      // Fall through to demo mode if backend returns error
-      if (response.status === 404 || response.status >= 500) {
-        return { success: true, data: SAMPLE_REPAIR_HISTORY, isDemo: true };
-      }
-      return {
-        success: false,
-        isDemo: true,
-        message:
-          err?.message ||
-          `Failed to fetch repair history (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data, isDemo: false };
-  } catch {
-    // Demo Mode Fallback when Spring Boot backend is offline
+  if (isDemoSession(token)) {
     return {
       success: true,
       data: SAMPLE_REPAIR_HISTORY,
       isDemo: true,
     };
   }
+
+  const result = await apiClient<RepairHistoryItem[]>("/repair-history", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data && Array.isArray(result.data)) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  // Demo Mode Fallback when Spring Boot backend is offline
+  return {
+    success: true,
+    data: SAMPLE_REPAIR_HISTORY,
+    isDemo: true,
+    message: `Backend repair history service at ${API_BASE_URL}/repair-history is offline. Displaying sample records.`,
+  };
 }
 
 export async function fetchRepairHistoryById(
   repairId: string,
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<RepairHistoryDetailApiResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(
-      `${API_BASE_URL}/repair-history/${repairId}`,
-      {
-        method: "GET",
-        headers,
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      // Fall through to demo mode for server errors
-      if (response.status >= 500) {
-        const found = SAMPLE_REPAIR_HISTORY.find((item) => item.id === repairId);
-        if (found) return { success: true, data: found, isDemo: true };
-      }
-      const err = await response.json().catch(() => null);
-      return {
-        success: false,
-        isDemo: true,
-        message:
-          err?.message || `Repair record not found (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data, isDemo: false };
-  } catch {
-    // Demo Mode Fallback
+  if (isDemoSession(token)) {
     const found = SAMPLE_REPAIR_HISTORY.find((item) => item.id === repairId);
-    if (found) {
-      return { success: true, data: found, isDemo: true };
-    }
-    return {
-      success: false,
-      isDemo: true,
-      message: "Repair record not found or backend API offline.",
-    };
+    if (found) return { success: true, data: found, isDemo: true };
   }
+
+  const result = await apiClient<RepairHistoryItem>(`/repair-history/${repairId}`, {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  // Demo Mode Fallback
+  const found = SAMPLE_REPAIR_HISTORY.find((item) => item.id === repairId);
+  if (found) {
+    return { success: true, data: found, isDemo: true };
+  }
+  return {
+    success: false,
+    isDemo: true,
+    message: "Repair record not found or backend API offline.",
+  };
 }
 
 export function computeRepairHistorySummary(
@@ -461,3 +436,4 @@ export function computeRepairHistorySummary(
     totalEwasteReducedKg: Number(totalEwasteReducedKg.toFixed(2)),
   };
 }
+

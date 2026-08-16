@@ -1,4 +1,7 @@
-import { ApiResponse } from "@/lib/types/auth";
+import { apiClient } from "@/lib/api/client";
+import { API_BASE_URL } from "@/lib/config";
+import { isDemoSession } from "@/lib/demo";
+import type { ApiResponse } from "@/lib/types/auth";
 
 // ─── Carbon Types ─────────────────────────────────────────────────────────────
 
@@ -38,62 +41,98 @@ export type CarbonDashboardData = {
   trend: CarbonTrendPoint[];
   recentActivity: CarbonRepairActivity[];
   sustainabilityScore: number; // 0–100
+  isDemoData?: boolean;
 };
 
 export type CarbonDashboardResponse = ApiResponse<CarbonDashboardData>;
 
-// ─── Carbon API Service ───────────────────────────────────────────────────────
+// ─── Reference Sample Data for Demo/Offline Mode ─────────────────────────────
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+export const SAMPLE_CARBON_DATA: CarbonDashboardData = {
+  impact: {
+    co2Saved: 142.8,
+    ewasteReduced: 4.85,
+    moneySaved: 1250,
+    repairCount: 8,
+  },
+  sustainabilityScore: 88,
+  trend: [
+    { period: "Sep", co2Saved: 12.4, moneySaved: 120 },
+    { period: "Oct", co2Saved: 28.1, moneySaved: 250 },
+    { period: "Nov", co2Saved: 49.3, moneySaved: 480 },
+    { period: "Dec", co2Saved: 78.6, moneySaved: 710 },
+    { period: "Jan", co2Saved: 110.2, moneySaved: 990 },
+    { period: "Feb", co2Saved: 142.8, moneySaved: 1250 },
+  ],
+  recentActivity: [
+    {
+      id: "act-1",
+      deviceName: "iPhone 13 Pro",
+      repairType: "OLED Screen & Battery Replacement",
+      repairDate: "2026-02-10",
+      co2Avoided: 58.2,
+      ewasteAvoided: 0.24,
+      moneySaved: 680,
+    },
+    {
+      id: "act-2",
+      deviceName: "MacBook Pro 16\" (M1)",
+      repairType: "Logic Board Capacitor Micro-soldering",
+      repairDate: "2026-01-18",
+      co2Avoided: 64.5,
+      ewasteAvoided: 2.1,
+      moneySaved: 450,
+    },
+    {
+      id: "act-3",
+      deviceName: "Sony WH-1000XM4",
+      repairType: "ANC Hinge & Left Driver Repair",
+      repairDate: "2025-12-04",
+      co2Avoided: 20.1,
+      ewasteAvoided: 0.25,
+      moneySaved: 120,
+    },
+  ],
+  isDemoData: true,
+};
+
+// ─── Carbon API Service ───────────────────────────────────────────────────────
 
 /**
  * Fetch the authenticated user's carbon impact dashboard data.
- * Corresponds to: GET /api/v1/carbon  (documented in docs/API_SPEC.md)
- *
- * NOTE: The Spring Boot backend is not yet implemented.
- * This service layer is ready for integration once the backend
- * CarbonController / CarbonService is deployed.
+ * Corresponds to: GET /api/v1/carbon (docs/API_SPEC.md)
  */
 export async function fetchCarbonDashboard(
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<CarbonDashboardResponse> {
-  try {
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-    };
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    const response = await fetch(`${API_BASE_URL}/carbon`, {
-      method: "GET",
-      headers,
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      return {
-        success: false,
-        message:
-          errorData?.message ||
-          `Carbon dashboard request failed with status ${response.status}`,
-      };
-    }
-
-    const data = await response.json();
+  // If demo session, return sample immediately
+  if (isDemoSession(token)) {
     return {
       success: true,
-      data: data.data || data,
-    };
-  } catch {
-    return {
-      success: false,
-      message:
-        "Carbon Impact backend service is currently offline. " +
-        "Start the Spring Boot API at " +
-        API_BASE_URL +
-        " to load live data.",
+      message: "Sample carbon data loaded (Demo Session)",
+      data: SAMPLE_CARBON_DATA,
     };
   }
+
+  const result = await apiClient<CarbonDashboardData>("/carbon", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return {
+      success: true,
+      data: { ...result.data, isDemoData: false },
+      message: result.message || "Live carbon impact data loaded",
+    };
+  }
+
+  // Fallback to sample data with explicit demo message
+  return {
+    success: true,
+    message: `Backend service at ${API_BASE_URL}/carbon is offline. Displaying reference metrics.`,
+    data: SAMPLE_CARBON_DATA,
+  };
 }

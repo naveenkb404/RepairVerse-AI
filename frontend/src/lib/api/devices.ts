@@ -6,9 +6,9 @@ import {
   DevicePassportData,
   DevicePassportResponse,
 } from "@/lib/types/device";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+import { apiClient } from "@/lib/api/client";
+import { API_BASE_URL } from "@/lib/config";
+import { isDemoSession } from "@/lib/demo";
 
 // ─── Sample Reference Data for Demo/Offline Mode ─────────────────────────────
 export const SAMPLE_DEVICES: Device[] = [
@@ -261,169 +261,131 @@ export const SAMPLE_PASSPORTS: Record<string, DevicePassportData> = {
 
 // ─── API Functions ────────────────────────────────────────────────────────────
 
-export async function fetchUserDevices(token?: string): Promise<DeviceListResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(`${API_BASE_URL}/devices`, {
-      method: "GET",
-      headers,
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      return {
-        success: false,
-        message: err?.message || `Failed to fetch devices (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data };
-  } catch {
-    // Offline / Demo fallback
+export async function fetchUserDevices(
+  token?: string,
+  signal?: AbortSignal
+): Promise<DeviceListResponse> {
+  if (isDemoSession(token)) {
     return {
       success: true,
       data: SAMPLE_DEVICES,
     };
   }
+
+  const result = await apiClient<Device[]>("/devices", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data && Array.isArray(result.data)) {
+    return { success: true, data: result.data };
+  }
+
+  // Offline / Demo fallback
+  return {
+    success: true,
+    data: SAMPLE_DEVICES,
+    message: `Backend devices service at ${API_BASE_URL}/devices is offline. Displaying sample devices.`,
+  };
 }
 
 export async function fetchDeviceById(
   deviceId: string,
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<DeviceDetailResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(`${API_BASE_URL}/devices/${deviceId}`, {
-      method: "GET",
-      headers,
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      return {
-        success: false,
-        message: err?.message || `Device not found (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data };
-  } catch {
-    // Offline / Demo fallback
+  if (isDemoSession(token)) {
     const found = SAMPLE_DEVICES.find((d) => d.id === deviceId);
-    if (found) {
-      return { success: true, data: found };
-    }
-    return {
-      success: false,
-      message: "Device not found or backend API offline.",
-    };
+    if (found) return { success: true, data: found };
   }
+
+  const result = await apiClient<Device>(`/devices/${deviceId}`, {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data };
+  }
+
+  // Offline / Demo fallback
+  const found = SAMPLE_DEVICES.find((d) => d.id === deviceId);
+  if (found) {
+    return { success: true, data: found };
+  }
+  return {
+    success: false,
+    message: "Device not found or backend API offline.",
+  };
 }
 
 export async function fetchDevicePassport(
   deviceId: string,
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<DevicePassportResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(
-      `${API_BASE_URL}/devices/${deviceId}/passport`,
-      {
-        method: "GET",
-        headers,
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      return {
-        success: false,
-        message:
-          err?.message ||
-          `Device passport request failed (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data };
-  } catch {
-    // Offline / Demo fallback
+  if (isDemoSession(token)) {
     const samplePassport = SAMPLE_PASSPORTS[deviceId];
-    if (samplePassport) {
-      return { success: true, data: samplePassport };
-    }
+    if (samplePassport) return { success: true, data: samplePassport };
+  }
 
-    // Default synthesized passport if device exists in sample list
-    const foundDevice = SAMPLE_DEVICES.find((d) => d.id === deviceId);
-    if (foundDevice) {
-      return {
-        success: true,
-        data: {
-          device: foundDevice,
-          health: {
-            deviceId: foundDevice.id,
-            healthScore: 85,
-            batteryHealth: 90,
-            lastService: foundDevice.createdAt?.split("T")[0],
-            aiPrediction: "Device operating normally.",
-          },
-          lifecycleTimeline: [
-            {
-              id: `evt_${foundDevice.id}`,
-              date: foundDevice.createdAt?.split("T")[0] || "2023-01-01",
-              title: "Device Registered",
-              type: "purchase",
-              description: "Initialized digital passport.",
-            },
-          ],
-        },
-      };
-    }
+  const result = await apiClient<DevicePassportData>(`/devices/${deviceId}/passport`, {
+    method: "GET",
+    token,
+    signal,
+  });
 
+  if (result.success && result.data) {
+    return { success: true, data: result.data };
+  }
+
+  // Offline / Demo fallback
+  const samplePassport = SAMPLE_PASSPORTS[deviceId];
+  if (samplePassport) {
+    return { success: true, data: samplePassport };
+  }
+
+  // Default synthesized passport if device exists in sample list
+  const foundDevice = SAMPLE_DEVICES.find((d) => d.id === deviceId);
+  if (foundDevice) {
     return {
-      success: false,
-      message: "Device passport service is offline or device was not found.",
+      success: true,
+      data: {
+        device: foundDevice,
+        health: {
+          deviceId: foundDevice.id,
+          healthScore: 85,
+          batteryHealth: 90,
+          lastService: foundDevice.createdAt?.split("T")[0],
+          aiPrediction: "Device operating normally.",
+        },
+        lifecycleTimeline: [
+          {
+            id: `evt_${foundDevice.id}`,
+            date: foundDevice.createdAt?.split("T")[0] || "2023-01-01",
+            title: "Device Registered",
+            type: "purchase",
+            description: "Initialized digital passport.",
+          },
+        ],
+      },
     };
   }
+
+  return {
+    success: false,
+    message: "Device passport service is offline or device was not found.",
+  };
 }
 
 export async function createDevice(
   deviceData: CreateDeviceRequest,
-  token?: string
+  token?: string,
+  signal?: AbortSignal
 ): Promise<DeviceDetailResponse> {
-  try {
-    const headers: HeadersInit = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const response = await fetch(`${API_BASE_URL}/devices`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(deviceData),
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      return {
-        success: false,
-        message: err?.message || `Device creation failed (HTTP ${response.status})`,
-      };
-    }
-
-    const data = await response.json();
-    return { success: true, data: data.data || data };
-  } catch {
-    // Demo mode device creation
+  if (isDemoSession(token)) {
     const newDevice: Device = {
       id: `dev_demo_${Date.now()}`,
       deviceName: deviceData.deviceName,
@@ -465,6 +427,117 @@ export async function createDevice(
       ],
     };
 
-    return { success: true, data: newDevice };
+    return {
+      success: true,
+      data: newDevice,
+      message: "Device registered locally in Demo Mode. Connect Spring Boot backend for cloud persistence.",
+    };
   }
+
+  const result = await apiClient<Device>("/devices", {
+    method: "POST",
+    body: deviceData,
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data };
+  }
+
+  // Demo fallback on offline
+  const newDevice: Device = {
+    id: `dev_demo_${Date.now()}`,
+    deviceName: deviceData.deviceName,
+    category: deviceData.category,
+    brand: deviceData.brand,
+    model: deviceData.model,
+    serialNumber: deviceData.serialNumber || undefined,
+    purchaseDate: deviceData.purchaseDate || undefined,
+    warrantyExpiry: deviceData.warrantyExpiry || undefined,
+    purchasePrice: deviceData.purchasePrice,
+    currentCondition: deviceData.currentCondition,
+    createdAt: new Date().toISOString(),
+  };
+
+  SAMPLE_DEVICES.unshift(newDevice);
+  return {
+    success: true,
+    data: newDevice,
+    message: `Backend API at ${API_BASE_URL}/devices is offline. Device registered locally in Demo Mode.`,
+  };
 }
+
+export async function updateDevice(
+  deviceId: string,
+  deviceData: Partial<CreateDeviceRequest>,
+  token?: string,
+  signal?: AbortSignal
+): Promise<DeviceDetailResponse> {
+  if (isDemoSession(token)) {
+    const idx = SAMPLE_DEVICES.findIndex((d) => d.id === deviceId);
+    if (idx !== -1) {
+      SAMPLE_DEVICES[idx] = { ...SAMPLE_DEVICES[idx], ...deviceData };
+      return { success: true, data: SAMPLE_DEVICES[idx] };
+    }
+  }
+
+  const result = await apiClient<Device>(`/devices/${deviceId}`, {
+    method: "PUT",
+    body: deviceData,
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data };
+  }
+
+  const idx = SAMPLE_DEVICES.findIndex((d) => d.id === deviceId);
+  if (idx !== -1) {
+    SAMPLE_DEVICES[idx] = { ...SAMPLE_DEVICES[idx], ...deviceData };
+    return {
+      success: true,
+      data: SAMPLE_DEVICES[idx],
+      message: "Device updated locally (Demo Mode)",
+    };
+  }
+
+  return { success: false, message: result.message || "Failed to update device" };
+}
+
+export async function deleteDevice(
+  deviceId: string,
+  token?: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; message?: string }> {
+  if (isDemoSession(token)) {
+    const idx = SAMPLE_DEVICES.findIndex((d) => d.id === deviceId);
+    if (idx !== -1) {
+      SAMPLE_DEVICES.splice(idx, 1);
+    }
+    return { success: true, message: "Device removed (Demo Mode)" };
+  }
+
+  const result = await apiClient(`/devices/${deviceId}`, {
+    method: "DELETE",
+    token,
+    signal,
+  });
+
+  if (result.success) {
+    return { success: true, message: result.message || "Device deleted successfully" };
+  }
+
+  const idx = SAMPLE_DEVICES.findIndex((d) => d.id === deviceId);
+  if (idx !== -1) {
+    SAMPLE_DEVICES.splice(idx, 1);
+    return {
+      success: true,
+      message: `Backend API offline. Device removed locally from view.`,
+    };
+  }
+
+  return { success: false, message: result.message || "Failed to delete device" };
+}
+

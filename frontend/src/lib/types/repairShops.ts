@@ -6,6 +6,7 @@ import { ApiResponse } from "@/lib/types/auth";
 export type RepairShop = {
   id: string;
   shopName: string;
+  name?: string;
   ownerName?: string;
   address: string;
   latitude?: number;
@@ -13,11 +14,19 @@ export type RepairShop = {
   rating: number; // 0.0 – 5.0
   reviewCount?: number;
   phone?: string;
+  email?: string;
   website?: string;
+  hours?: string;
+  services?: string[];
   serviceCategories?: string[];
+  certifiedBrands?: string[];
+  estimatedTurnaround?: string;
+  avgPrice?: string;
   isVerified?: boolean;
+  verified?: boolean;
   isOpen?: boolean;
   distanceKm?: number;
+  ecoCertified?: boolean;
 };
 
 export type RepairShopSearchRequest = {

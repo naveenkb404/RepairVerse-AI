@@ -134,7 +134,8 @@ export default function Navbar({ className }: NavbarProps) {
                     {initials}
                   </Link>
                   <button
-                    onClick={logout}
+                    type="button"
+                    onClick={() => logout()}
                     className="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/10 transition-colors focus:outline-none"
                     title="Sign Out"
                     aria-label="Sign Out"

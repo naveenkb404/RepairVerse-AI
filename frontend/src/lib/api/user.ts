@@ -1,29 +1,13 @@
+import { apiClient } from "@/lib/api/client";
+import { API_BASE_URL } from "@/lib/config";
+import { isDemoSession, DEMO_USER_PROFILE } from "@/lib/demo";
 import type { UserProfile, DashboardStats, ActivityItem, Notification } from "@/lib/types/user";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 // ---------------------------------------------------------------------------
 // Sample reference data (displayed when Spring Boot backend is offline)
 // ---------------------------------------------------------------------------
 
-export const SAMPLE_PROFILE: UserProfile = {
-  id: "demo-user-001",
-  fullName: "Alex Johnson",
-  email: "alex.johnson@example.com",
-  role: "USER",
-  phone: "+1 (555) 012-3456",
-  location: "San Francisco, CA",
-  bio: "Electronics enthusiast and sustainability advocate. I believe in repairing over replacing.",
-  joinedAt: "2024-06-15T10:00:00Z",
-  lastLogin: new Date().toISOString(),
-  verified: true,
-  preferences: {
-    notifications: true,
-    newsletter: true,
-    theme: "dark",
-    language: "en",
-  },
-};
+export const SAMPLE_PROFILE: UserProfile = DEMO_USER_PROFILE;
 
 export const SAMPLE_STATS: DashboardStats = {
   totalDevices: 4,
@@ -39,7 +23,7 @@ export const SAMPLE_ACTIVITY: ActivityItem[] = [
     id: "act-001",
     type: "repair_complete",
     title: "iPhone 13 Screen Repair Completed",
-    description: "Screen replaced successfully at iRepair Pro. 6-month warranty active.",
+    description: "Screen replaced successfully at TechCare Express. 6-month warranty active.",
     timestamp: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
     deviceName: "iPhone 13",
     iconColor: "green",
@@ -74,7 +58,7 @@ export const SAMPLE_ACTIVITY: ActivityItem[] = [
   {
     id: "act-005",
     type: "shop_booked",
-    title: "Appointment Booked — TechFix Center",
+    title: "Appointment Booked — GreenCircuit Lab",
     description: "Screen repair appointment confirmed for MacBook Pro.",
     timestamp: new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(),
     iconColor: "green",
@@ -86,7 +70,7 @@ export const SAMPLE_NOTIFICATIONS: Notification[] = [
     id: "notif-001",
     type: "repair",
     title: "Repair Completed",
-    message: "Your iPhone 13 screen repair is complete and ready for pickup at iRepair Pro.",
+    message: "Your iPhone 13 screen repair is complete and ready for pickup at TechCare Express.",
     isRead: false,
     createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
     actionUrl: "/repair-history",
@@ -142,93 +126,166 @@ export const SAMPLE_NOTIFICATIONS: Notification[] = [
 // ---------------------------------------------------------------------------
 
 /** Fetch current authenticated user profile */
-export async function fetchUserProfile(token: string): Promise<{ success: boolean; data?: UserProfile; message?: string }> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/users/profile`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return { success: true, data: json.data || json };
-  } catch {
-    // Offline fallback
-    return { success: true, data: SAMPLE_PROFILE };
+export async function fetchUserProfile(
+  token: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; data?: UserProfile; message?: string; isDemo?: boolean }> {
+  if (isDemoSession(token)) {
+    return { success: true, data: SAMPLE_PROFILE, isDemo: true };
   }
+
+  const result = await apiClient<UserProfile>("/users/profile", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  return {
+    success: true,
+    data: SAMPLE_PROFILE,
+    isDemo: true,
+    message: `Backend profile service at ${API_BASE_URL}/users/profile is offline. Displaying demo user profile.`,
+  };
 }
 
 /** Fetch dashboard statistics */
-export async function fetchDashboardStats(token: string): Promise<{ success: boolean; data?: DashboardStats }> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/dashboard`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return { success: true, data: json.data || json };
-  } catch {
-    return { success: true, data: SAMPLE_STATS };
+export async function fetchDashboardStats(
+  token: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; data?: DashboardStats; isDemo?: boolean }> {
+  if (isDemoSession(token)) {
+    return { success: true, data: SAMPLE_STATS, isDemo: true };
   }
+
+  const result = await apiClient<DashboardStats>("/dashboard", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  return { success: true, data: SAMPLE_STATS, isDemo: true };
 }
 
 /** Fetch activity feed */
-export async function fetchActivity(token: string): Promise<{ success: boolean; data?: ActivityItem[] }> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/dashboard/activity`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return { success: true, data: json.data || json };
-  } catch {
-    return { success: true, data: SAMPLE_ACTIVITY };
+export async function fetchActivity(
+  token: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; data?: ActivityItem[]; isDemo?: boolean }> {
+  if (isDemoSession(token)) {
+    return { success: true, data: SAMPLE_ACTIVITY, isDemo: true };
   }
+
+  const result = await apiClient<ActivityItem[]>("/dashboard/activity", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  return { success: true, data: SAMPLE_ACTIVITY, isDemo: true };
 }
 
 /** Fetch user notifications */
-export async function fetchNotifications(token: string): Promise<{ success: boolean; data?: Notification[] }> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/notifications`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return { success: true, data: json.data || json };
-  } catch {
-    return { success: true, data: SAMPLE_NOTIFICATIONS };
+export async function fetchNotifications(
+  token: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; data?: Notification[]; isDemo?: boolean }> {
+  if (isDemoSession(token)) {
+    return { success: true, data: SAMPLE_NOTIFICATIONS, isDemo: true };
   }
+
+  const result = await apiClient<Notification[]>("/notifications", {
+    method: "GET",
+    token,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, isDemo: false };
+  }
+
+  return { success: true, data: SAMPLE_NOTIFICATIONS, isDemo: true };
 }
 
 /** Mark a notification as read */
-export async function markNotificationRead(token: string, notifId: string): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/notifications/${notifId}/read`, {
-      method: "PUT",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  } catch {
-    // Silently fail for offline scenario
+export async function markNotificationRead(
+  token: string,
+  notifId: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; message?: string }> {
+  if (isDemoSession(token)) {
+    const notif = SAMPLE_NOTIFICATIONS.find((n) => n.id === notifId);
+    if (notif) notif.isRead = true;
+    return { success: true, message: "Notification marked as read (Demo Mode)" };
   }
+
+  const result = await apiClient(`/notifications/${notifId}/read`, {
+    method: "PUT",
+    token,
+    signal,
+  });
+
+  return { success: result.success, message: result.message };
+}
+
+/** Mark all notifications as read */
+export async function markAllNotificationsRead(
+  token: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean; message?: string }> {
+  if (isDemoSession(token)) {
+    SAMPLE_NOTIFICATIONS.forEach((n) => (n.isRead = true));
+    return { success: true, message: "All notifications marked as read (Demo Mode)" };
+  }
+
+  const result = await apiClient("/notifications/read-all", {
+    method: "PUT",
+    token,
+    signal,
+  });
+
+  return { success: result.success, message: result.message };
 }
 
 /** Update user profile */
 export async function updateUserProfile(
   token: string,
-  data: Partial<UserProfile>
+  data: Partial<UserProfile>,
+  signal?: AbortSignal
 ): Promise<{ success: boolean; data?: UserProfile; message?: string }> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/users/profile`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return { success: true, data: json.data || json };
-  } catch {
-    // Return the submitted data merged with sample as offline response
-    return { success: true, data: { ...SAMPLE_PROFILE, ...data } };
+  if (isDemoSession(token)) {
+    const updated = { ...SAMPLE_PROFILE, ...data };
+    return {
+      success: true,
+      data: updated,
+      message: "Profile updated locally (Demo Mode). Connect backend to persist across devices.",
+    };
   }
+
+  const result = await apiClient<UserProfile>("/users/profile", {
+    method: "PUT",
+    token,
+    body: data,
+    signal,
+  });
+
+  if (result.success && result.data) {
+    return { success: true, data: result.data, message: result.message || "Profile updated successfully" };
+  }
+
+  return {
+    success: false,
+    message: result.message || `Failed to update profile. Backend API at ${API_BASE_URL}/users/profile is offline.`,
+  };
 }

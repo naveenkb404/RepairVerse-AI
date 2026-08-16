@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import type { Notification } from "@/lib/types/user";
-import { fetchNotifications, markNotificationRead } from "@/lib/api/user";
+import { fetchNotifications, markNotificationRead, markAllNotificationsRead } from "@/lib/api/user";
 import { useAuth } from "@/lib/context/AuthContext";
 import GlassButton from "@/components/common/GlassButton";
 import { cn } from "@/lib/utils";
@@ -143,8 +143,7 @@ export default function NotificationsPage() {
   };
 
   const handleMarkAllRead = async () => {
-    const unread = notifications.filter((n) => !n.isRead);
-    await Promise.all(unread.map((n) => markNotificationRead(token ?? "", n.id)));
+    await markAllNotificationsRead(token ?? "");
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
   };
 
