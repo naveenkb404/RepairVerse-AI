@@ -29,18 +29,18 @@ backend/
     ├── main/
     │   ├── java/com/repairverse/ai/
     │   │   ├── config/          # SecurityConfig, CorsConfig, CloudinaryConfig, AppProperties
-    │   │   ├── controller/      # AuthController, DiagnosisController, RepairAnalysisController
-    │   │   ├── dto/             # AuthRequest, AuthResponse, DiagnosisResponseDto, GeminiVisionResponse, RecommendationRequest, RecommendationResponseDto, ErrorResponse
-    │   │   ├── entity/          # User, Role, Device, DiagnosisReport, AIRecommendation, RepairGuide
+    │   │   ├── controller/      # AuthController, DiagnosisController, RepairAnalysisController, DeviceController
+    │   │   ├── dto/             # AuthRequest, AuthResponse, DiagnosisResponseDto, GeminiVisionResponse, RecommendationRequest, RecommendationResponseDto, DeviceDto, DevicePassportDto, ErrorResponse
+    │   │   ├── entity/          # User, Role, Device, DeviceHealth, DiagnosisReport, AIRecommendation, RepairGuide
     │   │   ├── exception/       # GlobalExceptionHandler, Custom Exceptions
-    │   │   ├── repository/      # UserRepository, DiagnosisReportRepository, AIRecommendationRepository, RepairGuideRepository
+    │   │   ├── repository/      # UserRepository, DeviceRepository, DeviceHealthRepository, DiagnosisReportRepository, AIRecommendationRepository, RepairGuideRepository
     │   │   ├── security/        # JwtTokenProvider, JwtAuthenticationFilter, CustomUserDetailsService, UserPrincipal
-    │   │   └── service/         # AuthService, DiagnosisService, AiVisionService, CloudinaryService, RepairAnalysisService
+    │   │   └── service/         # AuthService, DiagnosisService, AiVisionService, CloudinaryService, RepairAnalysisService, DeviceService, DevicePassportService
     │   └── resources/
     │       ├── application.yml
     │       ├── application-test.yml
-    │       └── db/migration/    # Flyway schema scripts (V1__init_schema.sql, V2__diagnosis_reports_update.sql, V3__ai_recommendations_and_guides_update.sql)
-    └── test/                    # AuthServiceTest, AuthControllerTest, DiagnosisServiceTest, DiagnosisControllerTest, AiVisionServiceTest, CloudinaryServiceTest, RepairAnalysisServiceTest, RepairAnalysisControllerTest
+    │       └── db/migration/    # Flyway schema scripts (V1__init_schema.sql, V2__diagnosis_reports_update.sql, V3__ai_recommendations_and_guides_update.sql, V4__devices_update.sql)
+    └── test/                    # AuthServiceTest, AuthControllerTest, DiagnosisServiceTest, DiagnosisControllerTest, AiVisionServiceTest, CloudinaryServiceTest, RepairAnalysisServiceTest, RepairAnalysisControllerTest, DeviceServiceTest, DevicePassportServiceTest, DeviceControllerTest
 ```
 
 ---
@@ -177,6 +177,40 @@ Content-Type: application/json
 
 ---
 
+## 📱 Device Registry & Digital Health Passport Engine (Phase 17)
+
+Base URL: `http://localhost:8080/api/v1`
+
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/devices` | Authenticated | List all devices registered to the authenticated user. |
+| `GET` | `/devices/{id}` | Authenticated | Retrieve device details by ID with ownership validation. |
+| `POST` | `/devices` | Authenticated | Register new device with automatic Health Passport initialization. |
+| `PUT` | `/devices/{id}` | Authenticated | Update device information (condition, warranty, price). |
+| `DELETE` | `/devices/{id}` | Authenticated | Remove device and cascade associated health passport data. |
+| `GET` | `/devices/{id}/passport` | Authenticated | Retrieve aggregated Digital Health Passport (telemetry, AI diagnoses, lifecycle). |
+
+### Sample Device Registration
+```json
+POST /api/v1/devices
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "deviceName": "Personal iPhone 14 Pro",
+  "category": "Smartphone",
+  "brand": "Apple",
+  "model": "iPhone 14 Pro (128GB)",
+  "serialNumber": "F2LX9001K992",
+  "purchaseDate": "2023-01-15",
+  "warrantyExpiry": "2024-01-15",
+  "purchasePrice": 999.0,
+  "currentCondition": "Good"
+}
+```
+
+---
+
 ## 🛡️ Security Blueprint
 
 1. **Zero Secret Hardcoding**: Secrets (`JWT_SECRET`, Cloudinary secrets, Gemini API keys, DB passwords) are managed exclusively in backend environment variables.
@@ -184,3 +218,4 @@ Content-Type: application/json
 3. **Safe Error Handling**: `GlobalExceptionHandler` ensures stack traces, SQL, and database credentials are never leaked.
 4. **CORS Isolation**: Configured strictly for authorized origins (e.g. `http://localhost:3000`) with credentials support.
 5. **Deterministic Recommendation Rules**: Recommendation scores (0–100) are computed mathematically from diagnostic data without arbitrary randomness.
+6. **Device Ownership Guard**: Users can only read, update, or delete devices belonging to their authenticated user account.

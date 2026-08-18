@@ -131,6 +131,20 @@
 
 ---
 
+## Phase 17 – Device Registry & Digital Health Passport Engine [BACKEND COMPLETE]
+- [x] `DeviceController` (`GET /api/v1/devices`, `GET /api/v1/devices/{id}`, `POST /api/v1/devices`, `PUT /api/v1/devices/{id}`, `DELETE /api/v1/devices/{id}`, `GET /api/v1/devices/{id}/passport`)
+- [x] `DeviceService` with transactional CRUD, ownership validation, and initial health profile generation
+- [x] `DevicePassportService` with Digital Health Passport calculation engine aggregating device telemetry, AI diagnoses, and repair logs
+- [x] Dynamic health score engine (0–100) based on condition, component diagnostics, and battery status
+- [x] Dynamic lifecycle timeline generator creating chronological milestones (purchases, AI diagnoses, service intervals)
+- [x] Carbon and economic savings aggregator categorized by device hardware baselines
+- [x] JPA `Device` & `DeviceHealth` entities, `DeviceRepository`, and `DeviceHealthRepository`
+- [x] Flyway database migration (`V4__devices_update.sql`)
+- [x] Full compatibility with frontend `Device` & `DevicePassportData` DTOs
+- [x] Comprehensive test suite: `DeviceServiceTest`, `DevicePassportServiceTest`, `DeviceControllerTest`
+
+---
+
 ## Next Steps – Remaining Backend Microservice Pipelines
-1. **Phase 17**: `DeviceController` & `DevicePassportService` (`/api/v1/devices/*`) with Digital Health Passport calculation engine
-2. **Phase 18**: `CarbonController` (`GET /api/v1/carbon`), `ShopController` (`GET /api/v1/shops/*`), and `NotificationController`
+1. **Phase 18**: `CarbonController` (`GET /api/v1/carbon`), `ShopController` (`GET /api/v1/shops/*`), and `NotificationController`
+2. **Phase 19**: End-to-end multi-service orchestration & deployment packaging

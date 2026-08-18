@@ -125,30 +125,154 @@ PUT /users/profile
 ## Get All Devices
 
 GET /devices
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "dev_01HXYZ...",
+      "userId": "c7a8b9e0-1234-5678-9abc-def012345678",
+      "deviceName": "Personal iPhone 14 Pro",
+      "category": "Smartphone",
+      "brand": "Apple",
+      "model": "iPhone 14 Pro (128GB)",
+      "serialNumber": "F2LX9001K992",
+      "purchaseDate": "2023-01-15",
+      "warrantyExpiry": "2024-01-15",
+      "purchasePrice": 999.0,
+      "currentCondition": "Good",
+      "createdAt": "2023-01-15T10:00:00"
+    }
+  ]
+}
+```
 
 ---
 
 ## Get Device
 
 GET /devices/{id}
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "dev_01HXYZ...",
+    "userId": "c7a8b9e0-1234-5678-9abc-def012345678",
+    "deviceName": "Personal iPhone 14 Pro",
+    "category": "Smartphone",
+    "brand": "Apple",
+    "model": "iPhone 14 Pro (128GB)",
+    "serialNumber": "F2LX9001K992",
+    "purchaseDate": "2023-01-15",
+    "warrantyExpiry": "2024-01-15",
+    "purchasePrice": 999.0,
+    "currentCondition": "Good",
+    "createdAt": "2023-01-15T10:00:00"
+  }
+}
+```
 
 ---
 
 ## Add Device
 
 POST /devices
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Content-Type: `application/json`
+
+Request
+
+```json
+{
+  "deviceName": "Personal iPhone 14 Pro",
+  "category": "Smartphone",
+  "brand": "Apple",
+  "model": "iPhone 14 Pro (128GB)",
+  "serialNumber": "F2LX9001K992",
+  "purchaseDate": "2023-01-15",
+  "warrantyExpiry": "2024-01-15",
+  "purchasePrice": 999.0,
+  "currentCondition": "Good"
+}
+```
+
+Response (201 Created)
+
+```json
+{
+  "success": true,
+  "message": "Device registered successfully",
+  "data": {
+    "id": "dev_01HXYZ...",
+    "userId": "c7a8b9e0-1234-5678-9abc-def012345678",
+    "deviceName": "Personal iPhone 14 Pro",
+    "category": "Smartphone",
+    "brand": "Apple",
+    "model": "iPhone 14 Pro (128GB)",
+    "serialNumber": "F2LX9001K992",
+    "purchaseDate": "2023-01-15",
+    "warrantyExpiry": "2024-01-15",
+    "purchasePrice": 999.0,
+    "currentCondition": "Good",
+    "createdAt": "2026-08-16T12:00:00"
+  }
+}
+```
 
 ---
 
 ## Update Device
 
 PUT /devices/{id}
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Content-Type: `application/json`
+
+Request
+
+```json
+{
+  "deviceName": "Work iPhone 14 Pro",
+  "currentCondition": "Excellent"
+}
+```
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Device updated successfully",
+  "data": {
+    "id": "dev_01HXYZ...",
+    "deviceName": "Work iPhone 14 Pro",
+    "currentCondition": "Excellent"
+  }
+}
+```
 
 ---
 
 ## Delete Device
 
 DELETE /devices/{id}
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Device deleted successfully"
+}
+```
 
 ---
 
@@ -157,6 +281,66 @@ DELETE /devices/{id}
 ## Get Passport
 
 GET /devices/{id}/passport
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Device health passport retrieved successfully",
+  "data": {
+    "device": {
+      "id": "dev_01HXYZ...",
+      "deviceName": "Personal iPhone 14 Pro",
+      "category": "Smartphone",
+      "brand": "Apple",
+      "model": "iPhone 14 Pro (128GB)",
+      "currentCondition": "Good"
+    },
+    "health": {
+      "deviceId": "dev_01HXYZ...",
+      "batteryHealth": 88,
+      "healthScore": 86,
+      "lastService": "2024-02-10",
+      "aiPrediction": "Battery capacity degradation detected (88%). Display operating at optimal parameters."
+    },
+    "diagnosisSummary": {
+      "probableIssue": "Digitizer & Display Panel Fracture",
+      "confidenceScore": 92,
+      "repairDifficulty": "Moderate",
+      "repairCost": 85.0,
+      "lastDiagnosisDate": "2024-02-10"
+    },
+    "repairSummary": {
+      "repairsCompleted": 1,
+      "lastRepairDate": "2024-02-10",
+      "lastRecommendedAction": "Component replacement recommended within 30 days"
+    },
+    "carbonSummary": {
+      "co2SavedKg": 42.5,
+      "ewasteReducedKg": 0.21,
+      "moneySaved": 700.0
+    },
+    "lifecycleTimeline": [
+      {
+        "id": "evt_reg_dev_01HXYZ...",
+        "date": "2023-01-15",
+        "title": "Device Registered",
+        "type": "purchase",
+        "description": "Enrolled Apple iPhone 14 Pro (128GB) in RepairVerse Digital Health Passport."
+      },
+      {
+        "id": "evt_diag_diag_01...",
+        "date": "2024-02-10",
+        "title": "AI Visual Diagnosis",
+        "type": "diagnosis",
+        "description": "Identified: Digitizer & Display Panel Fracture (92% confidence)."
+      }
+    ]
+  }
+}
+```
 
 ---
 

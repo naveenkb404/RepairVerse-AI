@@ -105,21 +105,21 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 
 ---
 
-# Backend Architecture (Phases 14, 15, & 16)
+# Backend Architecture (Phases 14, 15, 16, & 17)
 
 ### 1. Layered Architecture (`com.repairverse.ai`)
 - **`config`**: `SecurityConfig`, `CorsConfig`, `CloudinaryConfig`, `AppProperties`
-- **`controller`**: `AuthController`, `DiagnosisController`, `RepairAnalysisController`
-- **`dto`**: `AuthRequest`, `AuthResponse`, `DiagnosisResponseDto`, `GeminiVisionResponse`, `RecommendationRequest`, `RecommendationResponseDto`, `ErrorResponse`
-- **`entity`**: `User`, `Role`, `Device`, `DiagnosisReport`, `AIRecommendation`, `RepairGuide`
-- **`exception`**: `GlobalExceptionHandler`, `EmailAlreadyExistsException`, `UnauthorizedRoleException`, `ImageUploadException`, `AiServiceException`, `InvalidFileException`, `DiagnosisNotFoundException`, `RecommendationNotFoundException`
-- **`repository`**: `UserRepository`, `DiagnosisReportRepository`, `AIRecommendationRepository`, `RepairGuideRepository`
+- **`controller`**: `AuthController`, `DiagnosisController`, `RepairAnalysisController`, `DeviceController`
+- **`dto`**: `AuthRequest`, `AuthResponse`, `DiagnosisResponseDto`, `GeminiVisionResponse`, `RecommendationRequest`, `RecommendationResponseDto`, `DeviceDto`, `DevicePassportDto`, `ErrorResponse`
+- **`entity`**: `User`, `Role`, `Device`, `DeviceHealth`, `DiagnosisReport`, `AIRecommendation`, `RepairGuide`
+- **`exception`**: `GlobalExceptionHandler`, `EmailAlreadyExistsException`, `UnauthorizedRoleException`, `ImageUploadException`, `AiServiceException`, `InvalidFileException`, `DiagnosisNotFoundException`, `RecommendationNotFoundException`, `DeviceNotFoundException`
+- **`repository`**: `UserRepository`, `DeviceRepository`, `DeviceHealthRepository`, `DiagnosisReportRepository`, `AIRecommendationRepository`, `RepairGuideRepository`
 - **`security`**: `JwtTokenProvider`, `JwtAuthenticationFilter`, `CustomUserDetailsService`, `UserPrincipal`
-- **`service`**: `AuthService`, `DiagnosisService`, `AiVisionService`, `CloudinaryService`, `RepairAnalysisService`
+- **`service`**: `AuthService`, `DiagnosisService`, `AiVisionService`, `CloudinaryService`, `RepairAnalysisService`, `DeviceService`, `DevicePassportService`
 
 ### 2. Spring Security & JWT Filter Chain
 - **Public Endpoints**: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/diagnosis`, `GET /api/v1/diagnosis/**`, `POST /api/v1/repair-analysis`, `GET /api/v1/repair-analysis/**`, `GET /api/v1/shops/**`, `GET /api/v1/repair-guide/**`
-- **Protected Endpoints**: `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`
+- **Protected Endpoints**: `GET /api/v1/auth/me`, `POST /api/v1/auth/logout`, `GET /api/v1/devices/**`, `POST /api/v1/devices`, `PUT /api/v1/devices/**`, `DELETE /api/v1/devices/**`
 - **Stateless Sessions**: `SessionCreationPolicy.STATELESS`
 - **BCrypt Encryption**: Passwords salted and hashed with `BCryptPasswordEncoder`
 - **Cryptographic JWT**: HMAC-SHA256 tokens carrying userId, email, and fullName claims
@@ -134,8 +134,13 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 - **Actions**: `REPAIR` (feasible & safe), `MONITOR` (low diagnostic certainty), `REPLACE` (uneconomic/catastrophic damage), `PROFESSIONAL_SERVICE` (high voltage / thermal hazard).
 - **Economic & Carbon Calculation**: Transparent calculation of financial savings against category new-purchase baselines, and avoided embodied carbon emissions aligned with Phase 6 models.
 - **Repair Plan Generation**: Itemizes step-by-step procedures, safety notes, parts (with estimated cost & part numbers), and precision toolkit requirements.
-- **Database & Migrations**: PostgreSQL relational database with Flyway versioned migrations (`V1__init_schema.sql`, `V2__diagnosis_reports_update.sql`, `V3__ai_recommendations_and_guides_update.sql`).
-- **H2 Test Profile**: In-memory database with test profile (`application-test.yml`) for hermetic unit and integration testing without external dependencies.
+
+### 5. Device Registry & Digital Health Passport Engine (Phase 17)
+- **Device Lifecycle & Ownership**: Secure CRUD operations associating hardware assets with verified owner accounts.
+- **Digital Health Passport**: Aggregates live hardware telemetry, initial baseline health ratings, diagnosis report histories, repair timeline events, and carbon reduction metrics into a unified passport payload (`GET /api/v1/devices/{id}/passport`).
+- **Dynamic AI Health Scoring (0–100)**: Computes score degradation dynamically based on reported failure modes, battery status, and diagnostic difficulty ratings.
+- **Flyway Migrations**: Continuous PostgreSQL schema versioning (`V1__init_schema.sql`, `V2__diagnosis_reports_update.sql`, `V3__ai_recommendations_and_guides_update.sql`, `V4__devices_update.sql`).
+- **Hermetic Testing**: Comprehensive Mockito unit and MockMvc integration test suite executing on H2 in-memory test profiles.
 
 
 

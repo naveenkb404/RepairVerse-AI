@@ -66,6 +66,7 @@ Fields
 - purchase_price
 - current_condition
 - created_at
+- updated_at
 
 ---
 

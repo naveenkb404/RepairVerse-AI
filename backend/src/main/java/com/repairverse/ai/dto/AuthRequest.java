@@ -29,7 +29,7 @@ public class AuthRequest {
             @Size(min = 8, message = "Password must be at least 8 characters")
             String password,
 
-            @Pattern(regexp = "USER|TECHNICIAN", message = "Role must be USER or TECHNICIAN")
+            @Pattern(regexp = "USER|TECHNICIAN|ADMIN", message = "Role must be USER or TECHNICIAN")
             String role
     ) {}
 }

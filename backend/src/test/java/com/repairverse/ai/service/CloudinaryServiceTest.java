@@ -85,7 +85,7 @@ class CloudinaryServiceTest {
 
     @Test
     @DisplayName("Should return fallback URL gracefully if Cloudinary credentials are not configured")
-    void testUnconfiguredFallback() {
+    void testUnconfiguredFallback() throws Exception {
         AppProperties.Cloudinary unconfiguredProps = new AppProperties.Cloudinary();
         unconfiguredProps.setCloudName("");
         unconfiguredProps.setApiKey("");

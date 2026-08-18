@@ -33,8 +33,7 @@ class RepairAnalysisServiceTest {
     @Mock
     private AIRecommendationRepository recommendationRepository;
 
-    @Spy
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private RepairAnalysisService repairAnalysisService;
@@ -43,6 +42,8 @@ class RepairAnalysisServiceTest {
 
     @BeforeEach
     void setUp() {
+        repairAnalysisService = new RepairAnalysisService(diagnosisReportRepository, recommendationRepository, objectMapper);
+
         sampleDiagnosis = DiagnosisReport.builder()
                 .id("diag-101")
                 .userId("usr-1")

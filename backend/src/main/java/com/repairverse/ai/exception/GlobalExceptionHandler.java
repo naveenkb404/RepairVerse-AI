@@ -119,6 +119,13 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(ex.getMessage(), "RECOMMENDATION_NOT_FOUND"));
     }
 
+    @ExceptionHandler(DeviceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDeviceNotFound(DeviceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(ex.getMessage(), "DEVICE_NOT_FOUND"));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         // Log full error server-side but never expose it to client
