@@ -551,9 +551,38 @@ Response (200 OK)
 }
 ```
 
+# System Health & Diagnostics (Phase 19)
+
+GET /health
+
+Public Endpoint for infrastructure monitoring and container orchestration healthchecks.
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "System health report generated",
+  "data": {
+    "status": "UP",
+    "timestamp": "2026-08-20T23:50:00",
+    "system": "RepairVerse AI Platform Service",
+    "version": "1.0.0",
+    "services": {
+      "database": "UP",
+      "flyway": "UP",
+      "geminiAi": "CONFIGURED",
+      "cloudinary": "CONFIGURED"
+    },
+    "activeProfiles": "prod"
+  }
+}
+```
+
 ---
 
 # Repair Shops
+
 
 GET /shops?latitude=37.7749&longitude=-122.4194&radiusKm=10&serviceCategory=Smartphone+Repair&sortBy=nearest
 

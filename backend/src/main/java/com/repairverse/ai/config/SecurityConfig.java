@@ -61,7 +61,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/diagnosis/**", "/repair-analysis/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/auth/**", "/health/**", "/diagnosis/**", "/repair-analysis/**", "/h2-console/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/shops/**", "/repair-guide/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated());

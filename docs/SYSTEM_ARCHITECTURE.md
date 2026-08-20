@@ -135,12 +135,16 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 - **Economic & Carbon Calculation**: Transparent calculation of financial savings against category new-purchase baselines, and avoided embodied carbon emissions aligned with Phase 6 models.
 - **Repair Plan Generation**: Itemizes step-by-step procedures, safety notes, parts (with estimated cost & part numbers), and precision toolkit requirements.
 
-### 5. Device Registry & Digital Health Passport Engine (Phase 17)
-- **Device Lifecycle & Ownership**: Secure CRUD operations associating hardware assets with verified owner accounts.
-- **Digital Health Passport**: Aggregates live hardware telemetry, initial baseline health ratings, diagnosis report histories, repair timeline events, and carbon reduction metrics into a unified passport payload (`GET /api/v1/devices/{id}/passport`).
-- **Dynamic AI Health Scoring (0–100)**: Computes score degradation dynamically based on reported failure modes, battery status, and diagnostic difficulty ratings.
-- **Flyway Migrations**: Continuous PostgreSQL schema versioning (`V1__init_schema.sql`, `V2__diagnosis_reports_update.sql`, `V3__ai_recommendations_and_guides_update.sql`, `V4__devices_update.sql`).
-- **Hermetic Testing**: Comprehensive Mockito unit and MockMvc integration test suite executing on H2 in-memory test profiles.
+### 6. Carbon Impact, Certified Repair Shops & Notification Hub (Phase 18)
+- **Carbon Engine**: `CarbonService` & `CarbonController` (`GET /api/v1/carbon`) calculating CO₂ emissions saved, e-waste avoided, financial savings, 0–100 sustainability score, and 6-month historical trends.
+- **Repair Shops & Haversine Search**: `RepairShopService` & `ShopController` (`GET /api/v1/shops`) with server-side Haversine distance calculations in kilometers and coordinate bounds validation (-90 to 90 / -180 to 180).
+- **Booking Pipeline & Notifications**: `BookingService` & `BookingController` handling scheduling, cancellation, 409 conflict checks, user identity context enforcement, and event hooks invoking `NotificationService`.
+
+### 7. End-to-End Orchestration & Deployment Packaging (Phase 19)
+- **System Health Diagnostics**: `SystemHealthService` & `HealthController` (`GET /api/v1/health`) performing live connectivity checks across database, Flyway, Gemini AI, and Cloudinary.
+- **Production Containerization**: Multi-stage `Dockerfile` for Spring Boot (JRE 21 non-root container) and Next.js 16 (Node 20 Alpine standalone build).
+- **Multi-Service Docker Compose**: Root `docker-compose.yml` linking PostgreSQL 15, Spring Boot 3 backend API, and Next.js frontend web service with automated health dependency checks and persistent volume storage (`postgres_data`).
+
 
 
 
