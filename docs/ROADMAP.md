@@ -145,6 +145,18 @@
 
 ---
 
+## Phase 18 – Carbon Impact, Certified Repair Shops & Notifications Pipelines [BACKEND COMPLETE]
+- [x] `CarbonController` (`GET /api/v1/carbon`) with deterministic CO₂ saved, e-waste avoided, money saved, sustainability score (0-100), 6-month trend, and recent activities
+- [x] `ShopController` (`GET /api/v1/shops`, `GET /api/v1/shops/{id}`) with server-side Haversine distance calculations (km), category/rating filtering, eco-certification, and coordinate bounds validation (-90 to 90 / -180 to 180)
+- [x] `BookingController` (`POST /api/v1/bookings`, `GET /api/v1/bookings`, `DELETE /api/v1/bookings/{id}`) with JWT identity context, date validation, status transitions (SCHEDULED, CANCELLED, COMPLETED), 409 conflict handling, and cross-user ownership isolation (403)
+- [x] `NotificationController` (`GET /api/v1/notifications`, `PUT /api/v1/notifications/{id}/read`, `PUT /api/v1/notifications/read-all`) with user scoping and unread counter
+- [x] Notification event hooks in `BookingService` dispatches user notifications upon booking creation and cancellation
+- [x] JPA entities (`CarbonImpact`, `RepairShop`, `Booking`, `Notification`) & repositories (`CarbonImpactRepository`, `RepairShopRepository`, `BookingRepository`, `NotificationRepository`)
+- [x] Flyway database migration (`V5__carbon_shops_notifications_update.sql`)
+- [x] Seamless compatibility with frontend DTOs & Next.js production build passing
+- [x] Comprehensive test suite (`CarbonServiceTest`, `CarbonControllerTest`, `RepairShopServiceTest`, `ShopControllerTest`, `BookingServiceTest`, `BookingControllerTest`, `NotificationServiceTest`, `NotificationControllerTest`)
+
+---
+
 ## Next Steps – Remaining Backend Microservice Pipelines
-1. **Phase 18**: `CarbonController` (`GET /api/v1/carbon`), `ShopController` (`GET /api/v1/shops/*`), and `NotificationController`
-2. **Phase 19**: End-to-end multi-service orchestration & deployment packaging
+1. **Phase 19**: End-to-end multi-service orchestration & deployment packaging

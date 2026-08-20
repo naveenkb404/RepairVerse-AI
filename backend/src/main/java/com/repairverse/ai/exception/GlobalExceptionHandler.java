@@ -119,6 +119,20 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(ex.getMessage(), "RECOMMENDATION_NOT_FOUND"));
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(ex.getMessage(), "RESOURCE_NOT_FOUND"));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.of(ex.getMessage(), "CONFLICT"));
+    }
+
     @ExceptionHandler(DeviceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleDeviceNotFound(DeviceNotFoundException ex) {
         return ResponseEntity

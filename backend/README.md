@@ -211,11 +211,42 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
+## 🍃 Carbon Impact, Repair Shops & Notifications Endpoints (Phase 18)
+
+### Carbon Impact Engine (`/carbon`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/carbon` | Authenticated | Retrieves user's carbon dashboard (CO₂ saved, e-waste avoided, money saved, sustainability score 0-100, 6-month trend). |
+
+### Certified Repair Shops (`/shops`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/shops` | Public | Search/list repair shops with server-side Haversine distance calculations (km), category/rating filtering, and eco-certification. |
+| `GET` | `/shops/{id}` | Public | Retrieve detailed shop profile by ID. |
+
+### Booking Pipeline (`/bookings`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `POST` | `/bookings` | Authenticated | Create a new repair appointment (triggers automatic notification event hook). |
+| `GET` | `/bookings` | Authenticated | Retrieve authenticated user's repair appointments. |
+| `DELETE` | `/bookings/{id}` | Authenticated | Cancel an appointment owned by the user (403 Forbidden if not owner). |
+
+### Notification Hub (`/notifications`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/notifications` | Authenticated | List all notifications for authenticated user. |
+| `GET` | `/notifications/unread-count` | Authenticated | Retrieve unread notification count. |
+| `PUT` | `/notifications/{id}/read` | Authenticated | Mark a single notification as read. |
+| `PUT` | `/notifications/read-all` | Authenticated | Mark all notifications for authenticated user as read. |
+
+---
+
 ## 🛡️ Security Blueprint
 
 1. **Zero Secret Hardcoding**: Secrets (`JWT_SECRET`, Cloudinary secrets, Gemini API keys, DB passwords) are managed exclusively in backend environment variables.
 2. **Stateless JWT Authorization**: All authenticated requests require `Authorization: Bearer <token>`.
 3. **Safe Error Handling**: `GlobalExceptionHandler` ensures stack traces, SQL, and database credentials are never leaked.
 4. **CORS Isolation**: Configured strictly for authorized origins (e.g. `http://localhost:3000`) with credentials support.
-5. **Deterministic Recommendation Rules**: Recommendation scores (0–100) are computed mathematically from diagnostic data without arbitrary randomness.
-6. **Device Ownership Guard**: Users can only read, update, or delete devices belonging to their authenticated user account.
+5. **Deterministic Recommendation & Carbon Metrics**: Scores and trends are computed mathematically from empirical data without arbitrary randomness.
+6. **Cross-User Ownership Guard**: Strict identity context enforcement guarantees users cannot view, modify, or delete another user's devices, bookings, or notifications.
+

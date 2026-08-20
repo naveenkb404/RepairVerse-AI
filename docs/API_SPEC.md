@@ -511,25 +511,103 @@ GET /repair-guide/{issue}
 
 GET /carbon
 
-Response
+Header: `Authorization: Bearer <JWT_TOKEN>`
 
-- CO₂ Saved
-- Money Saved
-- Devices Repaired
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Live carbon impact data loaded",
+  "data": {
+    "impact": {
+      "co2Saved": 142.8,
+      "ewasteReduced": 4.85,
+      "moneySaved": 1250.0,
+      "repairCount": 8
+    },
+    "trend": [
+      { "period": "Sep", "co2Saved": 12.4, "moneySaved": 120.0 },
+      { "period": "Oct", "co2Saved": 28.1, "moneySaved": 250.0 },
+      { "period": "Nov", "co2Saved": 49.3, "moneySaved": 480.0 },
+      { "period": "Dec", "co2Saved": 78.6, "moneySaved": 710.0 },
+      { "period": "Jan", "co2Saved": 110.2, "moneySaved": 990.0 },
+      { "period": "Feb", "co2Saved": 142.8, "moneySaved": 1250.0 }
+    ],
+    "recentActivity": [
+      {
+        "id": "act-1",
+        "deviceName": "iPhone 13 Pro",
+        "repairType": "OLED Screen & Battery Replacement",
+        "repairDate": "2026-02-10",
+        "co2Avoided": 58.2,
+        "ewasteAvoided": 0.24,
+        "moneySaved": 680.0
+      }
+    ],
+    "sustainabilityScore": 88,
+    "isDemoData": false
+  }
+}
+```
 
 ---
 
 # Repair Shops
 
-GET /shops
+GET /shops?latitude=37.7749&longitude=-122.4194&radiusKm=10&serviceCategory=Smartphone+Repair&sortBy=nearest
+
+Public Endpoint. Supports server-side Haversine distance calculation in km and coordinate validation (-90 to 90 / -180 to 180).
 
 GET /shops/{id}
 
+Public Endpoint.
+
+---
+
+# Bookings Pipeline
+
 POST /bookings
+
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Request
+
+```json
+{
+  "shopId": "shop-001",
+  "bookingDate": "2026-09-01 10:00 AM",
+  "notes": "Screen replacement"
+}
+```
+
+Response (201 Created)
+
+```json
+{
+  "success": true,
+  "message": "Booking confirmed successfully",
+  "data": {
+    "id": "book-12345",
+    "userId": "c7a8b9e0-1234-5678-9abc-def012345678",
+    "shopId": "shop-001",
+    "shopName": "TechCare Express Repair",
+    "bookingDate": "2026-09-01 10:00 AM",
+    "bookingStatus": "SCHEDULED",
+    "status": "SCHEDULED",
+    "notes": "Screen replacement",
+    "createdAt": "2026-08-20T23:25:00"
+  }
+}
+```
 
 GET /bookings
 
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
 DELETE /bookings/{id}
+
+Header: `Authorization: Bearer <JWT_TOKEN>` (403 Forbidden if not booking owner)
 
 ---
 
@@ -537,7 +615,16 @@ DELETE /bookings/{id}
 
 GET /notifications
 
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
 PUT /notifications/{id}/read
+
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+PUT /notifications/read-all
+
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
 
 ---
 

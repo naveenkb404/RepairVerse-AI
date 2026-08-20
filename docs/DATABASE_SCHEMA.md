@@ -158,12 +158,16 @@ Fields
 
 Fields
 
-- id
-- user_id
-- co2_saved
-- ewaste_reduced
-- money_saved
-- repair_count
+- id (VARCHAR 36, PK)
+- user_id (VARCHAR 36, UNIQUE, FK -> users.id)
+- co2_saved (DOUBLE PRECISION)
+- ewaste_reduced (DOUBLE PRECISION)
+- money_saved (DOUBLE PRECISION)
+- repair_count (INT)
+- sustainability_score (INT, Default 80)
+- updated_at (TIMESTAMP)
+
+Index: `idx_carbon_user_id` ON `carbon_impact(user_id)`
 
 ---
 
@@ -173,14 +177,27 @@ Fields
 
 Fields
 
-- id
-- shop_name
-- owner_name
-- address
-- latitude
-- longitude
-- rating
-- phone
+- id (VARCHAR 36, PK)
+- shop_name (VARCHAR 150)
+- owner_name (VARCHAR 100)
+- address (VARCHAR 255)
+- latitude (DOUBLE PRECISION)
+- longitude (DOUBLE PRECISION)
+- rating (DOUBLE PRECISION)
+- review_count (INT)
+- phone (VARCHAR 30)
+- email (VARCHAR 100)
+- hours (VARCHAR 100)
+- services_json (TEXT)
+- service_categories_json (TEXT)
+- certified_brands_json (TEXT)
+- estimated_turnaround (VARCHAR 100)
+- avg_price (VARCHAR 50)
+- verified (BOOLEAN)
+- is_open (BOOLEAN)
+- eco_certified (BOOLEAN)
+- is_demo (BOOLEAN)
+- created_at (TIMESTAMP)
 
 ---
 
@@ -188,27 +205,37 @@ Fields
 
 Fields
 
-- id
-- user_id
-- shop_id
-- booking_date
-- booking_status
-- notes
+- id (VARCHAR 36, PK)
+- user_id (VARCHAR 36, FK -> users.id)
+- shop_id (VARCHAR 36, FK -> repair_shops.id)
+- booking_date (VARCHAR 50)
+- booking_status (VARCHAR 50, Default 'SCHEDULED')
+- notes (TEXT)
+- created_at (TIMESTAMP)
+
+Indexes: `idx_bookings_user_id`, `idx_bookings_shop_id`, `idx_bookings_created_at`
 
 ---
 
-# Module 7 - Dashboard
+# Module 7 - Dashboard & Notifications
 
 ## Notifications
 
 Fields
 
-- id
-- user_id
-- title
-- message
-- is_read
-- created_at
+- id (VARCHAR 36, PK)
+- user_id (VARCHAR 36, FK -> users.id)
+- type (VARCHAR 50)
+- title (VARCHAR 150)
+- message (TEXT)
+- is_read (BOOLEAN)
+- action_url (VARCHAR 255)
+- action_label (VARCHAR 100)
+- icon_color (VARCHAR 20)
+- created_at (TIMESTAMP)
+
+Indexes: `idx_notif_user_read` ON `notifications(user_id, is_read)`, `idx_notif_created_at` ON `notifications(created_at)`
+
 
 ---
 
