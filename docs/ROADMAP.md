@@ -168,3 +168,16 @@
 - [x] Unit and integration test suite for health & platform orchestration (`SystemHealthServiceTest`, `HealthControllerTest`)
 - [x] Zero TypeScript errors (`npx tsc --noEmit`) and Next.js 16 production Turbopack build passing across 16 routes
 - [x] Full Spring Boot Maven test suite passing (79/79 tests, 0 failures, 0 errors)
+
+---
+
+## Phase 20 – User Profile, Smart Repair History, Unified Dashboard & Admin Pipelines [COMPLETE]
+- [x] `UserController` (`GET /api/v1/users/profile`, `PUT /api/v1/users/profile`) with profile management, preferences, and aggregate user metrics
+- [x] `RepairHistoryController` (`GET /api/v1/repair-history`, `GET /api/v1/repair-history/{id}`, `POST /api/v1/repair-history`) with itemized parts, timeline stages, warranty tracking, and carbon/money savings metrics
+- [x] `DashboardController` (`GET /api/v1/dashboard`, `GET /api/v1/dashboard/activity`) with platform statistics and chronological activity feed
+- [x] `AdminController` (`GET /api/v1/admin/users`, `GET /api/v1/admin/analytics`, `GET /api/v1/admin/reports`, `DELETE /api/v1/admin/users/{id}`) for platform management and compliance
+- [x] JPA entities (`RepairHistory`, `RepairPart`, `RepairTimelineStage`, `ActivityLog`) and Spring Data repositories
+- [x] Flyway database migration (`V6__repair_history_and_activity_update.sql`) with performance indexes
+- [x] Comprehensive test suite (`UserServiceTest`, `UserControllerTest`, `RepairHistoryServiceTest`, `RepairHistoryControllerTest`, `DashboardServiceTest`, `DashboardControllerTest`, `AdminServiceTest`, `AdminControllerTest`)
+- [x] All 104 backend tests passing with 0 failures, 0 errors
+- [x] Frontend TypeScript verification (0 errors) and Next.js 16 production Turbopack build passing across 16 routes

@@ -106,19 +106,82 @@ Response (200 OK)
 
 ---
 
-# User
+# User (Phase 20)
 
 ## Get Profile
 
 GET /users/profile
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Response (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "User profile retrieved successfully",
+  "data": {
+    "id": "c7a8b9e0-1234-5678-9abc-def012345678",
+    "fullName": "Jane Doe",
+    "email": "jane@example.com",
+    "role": "USER",
+    "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+    "phone": "+1 (555) 234-5678",
+    "location": "San Francisco, CA",
+    "bio": "Hardware enthusiast, DIY repair advocate.",
+    "joinedAt": "2024-01-15",
+    "lastLogin": "Just now",
+    "verified": true,
+    "preferences": {
+      "notifications": true,
+      "newsletter": true,
+      "theme": "dark",
+      "language": "en"
+    },
+    "totalDevices": 4,
+    "totalRepairs": 9,
+    "totalCarbonSaved": 47.3,
+    "totalMoneySaved": 1240.0
+  }
+}
+```
 
 ---
 
 ## Update Profile
 
 PUT /users/profile
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+Request:
+```json
+{
+  "fullName": "Jane Doe",
+  "phone": "+1 (555) 234-5678",
+  "location": "San Francisco, CA",
+  "bio": "Hardware enthusiast & DIY repair specialist.",
+  "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb"
+}
+```
 
 ---
+
+# Smart Repair History (Phase 20)
+
+## Get All Repairs
+
+GET /repair-history
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+## Get Repair By ID
+
+GET /repair-history/{id}
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+## Log Completed Repair
+
+POST /repair-history
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
 
 # Devices
 

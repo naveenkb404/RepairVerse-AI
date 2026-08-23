@@ -12,4 +12,6 @@ public interface DeviceRepository extends JpaRepository<Device, String> {
     List<Device> findByUserIdOrderByCreatedAtDesc(String userId);
     Optional<Device> findByIdAndUserId(String id, String userId);
     boolean existsByIdAndUserId(String id, String userId);
+    long countByUserId(String userId);
+
 }
