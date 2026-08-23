@@ -181,3 +181,16 @@
 - [x] Comprehensive test suite (`UserServiceTest`, `UserControllerTest`, `RepairHistoryServiceTest`, `RepairHistoryControllerTest`, `DashboardServiceTest`, `DashboardControllerTest`, `AdminServiceTest`, `AdminControllerTest`)
 - [x] All 104 backend tests passing with 0 failures, 0 errors
 - [x] Frontend TypeScript verification (0 errors) and Next.js 16 production Turbopack build passing across 16 routes
+
+---
+
+## Phase 21 – Smart Repair Guides, Repair Cost Estimator & Community Knowledge Ecosystem [COMPLETE]
+- [x] `RepairGuideController` (`GET /api/v1/repair-guide`, `GET /api/v1/repair-guide/{id}`, `GET /api/v1/repair-guide/category/{category}`, `POST /api/v1/repair-guide`) with structured procedures, safety warnings, and toolkits
+- [x] `RepairCostEstimatorController` (`POST /api/v1/repair-cost-estimate`, `GET /api/v1/repair-cost-estimate/categories`) delivering multi-channel cost breakdown (DIY vs Local Shop vs Authorized Service Center) and financial savings percentages
+- [x] `CommunityController` (`GET /api/v1/community/posts`, `GET /api/v1/community/posts/{id}`, `POST /api/v1/community/posts`, `POST /api/v1/community/posts/{id}/reply`, `POST /api/v1/community/posts/{id}/like`) for repair Q&A and community knowledge sharing
+- [x] JPA entities (`CommunityPost`, `CommunityReply`, enhanced `RepairGuide`) and Spring Data repositories (`CommunityPostRepository`, `CommunityReplyRepository`, `RepairGuideRepository`)
+- [x] Flyway database migration (`V7__repair_guides_and_community_update.sql`)
+- [x] Frontend API clients and TypeScript types (`frontend/src/lib/api/guides.ts`, `frontend/src/lib/api/community.ts`) with Demo Mode fallbacks
+- [x] Comprehensive test suite (`RepairGuideServiceTest`, `RepairGuideControllerTest`, `RepairCostEstimatorServiceTest`, `RepairCostEstimatorControllerTest`, `CommunityServiceTest`, `CommunityControllerTest`)
+- [x] All 126 backend Maven tests passing with 0 failures, 0 errors
+- [x] Frontend TypeScript check (0 errors) and Next.js 16 production Turbopack build passing across 16 routes

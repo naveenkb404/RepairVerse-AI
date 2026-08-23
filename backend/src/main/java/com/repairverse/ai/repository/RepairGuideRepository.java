@@ -9,6 +9,12 @@ import java.util.Optional;
 
 @Repository
 public interface RepairGuideRepository extends JpaRepository<RepairGuide, String> {
-    List<RepairGuide> findByCategory(String category);
+
+    List<RepairGuide> findByCategoryIgnoreCaseOrderByCreatedAtDesc(String category);
+
+    List<RepairGuide> findByDifficultyIgnoreCaseOrderByCreatedAtDesc(String difficulty);
+
+    List<RepairGuide> findAllByOrderByCreatedAtDesc();
+
     Optional<RepairGuide> findFirstByTitleContainingIgnoreCase(String keyword);
 }

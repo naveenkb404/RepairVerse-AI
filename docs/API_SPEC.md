@@ -745,6 +745,61 @@ DELETE /admin/users/{id}
 
 ---
 
+# Smart Repair Guides (Phase 21)
+
+GET /repair-guide?category={category}&difficulty={difficulty}
+Public Endpoint. Returns curated repair guides.
+
+GET /repair-guide/{id}
+Public Endpoint. Returns detailed step-by-step repair procedure, safety warnings, and tool list.
+
+GET /repair-guide/category/{category}
+Public Endpoint.
+
+POST /repair-guide
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+---
+
+# Repair Cost Estimator (Phase 21)
+
+POST /repair-cost-estimate
+Public Endpoint. Calculates multi-channel cost breakdown (DIY vs Local vs Authorized Service Center).
+
+Request:
+```json
+{
+  "category": "Smartphone",
+  "deviceModel": "iPhone 13 Pro",
+  "issueType": "OLED Screen Crack",
+  "deviceAgeYears": "2"
+}
+```
+
+GET /repair-cost-estimate/categories
+Public Endpoint. Returns supported hardware categories and common failure mode baselines.
+
+---
+
+# Community Hub & Q&A (Phase 21)
+
+GET /community/posts?category={category}
+Public Endpoint.
+
+GET /community/posts/{id}
+Public Endpoint. Returns topic discussion and reply thread.
+
+POST /community/posts
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+POST /community/posts/{id}/reply
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+POST /community/posts/{id}/like
+Public/Authenticated Endpoint. Upvotes a community discussion.
+
+---
+
 # Response Format
 
 Success

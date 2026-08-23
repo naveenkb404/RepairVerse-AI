@@ -147,9 +147,11 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 
 ### 8. User Profile, Smart Repair History & Unified Dashboard (Phase 20)
 - **User Profile Management**: `UserService` & `UserController` (`GET/PUT /api/v1/users/profile`) managing profile details, contact information, preferences, and aggregate lifetime stats.
-- **Smart Repair History**: `RepairHistoryService` & `RepairHistoryController` (`GET/POST /api/v1/repair-history`, `GET /api/v1/repair-history/{id}`) managing detailed device repair logs, parts lists, timeline milestones, and warranties.
-- **Unified Dashboard & Activity Stream**: `DashboardService` & `DashboardController` (`GET /api/v1/dashboard`, `GET /api/v1/dashboard/activity`) aggregating real-time metrics and dynamic activity feeds.
-- **Platform Administration & Compliance**: `AdminService` & `AdminController` (`GET/DELETE /api/v1/admin/**`) for user management, analytics audits, and system reports.
+### 9. Smart Repair Guides, Cost Estimator & Community Knowledge (Phase 21)
+- **Interactive Repair Guides**: `RepairGuideService` & `RepairGuideController` (`/repair-guide/**`) delivering step-by-step disassembly/assembly procedures, safety warnings, and precision toolkit lists.
+- **Repair Cost Estimator Engine**: `RepairCostEstimatorService` & `RepairCostEstimatorController` (`/repair-cost-estimate/**`) computing multi-channel economic breakdowns (DIY vs Local Certified Tech vs Authorized Service Center) and financial savings percentages.
+- **Community Hub & Q&A Discussions**: `CommunityService` & `CommunityController` (`/community/**`) managing user questions, verified repair solutions, and community upvotes.
+
 
 
 

@@ -61,11 +61,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/health/**", "/diagnosis/**", "/repair-analysis/**", "/h2-console/**").permitAll()
-
-                        .requestMatchers(HttpMethod.GET, "/shops/**", "/repair-guide/**").permitAll()
+                        .requestMatchers("/auth/**", "/health/**", "/diagnosis/**", "/repair-analysis/**", "/repair-cost-estimate/**", "/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/shops/**", "/repair-guide/**", "/community/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/community/*/like").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated());
+
 
         // H2 console frame options
         http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
