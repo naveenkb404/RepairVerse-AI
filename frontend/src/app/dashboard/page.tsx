@@ -21,6 +21,7 @@ import type { DashboardStats, ActivityItem } from "@/lib/types/user";
 import { fetchDashboardStats, fetchActivity } from "@/lib/api/user";
 import { useAuth } from "@/lib/context/AuthContext";
 import GlassButton from "@/components/common/GlassButton";
+import PredictiveFleetWidget from "@/components/dashboard/PredictiveFleetWidget";
 import { cn } from "@/lib/utils";
 
 
@@ -392,6 +393,9 @@ export default function DashboardPage() {
             />
           </div>
         ) : null}
+
+        {/* Predictive Fleet Intelligence (Phase 22) */}
+        <PredictiveFleetWidget token={token} />
 
         {/* Quick Actions */}
         <motion.section

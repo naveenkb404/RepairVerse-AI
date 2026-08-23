@@ -36,6 +36,9 @@ class AdminControllerTest {
     private AdminService adminService;
 
     @MockBean
+    private AdminIntelligenceService adminIntelligenceService;
+
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
     @MockBean

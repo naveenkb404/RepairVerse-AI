@@ -1,6 +1,7 @@
 package com.repairverse.ai.controller;
 
 import com.repairverse.ai.dto.AdminDto.*;
+import com.repairverse.ai.service.AdminIntelligenceService;
 import com.repairverse.ai.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
+    private final AdminIntelligenceService adminIntelligenceService;
 
     /**
      * GET /api/v1/admin/users
@@ -74,6 +76,22 @@ public class AdminController {
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "User account removed successfully"
+        ));
+    }
+
+    /**
+     * GET /api/v1/admin/fleet-overview
+     * Predictive intelligence fleet health overview (Phase 22 addition).
+     * Delegates to AdminIntelligenceService for risk distribution and aggregates.
+     */
+    @GetMapping("/fleet-overview")
+    public ResponseEntity<Map<String, Object>> getFleetOverview() {
+        log.info("Admin fleet overview requested");
+        var overview = adminIntelligenceService.getPlatformFleetOverview();
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "data", overview,
+                "message", "Platform fleet overview retrieved successfully"
         ));
     }
 }

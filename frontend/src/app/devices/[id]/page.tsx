@@ -25,6 +25,7 @@ import HealthScoreBreakdown from "@/components/devices/HealthScoreBreakdown";
 import DeviceInformationPanel from "@/components/devices/DeviceInformationPanel";
 import DeviceLifecycleTimeline from "@/components/devices/DeviceLifecycleTimeline";
 import DevicePassportQRModal from "@/components/devices/DevicePassportQRModal";
+import DevicePredictiveIntelligence from "@/components/devices/DevicePredictiveIntelligence";
 
 import { fetchDevicePassport } from "@/lib/api/devices";
 import { DevicePassportData } from "@/lib/types/device";
@@ -144,6 +145,13 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
             {/* Left Column: Health & Specifications */}
             <div className="lg:col-span-7 space-y-6">
               <HealthScoreBreakdown health={health} />
+              
+              {/* AI Predictive Maintenance Intelligence (Phase 22) */}
+              <DevicePredictiveIntelligence
+                deviceId={device.id}
+                deviceName={device.deviceName}
+              />
+
               <DeviceInformationPanel device={device} />
 
               {/* Diagnosis Summary Card */}
