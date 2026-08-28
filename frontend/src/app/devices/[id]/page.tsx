@@ -27,11 +27,20 @@ import DeviceLifecycleTimeline from "@/components/devices/DeviceLifecycleTimelin
 import DevicePassportQRModal from "@/components/devices/DevicePassportQRModal";
 import DevicePredictiveIntelligence from "@/components/devices/DevicePredictiveIntelligence";
 import ExplainableAiCard from "@/components/common/ExplainableAiCard";
+import SmartActionPlan from "@/components/devices/SmartActionPlan";
+import LifecycleSimulator from "@/components/devices/LifecycleSimulator";
+import RepairJourneyTimeline from "@/components/devices/RepairJourneyTimeline";
 
 import { fetchDevicePassport } from "@/lib/api/devices";
 import { fetchDeviceRiskExplanation } from "@/lib/api/aiExplanation";
+import { fetchDeviceActionPlan, refreshDeviceActionPlan } from "@/lib/api/repairPlanning";
+import { fetchDeviceLifecycle, fetchDelayImpact } from "@/lib/api/lifecycle";
+import { fetchRepairJourney } from "@/lib/api/repairJourney";
 import { DevicePassportData } from "@/lib/types/device";
 import type { DeviceRiskExplanationResponse } from "@/lib/types/aiExplanation";
+import type { RepairActionPlanData } from "@/lib/types/repairPlanning";
+import type { DeviceLifecycleAssessmentData, DelayImpactData } from "@/lib/types/lifecycle";
+import type { RepairJourneyData } from "@/lib/types/repairJourney";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -45,7 +54,12 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
 
   const [passportData, setPassportData] = useState<DevicePassportData | null>(null);
   const [riskExplanation, setRiskExplanation] = useState<DeviceRiskExplanationResponse | null>(null);
+  const [actionPlan, setActionPlan] = useState<RepairActionPlanData | null>(null);
+  const [lifecycle, setLifecycle] = useState<DeviceLifecycleAssessmentData | null>(null);
+  const [delayImpact, setDelayImpact] = useState<DelayImpactData | null>(null);
+  const [repairJourney, setRepairJourney] = useState<RepairJourneyData | null>(null);
   const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
+  const [isLoadingPlan, setIsLoadingPlan] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -59,13 +73,26 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
     setIsLoadingExplanation(false);
   };
 
+  const handleRefreshPlan = async () => {
+    setIsLoadingPlan(true);
+    const res = await refreshDeviceActionPlan(deviceId);
+    if (res.data) {
+      setActionPlan(res.data);
+    }
+    setIsLoadingPlan(false);
+  };
+
   useEffect(() => {
     async function loadPassport() {
       setIsLoading(true);
       setErrorMsg("");
-      const [res, expRes] = await Promise.all([
+      const [res, expRes, planRes, lifeRes, delayRes, journeyRes] = await Promise.all([
         fetchDevicePassport(deviceId),
         fetchDeviceRiskExplanation(deviceId),
+        fetchDeviceActionPlan(deviceId),
+        fetchDeviceLifecycle(deviceId),
+        fetchDelayImpact(deviceId),
+        fetchRepairJourney(deviceId),
       ]);
 
       if (res.success && res.data) {
@@ -74,9 +101,11 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
         setErrorMsg(res.message || "Failed to load device passport data.");
       }
 
-      if (expRes.data) {
-        setRiskExplanation(expRes.data);
-      }
+      if (expRes.data) setRiskExplanation(expRes.data);
+      if (planRes.data) setActionPlan(planRes.data);
+      if (lifeRes.data) setLifecycle(lifeRes.data);
+      if (delayRes.data) setDelayImpact(delayRes.data);
+      if (journeyRes.data) setRepairJourney(journeyRes.data);
 
       setIsLoading(false);
     }
@@ -162,12 +191,34 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
             onOpenQR={() => setIsQRModalOpen(true)}
           />
 
+          {/* End-to-End Repair Journey Tracker (Phase 24) */}
+          {repairJourney && (
+            <RepairJourneyTimeline journey={repairJourney} />
+          )}
+
           {/* Main Grid Section */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             {/* Left Column: Health & Specifications */}
             <div className="lg:col-span-7 space-y-6">
               <HealthScoreBreakdown health={health} />
               
+              {/* Autonomous Repair Action Plan (Phase 24) */}
+              {actionPlan && (
+                <SmartActionPlan
+                  plan={actionPlan}
+                  isLoading={isLoadingPlan}
+                  onRefresh={handleRefreshPlan}
+                />
+              )}
+
+              {/* Device Lifecycle Intelligence & Delay Simulator (Phase 24) */}
+              {lifecycle && (
+                <LifecycleSimulator
+                  lifecycle={lifecycle}
+                  delayImpact={delayImpact}
+                />
+              )}
+
               {/* AI Predictive Maintenance Intelligence (Phase 22) */}
               <DevicePredictiveIntelligence
                 deviceId={device.id}

@@ -893,6 +893,75 @@ Returns contextual circular economy storytelling, real-world carbon equivalencie
 
 ---
 
+# Autonomous Repair Planning & Lifecycle Intelligence (Phase 24)
+
+## Repair Planning Endpoints (`/repair-planning`)
+`GET /repair-planning/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Retrieves or synthesizes the deterministic action plan for a device.
+
+`POST /repair-planning/device/{deviceId}/refresh`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Recalculates and persists a refreshed action plan.
+
+`GET /repair-planning`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Lists all action plans belonging to the authenticated user.
+
+Response (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "id": "plan-123",
+    "userId": "usr-1",
+    "deviceId": "dev-1",
+    "deviceName": "iPhone 14 Pro",
+    "deviceCategory": "Smartphone",
+    "overallStrategy": "PREVENTIVE_MAINTENANCE",
+    "priorityLevel": "MEDIUM",
+    "estimatedTotalCost": 45.0,
+    "estimatedLifecycleExtensionMonths": 14,
+    "estimatedCarbonSaved": 5.8,
+    "estimatedEwastePrevented": 0.15,
+    "status": "ACTIVE",
+    "strategyRationale": "Moderate component wear detected. Proactive servicing recommended.",
+    "steps": [
+      {
+        "id": "step-1",
+        "actionPlanId": "plan-123",
+        "stepOrder": 1,
+        "title": "Critical Data Backup",
+        "description": "Secure full backup before physical maintenance.",
+        "actionType": "BACKUP_DATA",
+        "priority": "HIGH",
+        "estimatedCost": 0.0,
+        "estimatedDuration": "20 mins",
+        "carbonImpact": 0.0,
+        "isRequired": true,
+        "status": "PENDING"
+      }
+    ]
+  }
+}
+```
+
+## Lifecycle Intelligence & Delay Simulation (`/lifecycle`)
+`GET /lifecycle/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns multi-scenario lifespan comparison matrix (DO_NOTHING, PREVENTIVE_MAINTENANCE, REPAIR_NOW, DELAY_REPAIR, REPLACE).
+
+`GET /lifecycle/device/{deviceId}/delay-impact`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 7-day, 30-day, and 90-day delay consequence projections.
+
+## Repair Journey Tracking (`/repair-journey`)
+`GET /repair-journey/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 9-stage unified repair journey status and progress percentage.
+
+---
+
 # Response Format
 
 Success

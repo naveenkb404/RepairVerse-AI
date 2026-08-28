@@ -15,6 +15,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Stri
     List<Notification> findByUserIdOrderByCreatedAtDesc(String userId);
     Optional<Notification> findByIdAndUserId(String id, String userId);
     long countByUserIdAndIsReadFalse(String userId);
+    boolean existsByUserIdAndTitleContainingAndCreatedAtAfter(String userId, String title, java.time.LocalDateTime createdAt);
 
     @Modifying
     @Query("UPDATE Notification n SET n.isRead = true WHERE n.userId = :userId")

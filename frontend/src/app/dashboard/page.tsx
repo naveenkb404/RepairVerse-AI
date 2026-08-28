@@ -18,7 +18,9 @@ import {
 } from "lucide-react";
 
 import type { DashboardStats, ActivityItem } from "@/lib/types/user";
+import type { RepairActionPlanData } from "@/lib/types/repairPlanning";
 import { fetchDashboardStats, fetchActivity } from "@/lib/api/user";
+import { fetchUserActionPlans } from "@/lib/api/repairPlanning";
 import { useAuth } from "@/lib/context/AuthContext";
 import GlassButton from "@/components/common/GlassButton";
 import PredictiveFleetWidget from "@/components/dashboard/PredictiveFleetWidget";
@@ -263,16 +265,19 @@ export default function DashboardPage() {
   const { user, token } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [actionPlans, setActionPlans] = useState<RepairActionPlanData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     setLoading(true);
-    const [statsRes, actRes] = await Promise.all([
+    const [statsRes, actRes, plansRes] = await Promise.all([
       fetchDashboardStats(token ?? ""),
       fetchActivity(token ?? ""),
+      fetchUserActionPlans(token ?? ""),
     ]);
     if (statsRes.data) setStats(statsRes.data);
     if (actRes.data) setActivity(actRes.data);
+    if (plansRes.data) setActionPlans(plansRes.data);
     setLoading(false);
   };
 
@@ -396,6 +401,72 @@ export default function DashboardPage() {
 
         {/* Predictive Fleet Intelligence (Phase 22) */}
         <PredictiveFleetWidget token={token} />
+
+        {/* Actionable Repair Plans & Lifecycle Roadmaps (Phase 24) */}
+        {actionPlans.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25, ease: EASE }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-white">Actionable Repair Roadmaps</h2>
+                <span className="rounded-full bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                  {actionPlans.length} Active
+                </span>
+              </div>
+              <Link
+                href="/devices"
+                className="text-xs font-semibold text-[#22C55E] hover:text-[#06B6D4] transition-colors"
+              >
+                View all devices →
+              </Link>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {actionPlans.map((plan) => (
+                <Link
+                  key={plan.id}
+                  href={`/devices/${plan.deviceId}`}
+                  className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:border-white/20 hover:bg-white/[0.07] transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-xs font-bold text-white truncate">
+                        {plan.deviceName}
+                      </span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                          plan.priorityLevel === "CRITICAL"
+                            ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                            : plan.priorityLevel === "HIGH"
+                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                            : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        }`}
+                      >
+                        {plan.overallStrategy.replace(/_/g, " ")}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-white/50 line-clamp-2 mb-3">
+                      {plan.strategyRationale}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-white/10 pt-2.5 text-[11px]">
+                    <span className="text-white/60">
+                      Est. ${plan.estimatedTotalCost.toFixed(2)}
+                    </span>
+                    <span className="font-bold text-cyan-400">
+                      +{plan.estimatedLifecycleExtensionMonths} mos lifespan
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.section>
+        )}
 
         {/* Quick Actions */}
         <motion.section

@@ -407,11 +407,11 @@ function RecommendationContent() {
             </div>
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <GlassButton
-                href="/devices"
+                href={recommendation.diagnosisReport?.deviceId ? `/devices/${recommendation.diagnosisReport.deviceId}` : "/devices"}
                 variant="secondary"
                 icon={<ShieldCheck className="size-4" />}
               >
-                Device Passports
+                Smart Action Plan
               </GlassButton>
               <GlassButton
                 href={`/repair-shops?service=${encodeURIComponent(

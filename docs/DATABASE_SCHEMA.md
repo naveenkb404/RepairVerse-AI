@@ -250,3 +250,53 @@ Fields
 - activity
 - ip_address
 - created_at
+
+---
+
+# Module 9 - Autonomous Repair Planning & Lifecycle Intelligence (Phase 24)
+
+## RepairActionPlans
+
+Stores deterministic autonomous action plans generated per device.
+
+Fields
+
+- id (VARCHAR 36, PK)
+- user_id (VARCHAR 36, FK -> users.id)
+- device_id (VARCHAR 36, FK -> devices.id)
+- device_name (VARCHAR 150)
+- device_category (VARCHAR 80)
+- overall_strategy (VARCHAR 50) — MONITOR, PREVENTIVE_MAINTENANCE, REPAIR, REFURBISH, REPLACE, RECYCLE
+- priority_level (VARCHAR 20) — LOW, MEDIUM, HIGH, CRITICAL
+- estimated_total_cost (DOUBLE)
+- estimated_lifecycle_extension_months (INTEGER)
+- estimated_carbon_saved (DOUBLE)
+- estimated_ewaste_prevented (DOUBLE)
+- status (VARCHAR 20) — ACTIVE, ARCHIVED, COMPLETED
+- strategy_rationale (TEXT)
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
+
+Indexes: `idx_action_plan_device_user` ON `repair_action_plans(device_id, user_id)`, `idx_action_plan_user` ON `repair_action_plans(user_id)`
+
+## RepairActionSteps
+
+Stores ordered execution steps for each action plan.
+
+Fields
+
+- id (VARCHAR 36, PK)
+- action_plan_id (VARCHAR 36, FK -> repair_action_plans.id ON DELETE CASCADE)
+- step_order (INTEGER)
+- title (VARCHAR 200)
+- description (TEXT)
+- action_type (VARCHAR 50) — INSPECT, BACKUP_DATA, CLEAN, MAINTAIN, REPAIR, REPLACE_COMPONENT, BOOK_REPAIR, MONITOR, RECYCLE
+- priority (VARCHAR 20) — LOW, MEDIUM, HIGH, CRITICAL
+- estimated_cost (DOUBLE)
+- estimated_duration (VARCHAR 100)
+- carbon_impact (DOUBLE)
+- is_required (BOOLEAN)
+- status (VARCHAR 20) — PENDING, IN_PROGRESS, COMPLETED, SKIPPED
+- created_at (TIMESTAMP)
+
+Indexes: `idx_step_plan` ON `repair_action_steps(action_plan_id)`

@@ -224,3 +224,20 @@
 - [x] Integrated into `/devices/[id]`, `/recommendation`, `/carbon`, and `/admin/intelligence`
 - [x] TypeScript check (`npx tsc --noEmit`) passing with 0 errors
 - [x] Production Next.js 16 build passing with 0 errors across 17 routes
+
+---
+
+## Phase 24 – Autonomous Repair Planning, Device Lifecycle Intelligence & Smart Action Pipelines [COMPLETE]
+- [x] JPA entities (`RepairActionPlan`, `RepairActionStep`) and repositories (`RepairActionPlanRepository`, `RepairActionStepRepository`)
+- [x] Flyway migration (`V9__repair_planning_and_lifecycle_intelligence.sql`)
+- [x] `RepairPlanningService`: Deterministic strategy classification (`MONITOR`, `PREVENTIVE_MAINTENANCE`, `REPAIR`, `REFURBISH`, `REPLACE`, `RECYCLE`) and ordered action step synthesis
+- [x] `DeviceLifecycleService`: Lifecycle extension potentials and 5-scenario decision comparison models
+- [x] `RepairDelayImpactService`: 7-day, 30-day, and 90-day delay consequence forecasting and cost escalation curves
+- [x] `RepairJourneyService`: Unified 9-stage end-to-end device repair journey tracker
+- [x] `RepairPlanningController` (`GET/POST /api/v1/repair-planning/**`), `LifecycleController` (`GET /api/v1/lifecycle/**`), `RepairJourneyController` (`GET /api/v1/repair-journey/**`)
+- [x] Comprehensive test suite (`RepairPlanningServiceTest`, `DeviceLifecycleServiceTest`, `RepairDelayImpactServiceTest`, `RepairJourneyServiceTest`, `RepairPlanningControllerTest`, `LifecycleControllerTest`, `RepairJourneyControllerTest`)
+- [x] Full Spring Boot Maven test suite passing (176/176 tests, 0 failures, 0 errors)
+- [x] Frontend TypeScript types & API clients (`repairPlanning.ts`, `lifecycle.ts`, `repairJourney.ts`) with Demo Mode fallbacks
+- [x] Reusable UI components (`SmartActionPlan.tsx`, `LifecycleSimulator.tsx`, `RepairJourneyTimeline.tsx`)
+- [x] Integrated into `/devices/[id]`, `/dashboard`, and `/recommendation`
+- [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 17 routes

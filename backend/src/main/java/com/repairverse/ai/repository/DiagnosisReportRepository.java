@@ -10,4 +10,6 @@ import java.util.List;
 public interface DiagnosisReportRepository extends JpaRepository<DiagnosisReport, String> {
     List<DiagnosisReport> findByUserIdOrderByCreatedAtDesc(String userId);
     List<DiagnosisReport> findByDeviceIdOrderByCreatedAtDesc(String deviceId);
+    java.util.Optional<DiagnosisReport> findFirstByDeviceIdOrderByCreatedAtDesc(String deviceId);
+    java.util.Optional<DiagnosisReport> findTopByDeviceIdOrderByCreatedAtDesc(String deviceId);
 }
