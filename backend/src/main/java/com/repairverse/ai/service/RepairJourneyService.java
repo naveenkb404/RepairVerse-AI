@@ -26,6 +26,7 @@ public class RepairJourneyService {
     private final RepairActionPlanRepository actionPlanRepository;
     private final BookingRepository bookingRepository;
     private final RepairHistoryRepository repairHistoryRepository;
+    private final MaintenanceScheduleRepository maintenanceScheduleRepository;
 
     /**
      * Determines current position in the unified 9-stage repair journey pipeline.
@@ -40,6 +41,7 @@ public class RepairJourneyService {
         Optional<RepairActionPlan> planOpt = actionPlanRepository.findFirstByDeviceIdAndUserIdOrderByCreatedAtDesc(deviceId, userId);
         List<Booking> bookings = bookingRepository.findByUserIdOrderByCreatedAtDesc(userId);
         List<RepairHistory> history = repairHistoryRepository.findByDeviceIdOrderByRepairDateDesc(deviceId);
+        List<MaintenanceSchedule> maintenance = maintenanceScheduleRepository.findByUserIdAndDeviceIdOrderByDueDateAsc(userId, deviceId);
 
         boolean hasDiagnosis = diagOpt.isPresent();
         boolean hasPrediction = predOpt.isPresent();
@@ -140,12 +142,17 @@ public class RepairJourneyService {
         ));
 
         // Stage 9: DEVICE_MONITORED
+        boolean hasMaintenance = !maintenance.isEmpty();
+        String stage9Desc = hasMaintenance
+            ? "Digital passport updated. Active proactive care schedules (" + maintenance.size() + " tasks configured)."
+            : "Digital passport updated. Active continuous telemetry and circular warranty active.";
+
         stages.add(new RepairJourneyStageResponse(
             "DEVICE_MONITORED",
             "Extended Lifecycle Monitoring",
-            "Digital passport updated. Active continuous telemetry and circular warranty active.",
-            hasRepairHistory,
-            hasRepairHistory,
+            stage9Desc,
+            hasRepairHistory || hasMaintenance,
+            hasRepairHistory || hasMaintenance,
             null,
             "/devices/" + deviceId
         ));

@@ -113,6 +113,9 @@ export default function Navbar({ className }: NavbarProps) {
 
           {/* Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/maintenance" variant="secondary" size="sm">
+              Maintenance
+            </GlassButton>
             <GlassButton href="/repair-history" variant="secondary" size="sm">
               Repair History
             </GlassButton>
@@ -234,6 +237,9 @@ export default function Navbar({ className }: NavbarProps) {
                 transition={{ duration: 0.3, ease: EASE }}
                 className="pt-3 flex flex-col gap-2"
               >
+                <GlassButton href="/maintenance" variant="secondary" fullWidth onClick={closeMenu}>
+                  Smart Maintenance Center
+                </GlassButton>
                 <GlassButton href="/repair-history" variant="secondary" fullWidth onClick={closeMenu}>
                   Repair History
                 </GlassButton>

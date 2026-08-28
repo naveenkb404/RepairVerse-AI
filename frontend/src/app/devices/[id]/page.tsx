@@ -30,17 +30,30 @@ import ExplainableAiCard from "@/components/common/ExplainableAiCard";
 import SmartActionPlan from "@/components/devices/SmartActionPlan";
 import LifecycleSimulator from "@/components/devices/LifecycleSimulator";
 import RepairJourneyTimeline from "@/components/devices/RepairJourneyTimeline";
+import { MaintenanceTimeline } from "@/components/devices/MaintenanceTimeline";
+import { MaintenancePriorityCard } from "@/components/devices/MaintenancePriorityCard";
 
 import { fetchDevicePassport } from "@/lib/api/devices";
 import { fetchDeviceRiskExplanation } from "@/lib/api/aiExplanation";
 import { fetchDeviceActionPlan, refreshDeviceActionPlan } from "@/lib/api/repairPlanning";
 import { fetchDeviceLifecycle, fetchDelayImpact } from "@/lib/api/lifecycle";
 import { fetchRepairJourney } from "@/lib/api/repairJourney";
+import {
+  fetchDeviceMaintenance,
+  generateMaintenance,
+  updateMaintenanceStatus,
+  fetchDevicePriority,
+} from "@/lib/api/maintenance";
 import { DevicePassportData } from "@/lib/types/device";
 import type { DeviceRiskExplanationResponse } from "@/lib/types/aiExplanation";
 import type { RepairActionPlanData } from "@/lib/types/repairPlanning";
 import type { DeviceLifecycleAssessmentData, DelayImpactData } from "@/lib/types/lifecycle";
 import type { RepairJourneyData } from "@/lib/types/repairJourney";
+import type {
+  MaintenanceSchedule,
+  MaintenancePriority,
+  MaintenanceStatus,
+} from "@/lib/types/maintenance";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -58,8 +71,11 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
   const [lifecycle, setLifecycle] = useState<DeviceLifecycleAssessmentData | null>(null);
   const [delayImpact, setDelayImpact] = useState<DelayImpactData | null>(null);
   const [repairJourney, setRepairJourney] = useState<RepairJourneyData | null>(null);
+  const [maintenanceSchedules, setMaintenanceSchedules] = useState<MaintenanceSchedule[]>([]);
+  const [maintenancePriority, setMaintenancePriority] = useState<MaintenancePriority | null>(null);
   const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
   const [isLoadingPlan, setIsLoadingPlan] = useState(false);
+  const [isLoadingMaintenance, setIsLoadingMaintenance] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -82,17 +98,41 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
     setIsLoadingPlan(false);
   };
 
+  const handleGenerateMaintenance = async () => {
+    setIsLoadingMaintenance(true);
+    const res = await generateMaintenance(deviceId);
+    if (res.data) {
+      setMaintenanceSchedules(res.data);
+    }
+    const pRes = await fetchDevicePriority(deviceId);
+    if (pRes.data) {
+      setMaintenancePriority(pRes.data);
+    }
+    setIsLoadingMaintenance(false);
+  };
+
+  const handleMaintenanceStatusChange = async (id: string, newStatus: MaintenanceStatus) => {
+    const res = await updateMaintenanceStatus(id, newStatus);
+    if (res.success && res.data) {
+      setMaintenanceSchedules((prev) =>
+        prev.map((s) => (s.id === id ? res.data! : s))
+      );
+    }
+  };
+
   useEffect(() => {
     async function loadPassport() {
       setIsLoading(true);
       setErrorMsg("");
-      const [res, expRes, planRes, lifeRes, delayRes, journeyRes] = await Promise.all([
+      const [res, expRes, planRes, lifeRes, delayRes, journeyRes, maintRes, prioRes] = await Promise.all([
         fetchDevicePassport(deviceId),
         fetchDeviceRiskExplanation(deviceId),
         fetchDeviceActionPlan(deviceId),
         fetchDeviceLifecycle(deviceId),
         fetchDelayImpact(deviceId),
         fetchRepairJourney(deviceId),
+        fetchDeviceMaintenance(deviceId),
+        fetchDevicePriority(deviceId),
       ]);
 
       if (res.success && res.data) {
@@ -106,6 +146,8 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
       if (lifeRes.data) setLifecycle(lifeRes.data);
       if (delayRes.data) setDelayImpact(delayRes.data);
       if (journeyRes.data) setRepairJourney(journeyRes.data);
+      if (maintRes.data) setMaintenanceSchedules(maintRes.data);
+      if (prioRes.data) setMaintenancePriority(prioRes.data);
 
       setIsLoading(false);
     }
@@ -216,6 +258,27 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
                 <LifecycleSimulator
                   lifecycle={lifecycle}
                   delayImpact={delayImpact}
+                />
+              )}
+
+              {/* Proactive Maintenance Priority & Care Timeline (Phase 25) */}
+              {maintenancePriority && (
+                <MaintenancePriorityCard
+                  priority={maintenancePriority}
+                  onActionClick={handleGenerateMaintenance}
+                  actionButtonText={
+                    isLoadingMaintenance ? "Synthesizing Schedule..." : "Generate Care Schedule"
+                  }
+                />
+              )}
+
+              {maintenanceSchedules.length > 0 && (
+                <MaintenanceTimeline
+                  schedules={maintenanceSchedules}
+                  onStatusChange={handleMaintenanceStatusChange}
+                  onRefresh={handleGenerateMaintenance}
+                  isLoading={isLoadingMaintenance}
+                  deviceIdFilter={device.id}
                 />
               )}
 

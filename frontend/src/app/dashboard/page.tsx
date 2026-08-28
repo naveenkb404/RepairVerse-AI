@@ -5,7 +5,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Activity,
+  AlertOctagon,
+  AlertTriangle,
   Bell,
+  Calendar,
+  CalendarCheck,
   Cpu,
   History,
   Leaf,
@@ -19,8 +23,10 @@ import {
 
 import type { DashboardStats, ActivityItem } from "@/lib/types/user";
 import type { RepairActionPlanData } from "@/lib/types/repairPlanning";
+import type { MaintenanceSchedule, MaintenanceSummary } from "@/lib/types/maintenance";
 import { fetchDashboardStats, fetchActivity } from "@/lib/api/user";
 import { fetchUserActionPlans } from "@/lib/api/repairPlanning";
+import { fetchMaintenanceSummary, fetchMaintenanceSchedules } from "@/lib/api/maintenance";
 import { useAuth } from "@/lib/context/AuthContext";
 import GlassButton from "@/components/common/GlassButton";
 import PredictiveFleetWidget from "@/components/dashboard/PredictiveFleetWidget";
@@ -83,6 +89,16 @@ const QUICK_ACTIONS = [
     to: "to-[#06B6D4]/10",
     iconColor: "text-[#8B5CF6]",
     border: "border-[#8B5CF6]/20 hover:border-[#8B5CF6]/40",
+  },
+  {
+    label: "Smart Maintenance",
+    description: "Proactive care & schedules",
+    href: "/maintenance",
+    icon: CalendarCheck,
+    from: "from-[#22C55E]/20",
+    to: "to-[#06B6D4]/10",
+    iconColor: "text-emerald-400",
+    border: "border-emerald-500/20 hover:border-emerald-500/40",
   },
   {
     label: "Carbon Impact",
@@ -266,18 +282,24 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [actionPlans, setActionPlans] = useState<RepairActionPlanData[]>([]);
+  const [maintenanceSummary, setMaintenanceSummary] = useState<MaintenanceSummary | null>(null);
+  const [dueTasks, setDueTasks] = useState<MaintenanceSchedule[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     setLoading(true);
-    const [statsRes, actRes, plansRes] = await Promise.all([
+    const [statsRes, actRes, plansRes, sumRes, tasksRes] = await Promise.all([
       fetchDashboardStats(token ?? ""),
       fetchActivity(token ?? ""),
       fetchUserActionPlans(token ?? ""),
+      fetchMaintenanceSummary(token ?? ""),
+      fetchMaintenanceSchedules(undefined, undefined, token ?? ""),
     ]);
     if (statsRes.data) setStats(statsRes.data);
     if (actRes.data) setActivity(actRes.data);
     if (plansRes.data) setActionPlans(plansRes.data);
+    if (sumRes.data) setMaintenanceSummary(sumRes.data);
+    if (tasksRes.data) setDueTasks(tasksRes.data.slice(0, 3));
     setLoading(false);
   };
 
@@ -399,8 +421,89 @@ export default function DashboardPage() {
           </div>
         ) : null}
 
-        {/* Predictive Fleet Intelligence (Phase 22) */}
-        <PredictiveFleetWidget token={token} />
+        {/* Proactive Device Care (Phase 25) */}
+        {maintenanceSummary && (maintenanceSummary.totalDue > 0 || maintenanceSummary.totalOverdue > 0 || dueTasks.length > 0) && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.22, ease: EASE }}
+            className="rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/[0.08] via-cyan-500/[0.04] to-transparent p-5 backdrop-blur-xl"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                  <CalendarCheck className="size-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-bold text-white">Proactive Device Care</h2>
+                    {maintenanceSummary.totalOverdue > 0 && (
+                      <span className="rounded-full bg-red-500/20 border border-red-500/40 px-2 py-0.5 text-[10px] font-bold text-red-300 animate-pulse">
+                        {maintenanceSummary.totalOverdue} Overdue
+                      </span>
+                    )}
+                    {maintenanceSummary.totalDue > 0 && (
+                      <span className="rounded-full bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                        {maintenanceSummary.totalDue} Due Soon
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-white/50 mt-0.5">
+                    Proactive maintenance tasks automatically prioritized to prevent hardware degradation.
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                href="/maintenance"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition-all self-start sm:self-auto"
+              >
+                <span>Maintenance Center</span>
+                <ChevronRight className="size-3.5" />
+              </Link>
+            </div>
+
+            {/* Task Preview Cards */}
+            <div className="grid gap-3 sm:grid-cols-3">
+              {dueTasks.map((task) => (
+                <Link
+                  key={task.id}
+                  href="/maintenance"
+                  className={`p-3.5 rounded-xl border transition-all ${
+                    task.status === "OVERDUE"
+                      ? "bg-red-500/10 border-red-500/30 hover:border-red-500/50"
+                      : task.status === "DUE"
+                      ? "bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50"
+                      : "bg-white/[0.03] border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[11px] font-semibold text-white/70 truncate">
+                      {task.deviceName}
+                    </span>
+                    <span
+                      className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                        task.status === "OVERDUE"
+                          ? "bg-red-600 text-white"
+                          : task.status === "DUE"
+                          ? "bg-amber-500/30 text-amber-300"
+                          : "bg-white/10 text-white/60"
+                      }`}
+                    >
+                      {task.status}
+                    </span>
+                  </div>
+                  <p className="text-xs font-semibold text-white line-clamp-1">
+                    {task.title}
+                  </p>
+                  <p className="text-[11px] text-white/40 mt-1">
+                    Due: <strong className="text-white/70">{task.dueDate}</strong>
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </motion.section>
+        )}
 
         {/* Actionable Repair Plans & Lifecycle Roadmaps (Phase 24) */}
         {actionPlans.length > 0 && (

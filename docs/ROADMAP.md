@@ -241,3 +241,20 @@
 - [x] Reusable UI components (`SmartActionPlan.tsx`, `LifecycleSimulator.tsx`, `RepairJourneyTimeline.tsx`)
 - [x] Integrated into `/devices/[id]`, `/dashboard`, and `/recommendation`
 - [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 17 routes
+
+---
+
+## Phase 25: Proactive Device Care, Smart Maintenance Automation & Repair Intelligence
+- [x] Database migration `V10__maintenance_automation_update.sql` (`maintenance_schedules` table with 6 indexes)
+- [x] JPA Entity `MaintenanceSchedule.java` and repository `MaintenanceScheduleRepository.java`
+- [x] DTO records in `MaintenanceDto.java` (6 immutable value records)
+- [x] `MaintenanceSchedulingService.java` — deterministic scheduling engine (quarterly inspection, preventive care, battery health checks, deep cleaning) with deduplication (±7-day window) and automated notification dispatch
+- [x] `MaintenanceCalendarService.java` — unified chronological event aggregator across maintenance, shop bookings, action plan deadlines, and lifecycle alerts
+- [x] `MaintenancePriorityService.java` — deterministic 0-100 priority scoring engine with explainable rationale
+- [x] `MaintenanceController.java` — 7 REST endpoints under `/api/v1/maintenance/**` with JWT ownership verification
+- [x] Backend test suite — 4 test files (`MaintenanceSchedulingServiceTest`, `MaintenanceCalendarServiceTest`, `MaintenancePriorityServiceTest`, `MaintenanceControllerTest`), all 197 tests passing
+- [x] Frontend TypeScript types & API client (`maintenance.ts`) with Demo Mode fallbacks
+- [x] Reusable UI components (`MaintenanceTimeline.tsx`, `MaintenanceCalendar.tsx`, `MaintenancePriorityCard.tsx`)
+- [x] Full `/maintenance` page route (Task Stream + Unified Calendar)
+- [x] Integrated into `/dashboard`, `/devices/[id]`, and `Navbar.tsx`
+- [x] TypeScript check passing (`0 errors`) and Next.js 16 production build passing across 18 routes

@@ -962,6 +962,54 @@ Returns 9-stage unified repair journey status and progress percentage.
 
 ---
 
+# Proactive Device Care & Smart Maintenance Automation (Phase 25)
+
+Base path: `/maintenance`
+
+## 1. Get User Maintenance Schedules
+`GET /maintenance`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Query Params: `deviceId` (optional), `status` (optional)
+Returns all active/past maintenance schedules for the authenticated user.
+
+## 2. Get Device Maintenance Schedules
+`GET /maintenance/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns maintenance schedules for a single device with strict ownership enforcement.
+
+## 3. Generate Device Maintenance Schedule
+`POST /maintenance/device/{deviceId}/generate`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Triggers deterministic rule synthesis to generate or refresh proactive care tasks. Deduplication applies across a ±7-day window.
+
+## 4. Update Maintenance Status
+`PUT /maintenance/{id}/status`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body:
+```json
+{
+  "status": "COMPLETED"
+}
+```
+Valid targets: `COMPLETED`, `SKIPPED`, `CANCELLED`.
+
+## 5. Maintenance Calendar
+`GET /maintenance/calendar`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns unified chronological events across maintenance tasks, shop bookings, action plan deadlines, and lifecycle alerts.
+
+## 6. Maintenance Summary
+`GET /maintenance/summary`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns aggregated KPIs (upcoming, due, overdue, critical, completed count, estimated cost & carbon savings).
+
+## 7. Device Maintenance Priority
+`GET /maintenance/device/{deviceId}/priority`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns deterministic 0-100 priority score, priority level (CRITICAL, HIGH, MEDIUM, LOW), rationale, and recommended action.
+
+---
+
 # Response Format
 
 Success

@@ -37,6 +37,8 @@ class RepairJourneyServiceTest {
     private BookingRepository bookingRepository;
     @Mock
     private RepairHistoryRepository repairHistoryRepository;
+    @Mock
+    private MaintenanceScheduleRepository maintenanceScheduleRepository;
 
     @InjectMocks
     private RepairJourneyService repairJourneyService;

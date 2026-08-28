@@ -300,3 +300,34 @@ Fields
 - created_at (TIMESTAMP)
 
 Indexes: `idx_step_plan` ON `repair_action_steps(action_plan_id)`
+
+---
+
+# Module 10 - Proactive Device Care & Smart Maintenance Automation (Phase 25)
+
+## MaintenanceSchedules
+
+Stores deterministic proactive care and scheduled maintenance events.
+
+Fields
+
+- id (VARCHAR 36, PK)
+- user_id (VARCHAR 36, FK -> users.id)
+- device_id (VARCHAR 36, FK -> devices.id)
+- device_name (VARCHAR 150)
+- device_category (VARCHAR 80)
+- title (VARCHAR 200)
+- description (TEXT)
+- maintenance_type (VARCHAR 50) — INSPECTION, CLEANING, BATTERY_CHECK, SOFTWARE_MAINTENANCE, PREVENTIVE_REPAIR, COMPONENT_REPLACEMENT, PROFESSIONAL_SERVICE
+- priority (VARCHAR 20) — LOW, MEDIUM, HIGH, CRITICAL
+- scheduled_date (DATE)
+- due_date (DATE)
+- status (VARCHAR 20) — UPCOMING, DUE, OVERDUE, COMPLETED, SKIPPED, CANCELLED
+- estimated_cost (DOUBLE)
+- estimated_duration_minutes (INTEGER)
+- estimated_carbon_savings (DOUBLE)
+- created_at (TIMESTAMP)
+- updated_at (TIMESTAMP)
+- completed_at (TIMESTAMP)
+
+Indexes: `idx_ms_user_id` ON `maintenance_schedules(user_id)`, `idx_ms_device_id` ON `maintenance_schedules(device_id)`, `idx_ms_due_date` ON `maintenance_schedules(due_date)`, `idx_ms_status` ON `maintenance_schedules(status)`, `idx_ms_device_user` ON `maintenance_schedules(device_id, user_id)`, `idx_ms_user_status` ON `maintenance_schedules(user_id, status)`
