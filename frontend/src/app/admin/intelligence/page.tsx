@@ -31,10 +31,13 @@ import Container from "@/components/layout/Container";
 import Logo from "@/components/common/Logo";
 import GlassCard from "@/components/glass/GlassCard";
 import GlassButton from "@/components/common/GlassButton";
+import ExplainableAiCard from "@/components/common/ExplainableAiCard";
 import { fetchAdminIntelligenceSummary, fetchAdminPlatformFleet } from "@/lib/api/analytics";
+import { fetchSustainabilityNarrative } from "@/lib/api/aiExplanation";
 import { useAuth } from "@/lib/context/AuthContext";
 import type { AdminIntelligenceSummaryData } from "@/lib/types/analytics";
 import type { PredictiveFleetOverviewData, RiskLevel } from "@/lib/types/prediction";
+import type { SustainabilityNarrativeResponse } from "@/lib/types/aiExplanation";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -42,18 +45,21 @@ export default function AdminIntelligencePage() {
   const { token, user } = useAuth();
   const [summary, setSummary] = useState<AdminIntelligenceSummaryData | null>(null);
   const [fleet, setFleet] = useState<PredictiveFleetOverviewData | null>(null);
+  const [narrative, setNarrative] = useState<SustainabilityNarrativeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRiskFilter, setSelectedRiskFilter] = useState<string>("ALL");
 
   const loadData = async () => {
-    const [summaryRes, fleetRes] = await Promise.all([
+    const [summaryRes, fleetRes, narrRes] = await Promise.all([
       fetchAdminIntelligenceSummary(token),
       fetchAdminPlatformFleet(token),
+      fetchSustainabilityNarrative(token),
     ]);
     if (summaryRes.data) setSummary(summaryRes.data);
     if (fleetRes.data) setFleet(fleetRes.data);
+    if (narrRes.data) setNarrative(narrRes.data);
     setIsLoading(false);
   };
 
@@ -231,6 +237,18 @@ export default function AdminIntelligencePage() {
               </p>
             </GlassCard>
           </div>
+
+          {/* AI Executive Intelligence Narrative (Phase 23) */}
+          {narrative && (
+            <ExplainableAiCard
+              title="Platform Circular Intelligence & Impact Briefing"
+              subtitle="Generative fleet-wide sustainability, economic impact analysis, and circular milestones"
+              explanation={{ type: "sustainability", data: narrative }}
+              isLoading={isLoading}
+              onRefresh={loadData}
+              defaultExpanded={true}
+            />
+          )}
 
           {/* Platform Fleet Risk Distribution */}
           {fleet?.riskDistribution && (

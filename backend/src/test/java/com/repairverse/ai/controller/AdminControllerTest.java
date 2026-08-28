@@ -4,6 +4,7 @@ import com.repairverse.ai.dto.AdminDto.*;
 import com.repairverse.ai.exception.GlobalExceptionHandler;
 import com.repairverse.ai.security.CustomUserDetailsService;
 import com.repairverse.ai.security.JwtTokenProvider;
+import com.repairverse.ai.service.AdminIntelligenceService;
 import com.repairverse.ai.service.AdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

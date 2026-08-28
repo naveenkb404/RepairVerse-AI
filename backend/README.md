@@ -241,6 +241,42 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
+## 🔮 Predictive Maintenance & Platform Analytics (Phase 22)
+
+### Predictive Maintenance (`/predictions`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/predictions/device/{deviceId}` | Authenticated | Retrieve predictive health score and degradation metrics for a device. |
+| `POST` | `/predictions/device/{deviceId}/evaluate` | Authenticated | Trigger on-demand deterministic predictive evaluation for a device. |
+| `GET` | `/predictions/patterns` | Public/Auth | List common fault patterns and failure mode distributions. |
+
+### Platform Analytics (`/analytics`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/analytics/repair-costs` | Authenticated | Retrieve repair vs replace cost comparison analytics and ROI. |
+| `GET` | `/analytics/sustainability` | Authenticated | Retrieve advanced circular sustainability and e-waste metrics. |
+| `GET` | `/analytics/fleet-overview` | Authenticated | Retrieve user fleet degradation status summary. |
+
+### Admin Platform Intelligence (`/admin/intelligence`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/admin/intelligence/summary` | Admin | Global fleet health KPIs, critical risk counts, and preventable savings. |
+| `GET` | `/admin/intelligence/fleet` | Admin | Platform-wide fleet risk distributions and failure mode clusters. |
+
+---
+
+## 🧠 Explainable AI & Generative Repair Intelligence (Phase 23)
+
+### AI Intelligence Endpoints (`/ai-intelligence`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/ai-intelligence/device-prediction/{deviceId}` | Authenticated | Returns structured Gemini explainability for device failure probability, root cause, and component degradation. |
+| `GET` | `/ai-intelligence/diagnosis/{diagnosisId}` | Authenticated | Returns plain-English generative explanation of visual diagnosis findings. |
+| `GET` | `/ai-intelligence/recommendation/{recommendationId}` | Authenticated | Returns generative economic and environmental justification for repair recommendations. |
+| `GET` | `/ai-intelligence/sustainability` | Authenticated | Returns circular economy storytelling and real-world equivalence narrative. |
+
+---
+
 ## 🛡️ Security Blueprint
 
 1. **Zero Secret Hardcoding**: Secrets (`JWT_SECRET`, Cloudinary secrets, Gemini API keys, DB passwords) are managed exclusively in backend environment variables.
@@ -249,4 +285,5 @@ Authorization: Bearer <JWT_TOKEN>
 4. **CORS Isolation**: Configured strictly for authorized origins (e.g. `http://localhost:3000`) with credentials support.
 5. **Deterministic Recommendation & Carbon Metrics**: Scores and trends are computed mathematically from empirical data without arbitrary randomness.
 6. **Cross-User Ownership Guard**: Strict identity context enforcement guarantees users cannot view, modify, or delete another user's devices, bookings, or notifications.
+7. **Explainable AI Invariance**: Gemini models provide narrative explainability only and can never alter risk scores, override authorization, or modify database state.
 

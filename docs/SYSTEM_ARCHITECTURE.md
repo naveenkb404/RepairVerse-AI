@@ -147,15 +147,15 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 
 ### 8. User Profile, Smart Repair History & Unified Dashboard (Phase 20)
 - **User Profile Management**: `UserService` & `UserController` (`GET/PUT /api/v1/users/profile`) managing profile details, contact information, preferences, and aggregate lifetime stats.
-### 9. Smart Repair Guides, Cost Estimator & Community Knowledge (Phase 21)
-- **Interactive Repair Guides**: `RepairGuideService` & `RepairGuideController` (`/repair-guide/**`) delivering step-by-step disassembly/assembly procedures, safety warnings, and precision toolkit lists.
-- **Repair Cost Estimator Engine**: `RepairCostEstimatorService` & `RepairCostEstimatorController` (`/repair-cost-estimate/**`) computing multi-channel economic breakdowns (DIY vs Local Certified Tech vs Authorized Service Center) and financial savings percentages.
-- **Community Hub & Q&A Discussions**: `CommunityService` & `CommunityController` (`/community/**`) managing user questions, verified repair solutions, and community upvotes.
+### 10. Predictive Maintenance & Platform Analytics (Phase 22)
+- **Predictive Scoring Engine**: `PredictiveScoringService` evaluates failure probability (0-100), health score, projected remaining lifespan, and failure modes across 7 hardware categories using deterministic statistical heuristics.
+- **Fault Pattern Recognition**: `FaultPatternService` classifies recurring hardware degradation patterns (e.g., thermal throttling, battery swelling, solder joint fatigue) and generates actionable preventative recommendations.
+- **Cross-Service Analytics**: `RepairCostAnalyticsService`, `SustainabilityAnalyticsService`, and `AdminIntelligenceService` compute platform-wide cost distributions, ROI, and global fleet metrics.
 
-
-
-
-
+### 11. Generative AI Explainability & Explainable AI (XAI) (Phase 23)
+- **Gemini Narrative Layer**: `AiExplanationService` orchestrates Google Gemini 1.5 Flash to generate structured, natural language explainability for deterministic predictions, visual diagnoses, repair recommendations, and sustainability impact.
+- **Zero-Dependency Heuristic Fallback**: If Gemini API key is not configured, or if requests time out or fail validation, the system falls back seamlessly to deterministic rule-based explainability heuristics, ensuring zero downtime and complete offline resilience.
+- **Security & Authorization Invariant**: Gemini narratives are strictly explanatory/read-only and are never permitted to modify risk scores, bypass authentication, or alter database state. User data access is strictly bounded by JWT principal ownership.
 
 ---
 
@@ -166,3 +166,4 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 3. **Reactive Invalidation**: If a token expires or returns 401, the client automatically clears the session and alerts the user.
 4. **Input Sanitization**: All client forms enforce strict regex, length, and format validation before transmission.
 5. **No Email Enumeration**: Authentication failure messages are unified (`"Invalid email or password"`) to prevent account reconnaissance.
+6. **Authoritative Determinism**: Generative AI models never dictate authorization or database state; all risk and security determinations are enforced by deterministic Spring Boot services.

@@ -28,9 +28,12 @@ import CarbonTrendChart from "@/components/dashboard/CarbonTrendChart";
 import RepairVsReplacePanel from "@/components/dashboard/RepairVsReplacePanel";
 import SustainabilityScore from "@/components/dashboard/SustainabilityScore";
 import RecentActivityList from "@/components/dashboard/RecentActivityList";
+import ExplainableAiCard from "@/components/common/ExplainableAiCard";
 
 import { fetchCarbonDashboard } from "@/lib/api/carbon";
+import { fetchSustainabilityNarrative } from "@/lib/api/aiExplanation";
 import type { CarbonDashboardData } from "@/lib/api/carbon";
+import type { SustainabilityNarrativeResponse } from "@/lib/types/aiExplanation";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -136,10 +139,24 @@ function LoadingSkeleton() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function CarbonDashboardPage() {
   const [state, setState] = useState<DashboardState>({ status: "loading" });
+  const [narrative, setNarrative] = useState<SustainabilityNarrativeResponse | null>(null);
+  const [isLoadingNarrative, setIsLoadingNarrative] = useState(false);
+
+  const loadNarrative = async () => {
+    setIsLoadingNarrative(true);
+    const narrRes = await fetchSustainabilityNarrative();
+    if (narrRes.data) {
+      setNarrative(narrRes.data);
+    }
+    setIsLoadingNarrative(false);
+  };
 
   const loadData = async () => {
     setState({ status: "loading" });
-    const result = await fetchCarbonDashboard();
+    const [result, narrRes] = await Promise.all([
+      fetchCarbonDashboard(),
+      fetchSustainabilityNarrative(),
+    ]);
 
     if (!result.success) {
       // Backend offline — show demo data with clear disclosure
@@ -148,6 +165,10 @@ export default function CarbonDashboardPage() {
       setState({ status: "empty" });
     } else {
       setState({ status: "live", data: result.data });
+    }
+
+    if (narrRes.data) {
+      setNarrative(narrRes.data);
     }
   };
 
@@ -321,6 +342,18 @@ export default function CarbonDashboardPage() {
           {/* LIVE / DEMO */}
           {dashData && (state.status === "live" || state.status === "offline") && (
             <div className="space-y-10">
+
+              {/* ── Generative Sustainability Storytelling (Phase 23) ──────── */}
+              {narrative && (
+                <ExplainableAiCard
+                  title="Circular Economy Impact Storytelling"
+                  subtitle="Generative storytelling, real-world carbon equivalence, and circular milestones"
+                  explanation={{ type: "sustainability", data: narrative }}
+                  isLoading={isLoadingNarrative}
+                  onRefresh={loadNarrative}
+                  defaultExpanded={true}
+                />
+              )}
 
               {/* ── Metric Overview ─────────────────────────────────────────── */}
               <Section

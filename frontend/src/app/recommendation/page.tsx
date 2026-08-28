@@ -25,10 +25,13 @@ import RecommendedActionBanner from "@/components/recommendation/RecommendedActi
 import DecisionComparisonPanel from "@/components/recommendation/DecisionComparisonPanel";
 import PartsAndToolsGrid from "@/components/recommendation/PartsAndToolsGrid";
 import RepairPlanTimeline from "@/components/recommendation/RepairPlanTimeline";
+import ExplainableAiCard from "@/components/common/ExplainableAiCard";
 
 import { fetchRepairRecommendation } from "@/lib/api/recommendation";
+import { fetchRecommendationExplanation } from "@/lib/api/aiExplanation";
 import type { RepairRecommendation } from "@/lib/types/recommendation";
 import type { DiagnosisReport } from "@/lib/types/diagnosis";
+import type { RecommendationExplanationResponse } from "@/lib/types/aiExplanation";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -204,9 +207,20 @@ function RecommendationContent() {
   const diagnosisId = searchParams.get("diagnosisId") || "diag_demo_1";
 
   const [recommendation, setRecommendation] = useState<RepairRecommendation | null>(null);
+  const [explanation, setExplanation] = useState<RecommendationExplanationResponse | null>(null);
+  const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isBackendOffline, setIsBackendOffline] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const loadExplanation = async (recId: string) => {
+    setIsLoadingExplanation(true);
+    const res = await fetchRecommendationExplanation(recId);
+    if (res.data) {
+      setExplanation(res.data);
+    }
+    setIsLoadingExplanation(false);
+  };
 
   const loadData = async () => {
     setIsLoading(true);
@@ -218,18 +232,21 @@ function RecommendationContent() {
       if (response.success && response.data) {
         setIsBackendOffline(false);
         setRecommendation(response.data);
+        loadExplanation(response.data.id);
       } else {
         // Backend offline fallback — show sample demo recommendation cleanly
         setIsBackendOffline(true);
         const sample =
           SAMPLE_RECOMMENDATIONS[diagnosisId] || DEFAULT_DEMO_RECOMMENDATION;
         setRecommendation(sample);
+        loadExplanation(sample.id);
       }
     } catch {
       setIsBackendOffline(true);
       const sample =
         SAMPLE_RECOMMENDATIONS[diagnosisId] || DEFAULT_DEMO_RECOMMENDATION;
       setRecommendation(sample);
+      loadExplanation(sample.id);
     } finally {
       setIsLoading(false);
     }
@@ -352,6 +369,18 @@ function RecommendationContent() {
 
           {/* Repair vs Replace Decision Matrix */}
           <DecisionComparisonPanel decision={recommendation.decision} />
+
+          {/* Explainable AI Decision Rationale (Phase 23) */}
+          {explanation && (
+            <ExplainableAiCard
+              title="Explainable Decision Rationale"
+              subtitle="Generative financial cost-benefit justification, lifespan projection, and environmental analysis"
+              explanation={{ type: "recommendation", data: explanation }}
+              isLoading={isLoadingExplanation}
+              onRefresh={() => loadExplanation(recommendation.id)}
+              defaultExpanded={true}
+            />
+          )}
 
           {/* Itemized Parts & Tools Grid */}
           <PartsAndToolsGrid

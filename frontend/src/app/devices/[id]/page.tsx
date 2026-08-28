@@ -26,9 +26,12 @@ import DeviceInformationPanel from "@/components/devices/DeviceInformationPanel"
 import DeviceLifecycleTimeline from "@/components/devices/DeviceLifecycleTimeline";
 import DevicePassportQRModal from "@/components/devices/DevicePassportQRModal";
 import DevicePredictiveIntelligence from "@/components/devices/DevicePredictiveIntelligence";
+import ExplainableAiCard from "@/components/common/ExplainableAiCard";
 
 import { fetchDevicePassport } from "@/lib/api/devices";
+import { fetchDeviceRiskExplanation } from "@/lib/api/aiExplanation";
 import { DevicePassportData } from "@/lib/types/device";
+import type { DeviceRiskExplanationResponse } from "@/lib/types/aiExplanation";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -41,21 +44,40 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
   const deviceId = resolvedParams.id;
 
   const [passportData, setPassportData] = useState<DevicePassportData | null>(null);
+  const [riskExplanation, setRiskExplanation] = useState<DeviceRiskExplanationResponse | null>(null);
+  const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+
+  const loadExplanation = async () => {
+    setIsLoadingExplanation(true);
+    const expRes = await fetchDeviceRiskExplanation(deviceId);
+    if (expRes.data) {
+      setRiskExplanation(expRes.data);
+    }
+    setIsLoadingExplanation(false);
+  };
 
   useEffect(() => {
     async function loadPassport() {
       setIsLoading(true);
       setErrorMsg("");
-      const res = await fetchDevicePassport(deviceId);
+      const [res, expRes] = await Promise.all([
+        fetchDevicePassport(deviceId),
+        fetchDeviceRiskExplanation(deviceId),
+      ]);
 
       if (res.success && res.data) {
         setPassportData(res.data);
       } else {
         setErrorMsg(res.message || "Failed to load device passport data.");
       }
+
+      if (expRes.data) {
+        setRiskExplanation(expRes.data);
+      }
+
       setIsLoading(false);
     }
 
@@ -151,6 +173,18 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
                 deviceId={device.id}
                 deviceName={device.deviceName}
               />
+
+              {/* Generative AI Explainability & Root-Cause Matrix (Phase 23) */}
+              {riskExplanation && (
+                <ExplainableAiCard
+                  title="Explainable Hardware Intelligence"
+                  subtitle="Generative root-cause analysis, component degradation breakdown, and safety roadmap"
+                  explanation={{ type: "device-risk", data: riskExplanation }}
+                  isLoading={isLoadingExplanation}
+                  onRefresh={loadExplanation}
+                  defaultExpanded={true}
+                />
+              )}
 
               <DeviceInformationPanel device={device} />
 

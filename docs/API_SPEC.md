@@ -800,6 +800,99 @@ Public/Authenticated Endpoint. Upvotes a community discussion.
 
 ---
 
+# Predictive Intelligence & Platform Analytics (Phase 22)
+
+## Device Predictive Assessment
+`GET /predictions/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+`POST /predictions/device/{deviceId}/evaluate`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+`GET /predictions/patterns`
+Public/Authenticated Endpoint. Returns historical failure distributions and hardware risk archetypes.
+
+## Repair & Sustainability Analytics
+`GET /analytics/repair-costs`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+`GET /analytics/sustainability`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+`GET /analytics/fleet-overview`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+## Admin Fleet Intelligence
+`GET /admin/intelligence/summary`
+Header: `Authorization: Bearer <JWT_TOKEN>` (ROLE_ADMIN)
+
+`GET /admin/intelligence/fleet`
+Header: `Authorization: Bearer <JWT_TOKEN>` (ROLE_ADMIN)
+
+---
+
+# Explainable AI & Generative Repair Intelligence (Phase 23)
+
+## Device Risk Explanation
+`GET /ai-intelligence/device-prediction/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns structured Gemini generative narrative explaining the device's predictive score, degradation root-causes, component wear breakdown, and safety maintenance roadmap.
+
+Response (200 OK):
+```json
+{
+  "success": true,
+  "message": "Device predictive maintenance explanation generated successfully",
+  "data": {
+    "deviceId": "dev-123",
+    "deviceName": "MacBook Pro M1",
+    "overallHealthScore": 72,
+    "riskLevel": "MEDIUM",
+    "executiveSummary": "Thermal cycling and battery cycles indicate accelerated gate-oxide wear.",
+    "rootCauseAnalysis": "High charging cycles combined with thermal load over 45C have accelerated electrolyte degradation.",
+    "riskFactors": [
+      {
+        "factor": "Battery Cycle Count",
+        "severity": "HIGH",
+        "impactDescription": "620 charge cycles have reduced nominal battery capacity to 78%."
+      }
+    ],
+    "componentWear": [
+      {
+        "componentName": "Li-Ion Battery Cell",
+        "wearPercentage": 78,
+        "estimatedRemainingLifespanMonths": 8,
+        "recommendedPreventativeAction": "Schedule replacement before cycle count exceeds 800."
+      }
+    ],
+    "roadmap": [
+      "1. Avoid fast charging above 80% state-of-charge.",
+      "2. Perform fan cleaning and thermal paste repaste."
+    ],
+    "isAiGenerated": true,
+    "modelProvider": "Google Gemini 1.5 Flash",
+    "evaluatedAt": "2026-08-23T18:00:00"
+  }
+}
+```
+
+## Diagnosis Explanation
+`GET /ai-intelligence/diagnosis/{diagnosisId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns plain-English visual diagnosis explanation, technical failure mechanisms, and confidence factor breakdown.
+
+## Recommendation Rationale
+`GET /ai-intelligence/recommendation/{recommendationId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns economic and environmental justification for the Repair vs Replace decision.
+
+## Sustainability Narrative
+`GET /ai-intelligence/sustainability`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns contextual circular economy storytelling, real-world carbon equivalencies, and cumulative milestones.
+
+---
+
 # Response Format
 
 Success
