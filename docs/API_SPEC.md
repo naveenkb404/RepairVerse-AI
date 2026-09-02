@@ -1010,6 +1010,81 @@ Returns deterministic 0-100 priority score, priority level (CRITICAL, HIGH, MEDI
 
 ---
 
+# Phase 26: Trusted Repair Marketplace & Quotation Intelligence
+
+## 1. Discover & Rank Marketplace Shops
+`GET /marketplace/shops`
+Query Parameters: `deviceCategory`, `brand`, `minRating`, `verificationStatus`, `lat`, `lng`, `radius`
+
+## 2. Shop Details & Trust Score
+`GET /marketplace/shops/{id}`
+`GET /marketplace/shops/{id}/trust`
+`GET /marketplace/shops/{id}/ranking`
+
+## 3. Quotation Management
+`POST /repair-quotes/request` — Request formal quote for device
+`GET /repair-quotes` — Authenticated user's quotes
+`GET /repair-quotes/{id}` — Specific quote details (ownership protected)
+`GET /repair-quotes/compare` — Multi-quote side-by-side value analysis
+`PUT /repair-quotes/{id}/accept` — Accept quotation
+`PUT /repair-quotes/{id}/reject` — Reject quotation
+
+---
+
+# Phase 27: Intelligent Repair Matching & Marketplace Experience
+
+## 1. Smart Device Repair Matches
+`GET /marketplace/matches/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Query Parameters: `lat`, `lng`, `diagnosisId`, `repairType`
+Returns ranked repair shop matches evaluated through a deterministic 0–100 compatibility algorithm across 7 weighted dimensions (Specialization [25], Trust [20], Pricing [15], Proximity [15], Turnaround [10], Experience [10], Sustainability [5]).
+
+## 2. Decision Category Recommendations
+`GET /marketplace/recommendations/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns categorized winning badges: `BEST_OVERALL`, `BEST_VALUE`, `FASTEST_REPAIR`, `MOST_TRUSTED`, `MOST_SUSTAINABLE`, `NEAREST`.
+
+## 3. Multi-Shop Side-by-Side Comparison
+`POST /marketplace/compare`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body:
+```json
+{
+  "shopIds": ["shop-1", "shop-2", "shop-3"],
+  "deviceId": "dev-1"
+}
+```
+Returns structured comparison matrix and winner highlighting across compatibility, trust, price, speed, distance, warranty, and circularity.
+
+## 4. Deterministic Quote Price Intelligence
+`GET /marketplace/quotes/{quoteId}/intelligence`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Evaluates quote price vs. regional market averages, classifies pricing value (`EXCELLENT_VALUE`, `GOOD_VALUE`, `FAIR_PRICE`, `ABOVE_MARKET`, `OVERPRICED`, `SUSPICIOUSLY_LOW`), computes price fairness index (0–100), and flags suspicious cost risks.
+
+## 5. User Marketplace Analytics & Potential Savings
+`GET /marketplace/analytics`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns user's total shops compared, requested/accepted quotes, average repair cost, and cumulative potential savings.
+
+## 6. Admin Platform Marketplace Telemetry
+`GET /admin/marketplace/analytics`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Returns platform-wide provider counts, quote conversion rate, average repair cost index, popular device categories, and top-performing shop leaderboard.
+
+## 7. Interaction Telemetry Tracking
+`POST /marketplace/interactions`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body:
+```json
+{
+  "interactionType": "SHOP_COMPARED",
+  "entityId": "shop-1,shop-2",
+  "entityType": "SHOP"
+}
+```
+
+---
+
 # Response Format
 
 Success

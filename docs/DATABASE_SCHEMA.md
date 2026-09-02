@@ -331,3 +331,86 @@ Fields
 - completed_at (TIMESTAMP)
 
 Indexes: `idx_ms_user_id` ON `maintenance_schedules(user_id)`, `idx_ms_device_id` ON `maintenance_schedules(device_id)`, `idx_ms_due_date` ON `maintenance_schedules(due_date)`, `idx_ms_status` ON `maintenance_schedules(status)`, `idx_ms_device_user` ON `maintenance_schedules(device_id, user_id)`, `idx_ms_user_status` ON `maintenance_schedules(user_id, status)`
+
+---
+
+# Module 11 - Trusted Repair Marketplace, Quotes & Reputation (Phase 26)
+
+## RepairShopProfiles
+- `id` (VARCHAR 36, PK)
+- `repair_shop_id` (VARCHAR 36, UNIQUE)
+- `verification_status` (VARCHAR 20) — PENDING, VERIFIED, TRUSTED, SUSPENDED
+- `verification_level` (VARCHAR 20) — BASIC, VERIFIED, PREMIUM
+- `years_of_experience` (INT)
+- `total_repairs_completed` (INT)
+- `specializations_json` (TEXT)
+- `certifications_json` (TEXT)
+- `average_rating` (DOUBLE PRECISION)
+- `total_reviews` (INT)
+- `response_rate` (DOUBLE PRECISION)
+- `average_response_time_minutes` (INT)
+- `warranty_offered` (BOOLEAN)
+- `warranty_days` (INT)
+- `created_at`, `updated_at` (TIMESTAMP)
+
+## RepairShopSpecializations
+- `id` (VARCHAR 36, PK)
+- `repair_shop_id` (VARCHAR 36)
+- `device_category` (VARCHAR 80)
+- `brand` (VARCHAR 80)
+- `specialization_level` (VARCHAR 20) — BASIC, EXPERIENCED, EXPERT, CERTIFIED
+- `created_at` (TIMESTAMP)
+
+## RepairQuotes
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36)
+- `device_id` (VARCHAR 36)
+- `repair_shop_id` (VARCHAR 36)
+- `diagnosis_id`, `recommendation_id` (VARCHAR 36)
+- `repair_title` (VARCHAR 200)
+- `problem_summary` (TEXT)
+- `estimated_cost`, `minimum_cost`, `maximum_cost` (DOUBLE PRECISION)
+- `estimated_duration_hours`, `parts_cost`, `labor_cost` (DOUBLE PRECISION)
+- `warranty_days` (INT)
+- `status` (VARCHAR 20) — REQUESTED, DRAFT, SUBMITTED, ACCEPTED, REJECTED, EXPIRED, CANCELLED
+- `created_at`, `updated_at`, `expires_at` (TIMESTAMP)
+
+## RepairReviews
+- `id` (VARCHAR 36, PK)
+- `user_id`, `repair_shop_id`, `booking_id` (VARCHAR 36)
+- `rating` (INT 1-5)
+- `title` (VARCHAR 200), `comment` (TEXT)
+- `repair_quality_rating`, `communication_rating`, `value_rating`, `timeliness_rating` (INT 1-5)
+- `verified_repair` (BOOLEAN)
+- `created_at`, `updated_at` (TIMESTAMP)
+
+---
+
+# Module 12 - Smart Repair Matching & Marketplace Telemetry (Phase 27)
+
+## RepairMatchHistory
+Stores deterministic matching records, scores, rankings, and explanation factors between user devices and repair shops.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36)
+- `device_id` (VARCHAR 36)
+- `repair_shop_id` (VARCHAR 36)
+- `match_score` (INT) — 0 to 100 compatibility score
+- `match_level` (VARCHAR 30) — EXCELLENT_MATCH, GREAT_MATCH, GOOD_MATCH, FAIR_MATCH, LOW_MATCH
+- `rank_position` (INT)
+- `factors_json` (TEXT) — Itemized 7-dimension score factors
+- `explanation` (TEXT) — Explainable recommendation summary
+- `created_at` (TIMESTAMP)
+
+Indexes: `idx_rmh_user_device`, `idx_rmh_shop_id`, `idx_rmh_created_at`
+
+## MarketplaceInteractions
+Stores anonymized and structured marketplace events for user savings tracking and platform conversion analytics.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36)
+- `interaction_type` (VARCHAR 50) — SHOP_VIEWED, SHOP_COMPARED, QUOTE_REQUESTED, QUOTE_VIEWED, QUOTE_ACCEPTED, QUOTE_REJECTED, MATCH_SEARCHED
+- `entity_id` (VARCHAR 36)
+- `entity_type` (VARCHAR 30) — SHOP, QUOTE, MATCH, DEVICE
+- `metadata_json` (TEXT)
+- `created_at` (TIMESTAMP)
+
+Indexes: `idx_mi_user_id`, `idx_mi_interaction_type`, `idx_mi_entity`, `idx_mi_created_at`

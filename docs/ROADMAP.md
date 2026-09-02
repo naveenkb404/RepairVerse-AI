@@ -244,7 +244,7 @@
 
 ---
 
-## Phase 25: Proactive Device Care, Smart Maintenance Automation & Repair Intelligence
+## Phase 25: Proactive Device Care, Smart Maintenance Automation & Repair Intelligence [COMPLETE]
 - [x] Database migration `V10__maintenance_automation_update.sql` (`maintenance_schedules` table with 6 indexes)
 - [x] JPA Entity `MaintenanceSchedule.java` and repository `MaintenanceScheduleRepository.java`
 - [x] DTO records in `MaintenanceDto.java` (6 immutable value records)
@@ -258,3 +258,39 @@
 - [x] Full `/maintenance` page route (Task Stream + Unified Calendar)
 - [x] Integrated into `/dashboard`, `/devices/[id]`, and `Navbar.tsx`
 - [x] TypeScript check passing (`0 errors`) and Next.js 16 production build passing across 18 routes
+
+---
+
+## Phase 26: Trusted Repair Marketplace, Smart Quotations & Repair Reputation Intelligence [COMPLETE]
+- [x] Database migration `V11__repair_marketplace_intelligence.sql` (`repair_shop_profiles`, `repair_shop_specializations`, `repair_quotes`, `repair_reviews` tables with 10 performance indexes)
+- [x] JPA Entities (`RepairShopProfile`, `RepairShopSpecialization`, `RepairQuote`, `RepairReview`) and Spring Data repositories
+- [x] Immutable DTO layer in `MarketplaceDto.java`
+- [x] `RepairMarketplaceService.java` — shop discovery, capability-based filtering, and deterministic ranking
+- [x] `RepairQuoteService.java` — quotation requests, status lifecycle, multi-quote comparisons, and value scoring
+- [x] `RepairTrustService.java` — 0–100 deterministic trust scoring breakdown across verification, audit, warranty, and tenure
+- [x] `RepairReputationService.java` — verified review verification, aspect rating aggregation, and sentiment metrics
+- [x] REST Controllers (`RepairMarketplaceController`, `RepairQuoteController`, `RepairReviewController`)
+- [x] Comprehensive test suite — all 223 backend Maven tests passing with 0 failures
+- [x] Frontend TypeScript types (`marketplace.ts`, `repairQuote.ts`)
+
+---
+
+## Phase 27: Intelligent Repair Marketplace Experience & Smart Matching [COMPLETE]
+- [x] Database migration `V12__smart_repair_matching_and_marketplace_analytics.sql` (`repair_match_history`, `marketplace_interactions` tables with performance indexes)
+- [x] JPA Entities (`RepairMatchHistory`, `MarketplaceInteraction`) and Spring Data repositories (`RepairMatchHistoryRepository`, `MarketplaceInteractionRepository`)
+- [x] Immutable DTO records in `RepairMatchingDto.java`
+- [x] `RepairMatchingService.java` — deterministic 0–100 compatibility scoring engine across 7 dimensions (Specialization [25], Trust [20], Price [15], Proximity [15], Turnaround [10], Experience [10], Sustainability [5])
+- [x] `SmartRepairRecommendationService.java` — decision category engine (`BEST_OVERALL`, `BEST_VALUE`, `FASTEST_REPAIR`, `MOST_TRUSTED`, `MOST_SUSTAINABLE`, `NEAREST`) and multi-shop comparison matrix
+- [x] `QuoteIntelligenceService.java` — transparent pricing intelligence, fairness index, market average benchmarking, and risk detection (`EXCELLENT_VALUE`, `GOOD_VALUE`, `FAIR_PRICE`, `ABOVE_MARKET`, `OVERPRICED`, `SUSPICIOUSLY_LOW`)
+- [x] `MarketplaceAnalyticsService.java` — user savings & comparison telemetry and admin platform marketplace analytics
+- [x] REST Controllers (`RepairMarketplaceMatchingController`, `MarketplaceAdminAnalyticsController`) with `@PreAuthorize("hasRole('ADMIN')")` and strict JWT principal ownership
+- [x] Comprehensive backend test suite (6 test classes, 240/240 tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`repairMatching.ts`) and API client (`src/lib/api/repairMatching.ts`) with realistic Demo Mode fallbacks
+- [x] Reusable UI components:
+  - `SmartRepairMatches.tsx` — Top match showcase hero card, ranked cards with deterministic explanation factors and radar metrics
+  - `RepairShopComparison.tsx` — Side-by-side multi-shop comparison table with winner highlights
+  - `QuoteIntelligenceCard.tsx` — Price fairness gauge, market variance scale bar, and risk warnings
+  - `MarketplaceAnalyticsOverview.tsx` — User marketplace savings and platform KPI analytics dashboard
+- [x] Full interactive 5-step `/marketplace` page route with device selection, smart matching, comparison, quote requests, and quote intelligence
+- [x] Added Marketplace navigation link in `DashboardSidebar.tsx`
+- [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing with 19 routes

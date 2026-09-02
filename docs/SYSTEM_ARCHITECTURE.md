@@ -157,6 +157,34 @@ Frontend displays AI Hardware Analysis & triggers Phase 8 Recommendation Engine
 - **Zero-Dependency Heuristic Fallback**: If Gemini API key is not configured, or if requests time out or fail validation, the system falls back seamlessly to deterministic rule-based explainability heuristics, ensuring zero downtime and complete offline resilience.
 - **Security & Authorization Invariant**: Gemini narratives are strictly explanatory/read-only and are never permitted to modify risk scores, bypass authentication, or alter database state. User data access is strictly bounded by JWT principal ownership.
 
+### 12. Smart Repair Matching, Quotation & Marketplace Intelligence (Phase 26 & 27)
+```
+Device
+   ↓
+Diagnosis / Repair Need
+   ↓
+Repair Matching Engine (0–100 Compatibility Scoring)
+   ├─ Specialization Match (25 pts)
+   ├─ Trust & Reputation (20 pts)
+   ├─ Quote Competitiveness (15 pts)
+   ├─ Distance / Proximity (15 pts)
+   ├─ Availability & Speed (10 pts)
+   ├─ Experience & Tenure (10 pts)
+   └─ Circularity & Eco Score (5 pts)
+   ↓
+Smart Categorized Recommendations (Best Overall, Best Value, Fastest, Most Trusted, Eco Leader, Nearest)
+   ↓
+Side-by-Side Multi-Shop Comparison Matrix
+   ↓
+Quote Intelligence & Price Fairness Analysis
+   ↓
+Confident Repair Decision & Booking
+```
+- **Deterministic 0–100 Compatibility Engine**: `RepairMatchingService` synthesizes multi-dimensional shop capabilities, customer reviews, distance, and eco-credentials to rank repair providers for specific hardware architectures.
+- **Decision Category Winner Resolution**: `SmartRepairRecommendationService` calculates winners across distinct priorities (value, speed, trust, sustainability).
+- **Quote Pricing Fairness & Risk Flagging**: `QuoteIntelligenceService` compares quoted repair costs against regional market averages, generating a 0–100 price fairness index and warning against suspiciously low or overpriced quotes.
+- **Telemetry & Platform Analytics**: `MarketplaceAnalyticsService` captures user savings insights and aggregates platform-wide conversion and category trends for administrators.
+
 ---
 
 # Security Blueprint
