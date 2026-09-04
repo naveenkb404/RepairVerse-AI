@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
+  Bot,
   Loader2,
   Sparkles,
   Wrench,
@@ -213,6 +214,14 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
               All Devices
             </GlassButton>
             <GlassButton
+              href="/repair-agent"
+              size="sm"
+              icon={<Bot className="size-3.5" />}
+              className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border-cyan-500/40 text-cyan-300 font-bold"
+            >
+              Repair Agent
+            </GlassButton>
+            <GlassButton
               href={`/device-intelligence/${deviceId}`}
               size="sm"
               icon={<Cpu className="size-3.5" />}
@@ -241,6 +250,36 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
             isDemo={true}
             onOpenQR={() => setIsQRModalOpen(true)}
           />
+
+          {/* Phase 31: Autonomous Repair Agent & Proactive Intervention Banner */}
+          <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-emerald-950/40 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 text-slate-950 font-black shadow-lg shadow-cyan-500/20">
+                <Bot className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                    Phase 31 Autonomous Agent
+                  </span>
+                  <span className="px-2 py-0.2 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                    Proactive Shield
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                  Proactive Fleet Interventions & Autonomous Action Remediation
+                </h4>
+              </div>
+            </div>
+
+            <Link
+              href="/repair-agent"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 transition-all shadow-lg hover:shadow-cyan-500/25 shrink-0"
+            >
+              <span>Ask Repair Agent</span>
+              <Sparkles className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
           {/* Phase 30: AI Repair Ecosystem Intelligence Banner */}
           <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-slate-900/60 to-cyan-950/40 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">

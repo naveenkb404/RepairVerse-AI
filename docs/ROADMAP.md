@@ -371,3 +371,31 @@
 - [x] Full interactive `/device-intelligence/[id]` page route with multi-column glassmorphism layout, live re-evaluation, custom simulation, and error fallbacks
 - [x] Integrated entry points into Device Passport (`/devices/[id]`) with header CTA and feature hero banner
 - [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 23 routes
+
+---
+
+## Phase 31: Autonomous Repair Agent & Proactive Device Intervention System [COMPLETE]
+- [x] Database migration `V16__autonomous_repair_agent.sql` (`autonomous_interventions`, `autonomous_action_plans`, `autonomous_action_steps`, `agent_execution_history` tables with foreign keys and 12 performance indexes)
+- [x] JPA Entities (`AutonomousIntervention`, `AutonomousActionPlan`, `AutonomousActionStep`, `AgentExecutionHistory`) and Spring Data repositories (`AutonomousInterventionRepository`, `AutonomousActionPlanRepository`, `AutonomousActionStepRepository`, `AgentExecutionHistoryRepository`)
+- [x] Immutable DTO layer in `AutonomousRepairAgentDto.java` (AgentDashboardResponse, InterventionResponse, ActionPlanResponse, ActionStepResponse, ExecutionHistoryResponse, ExecutionResultResponse, DeviceEvaluationRequest, ActionApprovalRequest, ActionExecutionRequest)
+- [x] `InterventionPriorityService.java` — deterministic 6-factor priority engine (Failure Risk [25], User Impact [20], Urgency [20], Financial Risk [15], Repair Opportunity [10], Sustainability Impact [10]) with tier classification (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`)
+- [x] `AutonomousActionPlanningService.java` — prescriptive multi-step remediation generator tailoring action sequences (`GENERATE_REPORT`, `SCHEDULE_MAINTENANCE`, `FIND_SHOPS`, `REQUEST_QUOTE`, `COMPARE_OPTIONS`, `BOOK_SERVICE`, `DISPOSE_RECYCLE`, `NOTIFY_USER`) with safe automation thresholds and human-in-the-loop checkpointing
+- [x] `AgentApprovalService.java` — approval lifecycle manager enabling users to review, approve, reject, or inspect pending autonomous steps with notes and timestamp tracking
+- [x] `AgentExecutionService.java` — execution runtime safely processing automated or user-approved action steps with idempotency and permanent audit logging
+- [x] `ProactiveInterventionService.java` — proactive fleet scanner detecting anomalies and telemetry drift before catastrophic hardware failure with duplicate intervention prevention
+- [x] `AutonomousRepairAgentService.java` — master dashboard aggregator providing live fleet telemetry, pending approvals, priority distributions, and cumulative financial/carbon savings
+- [x] REST Controller `AutonomousRepairAgentController.java` (`/api/v1/repair-agent/**`) with strict JWT ownership verification
+- [x] Comprehensive backend test suite (7 test classes, all 331/331 backend Maven tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/autonomousRepairAgent.ts`) and API client (`src/lib/api/autonomousRepairAgent.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `RepairAgentHero.tsx` — Dynamic agent status header with live fleet telemetry badges and one-click fleet scan trigger
+  - `AgentImpactDashboard.tsx` — 4-card cumulative impact dashboard (Financial Savings, CO₂ Avoided, Autonomous Actions, Fleet Protection Rate)
+  - `PendingApprovalsPanel.tsx` — Interactive human-in-the-loop approval center with direct approve/reject buttons
+  - `InterventionPriorityBoard.tsx` — Priority-filtered board (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`) with real-time search
+  - `AutonomousInterventionCard.tsx` — Proactive intervention card with root-cause diagnostic summary, savings metrics, and embedded action plan
+  - `ActionPlanVisualizer.tsx` — Step-by-step progress visualizer with approval badges, action icons, and inline execution buttons
+  - `AgentActivityTimeline.tsx` — Chronological audit stream of executed autonomous interventions
+- [x] Full interactive `/repair-agent` dashboard page route with real-time status, live/demo fallback, and toast feedback
+- [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `AUTO` badge
+- [x] Device Passport integration (`/devices/[id]`) with "🤖 Ask Repair Agent" CTA banner and navigation header button
+- [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes

@@ -230,7 +230,26 @@ Circular Impact & Carbon (Phase 29) ────┘        ├─ Personalized A
 ```
 - **Unified Intelligence Scoring (0–100)**: Evaluates Health & Reliability (25%), Failure Risk (20%), Repair Economics (15%), Maintenance Status (15%), Device Longevity (10%), Sustainability Impact (10%), and Repair History (5%) into tiers (`EXCEPTIONAL`, `HEALTHY`, `STABLE`, `AT_RISK`, `CRITICAL`).
 - **One Clear Decision**: Resolves conflicting diagnostic and economic telemetry into one authoritative recommendation (`CONTINUE_USING`, `MONITOR`, `MAINTENANCE_REQUIRED`, `REPAIR_NOW`, `PROFESSIONAL_SERVICE`, `REFURBISH`, `REPLACE`, `RECYCLE`).
-- **What-If Decision Simulator**: Models costs, lifespan gains, CO₂ offsets, and savings across 7 scenarios with custom constraints (budget, lifespan target, zero-waste focus).
+### 15. Autonomous Repair Agent & Proactive Device Intervention System (Phase 31)
+```
+Continuous Fleet Telemetry & Anomaly Detection ────────┐
+Device Health Passport & Failure Predictor (Phase 22) ─┤
+Unified Decision Blueprint (Phase 30) ─────────────────┼──► PROACTIVE INTERVENTION ENGINE (`ProactiveInterventionService`)
+Repair Economics & Local Network (Phase 26/27) ────────┘        ├─ 6-Factor Priority Engine (`InterventionPriorityService`)
+                                                               ├─ Prescriptive Action Planner (`AutonomousActionPlanningService`)
+                                                               ├─ Safe Automation vs Human Approval (`AgentApprovalService`)
+                                                               ├─ Execution Engine & Idempotency (`AgentExecutionService`)
+                                                               └─ Master Fleet Dashboard (`AutonomousRepairAgentService`)
+                                                                        ↓
+                                                               Autonomous Remediation & Audit Log Stream
+```
+- **Proactive Anomaly Detection**: Proactively detects component failure signatures and telemetry drift across user devices before catastrophic failure occurs, preventing duplicate active interventions.
+- **6-Factor Deterministic Prioritization**: Scores interventions 0–100 across Failure Risk (25%), User Impact (20%), Urgency (20%), Financial Risk (15%), Repair Opportunity (10%), and Sustainability Impact (10%) into priority tiers (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`).
+- **Safe Automation Hierarchy**:
+  - 🟢 **Automatic**: Safe read/analysis tasks (`GENERATE_REPORT`, `NOTIFY_USER`, `FIND_SHOPS`, `COMPARE_OPTIONS`).
+  - 🟡 **Requires Approval**: Medium-impact actions (`SCHEDULE_MAINTENANCE`, `REQUEST_QUOTE`).
+  - 🔴 **Always Explicit Human Approval**: High-impact / financial actions (`BOOK_SERVICE`, `DISPOSE_RECYCLE`, `CONFIRM_PAYMENT`).
+- **Idempotent Audit Log Runtime**: Enforces safe execution guarantees and records every agent action permanently in `agent_execution_history`.
 
 ---
 

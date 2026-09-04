@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart3,
   Bell,
+  Bot,
   ChevronRight,
   Cpu,
   History,
@@ -40,6 +41,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: Home },
+  { label: "Repair Agent", href: "/repair-agent", icon: Bot, badge: "AUTO", badgeColor: "cyan" },
   { label: "Devices", href: "/devices", icon: Cpu, badge: "4" },
   { label: "AI Diagnosis", href: "/diagnosis", icon: Sparkles },
   { label: "Recommendations", href: "/recommendation", icon: Zap },

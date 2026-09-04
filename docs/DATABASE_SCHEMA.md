@@ -586,3 +586,74 @@ Stores actionable, user-scoped intelligence and risk alerts.
 - `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
 Indexes: `idx_dia_user_id`, `idx_dia_device_id`, `idx_dia_is_read`, `idx_dia_user_unread`, `idx_dia_type`
+
+---
+
+# Phase 31: Autonomous Repair Agent & Proactive Device Intervention System Schema
+
+## AutonomousInterventions (`autonomous_interventions`)
+Stores proactively detected device anomalies, automated evaluations, priority rankings, and financial/carbon estimates.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id, NULLABLE)
+- `intervention_type` (VARCHAR 50, NOT NULL) — MONITOR, MAINTENANCE, PREVENTIVE_REPAIR, URGENT_REPAIR, PROFESSIONAL_SERVICE, SHOP_RECOMMENDATION, QUOTE_REQUEST, DEVICE_OPTIMIZATION, REFURBISH, REPLACE, RECYCLE
+- `priority` (VARCHAR 20, NOT NULL DEFAULT 'MEDIUM') — LOW, MEDIUM, HIGH, CRITICAL
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'DETECTED') — DETECTED, PENDING_APPROVAL, APPROVED, REJECTED, IN_PROGRESS, COMPLETED, CANCELLED
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT, NOT NULL)
+- `reason` (TEXT)
+- `confidence_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.85)
+- `priority_score` (INT, NOT NULL DEFAULT 50) — 0 to 100
+- `estimated_cost` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `estimated_savings` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `estimated_co2_impact` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `recommended_action` (VARCHAR 50)
+- `requires_user_approval` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `resolved_at` (TIMESTAMP, NULLABLE)
+
+Indexes: `idx_ai_user_id`, `idx_ai_device_id`, `idx_ai_priority`, `idx_ai_status`, `idx_ai_type`, `idx_ai_created_at`
+
+## AutonomousActionPlans (`autonomous_action_plans`)
+Stores the multi-step prescriptive remediation roadmap associated with an intervention.
+- `id` (VARCHAR 36, PK)
+- `intervention_id` (VARCHAR 36, FK → autonomous_interventions.id ON DELETE CASCADE, NOT NULL)
+- `plan_name` (VARCHAR 255, NOT NULL)
+- `objective` (TEXT, NOT NULL)
+- `total_steps` (INT, NOT NULL DEFAULT 0)
+- `completed_steps` (INT, NOT NULL DEFAULT 0)
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'PENDING') — PENDING, PENDING_APPROVAL, APPROVED, IN_PROGRESS, COMPLETED, FAILED, CANCELLED
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aap_intervention_id`, `idx_aap_status`
+
+## AutonomousActionSteps (`autonomous_action_steps`)
+Stores individual sequenced remediation actions with safety classification and approval state.
+- `id` (VARCHAR 36, PK)
+- `plan_id` (VARCHAR 36, FK → autonomous_action_plans.id ON DELETE CASCADE, NOT NULL)
+- `step_order` (INT, NOT NULL)
+- `action_type` (VARCHAR 50, NOT NULL) — GENERATE_REPORT, SCHEDULE_MAINTENANCE, FIND_SHOPS, REQUEST_QUOTE, COMPARE_OPTIONS, BOOK_SERVICE, DISPOSE_RECYCLE, NOTIFY_USER
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT, NOT NULL)
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'PENDING') — PENDING, WAITING_APPROVAL, APPROVED, REJECTED, RUNNING, COMPLETED, FAILED, CANCELLED
+- `requires_approval` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `action_metadata` (TEXT, NULLABLE)
+- `scheduled_for` (TIMESTAMP, NULLABLE)
+- `completed_at` (TIMESTAMP, NULLABLE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aas_plan_id`, `idx_aas_status`, `idx_aas_requires_approval`, `idx_aas_step_order`
+
+## AgentExecutionHistory (`agent_execution_history`)
+Immutable chronological audit log of all autonomous agent execution results.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id, NULLABLE)
+- `intervention_id` (VARCHAR 36, FK → autonomous_interventions.id ON DELETE SET NULL, NULLABLE)
+- `action_step_id` (VARCHAR 36, FK → autonomous_action_steps.id ON DELETE SET NULL, NULLABLE)
+- `action_type` (VARCHAR 50, NOT NULL)
+- `execution_status` (VARCHAR 30, NOT NULL) — SUCCESS, FAILED, SKIPPED, TIMEOUT
+- `result_summary` (TEXT, NOT NULL)
+- `executed_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aeh_user_id`, `idx_aeh_device_id`, `idx_aeh_intervention_id`, `idx_aeh_status`, `idx_aeh_executed_at`

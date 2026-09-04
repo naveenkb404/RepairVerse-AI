@@ -1257,6 +1257,65 @@ Marks an alert as read and returns the updated alert record.
 
 ---
 
+# Autonomous Repair Agent & Proactive Intervention System (Phase 31)
+
+Base URL: `/api/v1/repair-agent`
+
+## 1. Get Agent Dashboard
+`GET /repair-agent/dashboard`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns overall agent operational status, active monitored devices count, active proactive interventions, pending human approvals, recent executions, priority distribution, and cumulative financial/carbon savings metrics.
+
+## 2. Get Active Interventions
+`GET /repair-agent/interventions`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns list of all active proactive interventions for the authenticated user, prioritized by urgency and failure risk.
+
+## 3. Get Intervention by ID
+`GET /repair-agent/interventions/{id}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns single proactive intervention details with root cause reason, priority scores, and complete step-by-step action plan.
+
+## 4. Trigger Proactive Device Evaluation
+`POST /repair-agent/evaluate/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Triggers deterministic proactive anomaly evaluation for a single device, synthesizes multi-step remediation action plan if risk threshold is met, and returns generated intervention.
+
+## 5. Evaluate All Fleet Devices
+`POST /repair-agent/evaluate-all`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Scans and evaluates all user registered fleet devices in one unified autonomous pass.
+
+## 6. Get Pending Approvals
+`GET /repair-agent/approvals`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all action steps currently in `WAITING_APPROVAL` status requiring user confirmation before execution.
+
+## 7. Approve Action Step
+`POST /repair-agent/approvals/{stepId}/approve`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "approved": true, "notes": "Approved by user" }`
+Approves a pending step, transitioning status to `APPROVED`.
+
+## 8. Reject Action Step
+`POST /repair-agent/approvals/{stepId}/reject`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "approved": false, "notes": "Not needed right now" }`
+Rejects a pending step, transitioning status to `REJECTED`.
+
+## 9. Execute Action Step
+`POST /repair-agent/execute/{stepId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "parameters": {} }`
+Executes an approved or automated action step, verifies safety criteria, logs execution audit record, and updates plan progression.
+
+## 10. Get Execution History Audit Stream
+`GET /repair-agent/history`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns chronological execution audit log with result summaries and timestamps.
+
+---
+
 # Response Format
 
 Success
