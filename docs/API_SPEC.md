@@ -1316,6 +1316,58 @@ Returns chronological execution audit log with result summaries and timestamps.
 
 ---
 
+# AI Repair Knowledge Graph & Ecosystem Learning Intelligence (Phase 32)
+
+Base URL: `/api/v1/knowledge`
+
+## 1. Get Knowledge Graph
+`GET /knowledge/graph`
+Returns full knowledge graph entities (nodes), weighted relationships (edges), and summary statistics.
+
+## 2. Get Graph Statistics
+`GET /knowledge/graph/statistics`
+Returns platform-wide totals for nodes, relationships, pattern insights, observations, average confidence, and distributions.
+
+## 3. Get Device Knowledge Profile
+`GET /knowledge/devices/{deviceId}/profile`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns device-scoped knowledge nodes, direct pattern insights, matched similar cases, and prescriptive recommendations.
+
+## 4. Get Similar Repair Cases
+`GET /knowledge/devices/{deviceId}/similar-cases`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns anonymized ecosystem repair cases with similarity match percentages, components, actions, cost ranges, and lessons learned.
+
+## 5. Get Knowledge Recommendations
+`GET /knowledge/devices/{deviceId}/recommendations`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns evidence-backed repair recommendations with traceable observation counts, expected outcomes, and reasoning.
+
+## 6. Get Pattern Insights
+`GET /knowledge/insights?type={type}&category={category}`
+Returns discovered ecosystem pattern insights filtered optionally by insight type (`COMMON_FAILURE`, `HIGH_SUCCESS_REPAIR`, etc.) and device category.
+
+## 7. Get Insight by ID
+`GET /knowledge/insights/{insightId}`
+Returns single pattern insight details with community feedback metrics.
+
+## 8. Submit Insight Feedback
+`POST /knowledge/insights/{insightId}/feedback`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "feedbackType": "HELPFUL", "rating": 5, "comment": "Accurate finding" }`
+Registers user feedback (`HELPFUL`, `NOT_HELPFUL`, `ACCURATE`, `INACCURATE`) and refines insight weights deterministically.
+
+## 9. Rebuild Knowledge Graph
+`POST /knowledge/rebuild`
+Synchronizes knowledge graph nodes and relationships against historical telemetry and outcomes.
+
+## 10. Admin Discover Patterns
+`POST /knowledge/admin/discover-patterns`
+Header: `Authorization: Bearer <JWT_TOKEN>` (ADMIN Role Required)
+Triggers ecosystem pattern discovery across aggregate repair observations.
+
+---
+
 # Response Format
 
 Success

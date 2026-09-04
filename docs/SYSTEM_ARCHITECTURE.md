@@ -251,6 +251,24 @@ Repair Economics & Local Network (Phase 26/27) ────────┘      
   - 🔴 **Always Explicit Human Approval**: High-impact / financial actions (`BOOK_SERVICE`, `DISPOSE_RECYCLE`, `CONFIRM_PAYMENT`).
 - **Idempotent Audit Log Runtime**: Enforces safe execution guarantees and records every agent action permanently in `agent_execution_history`.
 
+### 16. AI Repair Knowledge Graph & Ecosystem Learning Intelligence (Phase 32)
+```
+DEVICE_MODEL / CATEGORY ──HAS_COMPONENT──► COMPONENT ──INDICATES_FAILURE──► FAILURE_MODE
+                                                                                 │
+                                                                          EXHIBITS_SYMPTOM
+                                                                                 │
+                                                                                 ▼
+REPAIR_OUTCOME ◄──RESULTED_IN── REPAIR_ACTION ◄──RESOLVED_BY─────────────► SYMPTOM
+      ▲                               │
+      │                               ▼
+KNOWLEDGE INSIGHT ◄───────────── REPAIR_SHOP (Specialization)
+```
+- **Relational Knowledge Graph Engine**: Synthesizes and maintains domain entities (nodes) and weighted directed connections (edges) capturing collective repair precedents across the ecosystem.
+- **Deterministic Relationship Strength (0–100)**: Weights frequency of observations (30%), verified outcome quality (25%), observation recency (15%), confidence (20%), and community validation feedback (10%).
+- **Pattern Discovery Engine**: Autonomously extracts recurring failure modes, high-confidence repair strategies, shop specializations, and component-level carbon saving patterns.
+- **Privacy-Preserving Precedent Engine**: Provides 5-factor similarity scoring matching current device symptoms against anonymized historical repairs without exposing user identity.
+- **Autonomous Agent Knowledge Injection**: Allows Phase 31 Autonomous Repair Agent to query learned repair strategies before generating proactive intervention roadmaps.
+
 ---
 
 # Security Blueprint

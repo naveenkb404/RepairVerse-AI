@@ -657,3 +657,70 @@ Immutable chronological audit log of all autonomous agent execution results.
 - `executed_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
 Indexes: `idx_aeh_user_id`, `idx_aeh_device_id`, `idx_aeh_intervention_id`, `idx_aeh_status`, `idx_aeh_executed_at`
+
+---
+
+# Phase 32: AI Repair Knowledge Graph & Ecosystem Learning Intelligence Schema
+
+## RepairKnowledgeNodes (`repair_knowledge_nodes`)
+Represents categorized domain entities (device models, categories, components, symptoms, failure modes, actions, parts, shops, outcomes).
+- `id` (VARCHAR 36, PK)
+- `node_type` (VARCHAR 50, NOT NULL) — DEVICE_MODEL, DEVICE_CATEGORY, COMPONENT, SYMPTOM, FAILURE_MODE, REPAIR_ACTION, REPAIR_PART, REPAIR_SHOP, REPAIR_OUTCOME
+- `node_key` (VARCHAR 100, NOT NULL)
+- `display_name` (VARCHAR 255, NOT NULL)
+- `description` (TEXT)
+- `metadata` (TEXT)
+- `confidence_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.85)
+- `observation_count` (INT, NOT NULL DEFAULT 1)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Constraints: Unique `(node_type, node_key)`
+Indexes: `idx_rkn_type`, `idx_rkn_key`, `idx_rkn_obs_count`, `idx_rkn_confidence`
+
+## RepairKnowledgeRelationships (`repair_knowledge_relationships`)
+Represents weighted directed graph edges linking entities.
+- `id` (VARCHAR 36, PK)
+- `source_node_id` (VARCHAR 36, FK → repair_knowledge_nodes.id ON DELETE CASCADE, NOT NULL)
+- `target_node_id` (VARCHAR 36, FK → repair_knowledge_nodes.id ON DELETE CASCADE, NOT NULL)
+- `relationship_type` (VARCHAR 50, NOT NULL) — HAS_COMPONENT, EXHIBITS_SYMPTOM, INDICATES_FAILURE, CAUSED_BY, RESOLVED_BY, REQUIRES_PART, PERFORMED_BY, RESULTED_IN, SIMILAR_TO, PREVENTS
+- `strength` (DOUBLE PRECISION, NOT NULL DEFAULT 50.0) — 0 to 100
+- `confidence` (DOUBLE PRECISION, NOT NULL DEFAULT 0.80) — 0.0 to 1.0
+- `observation_count` (INT, NOT NULL DEFAULT 1)
+- `metadata` (TEXT)
+- `first_observed_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `last_observed_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Constraints: Unique `(source_node_id, target_node_id, relationship_type)`
+Indexes: `idx_rkr_source`, `idx_rkr_target`, `idx_rkr_type`, `idx_rkr_strength`, `idx_rkr_source_type`
+
+## RepairPatternInsights (`repair_pattern_insights`)
+Stores discovered ecosystem-wide failure, repair, and sustainability insights.
+- `id` (VARCHAR 36, PK)
+- `insight_type` (VARCHAR 50, NOT NULL) — COMMON_FAILURE, HIGH_SUCCESS_REPAIR, RECURRING_COMPONENT_ISSUE, SHOP_SPECIALIZATION, COST_EFFECTIVE_REPAIR, PREVENTIVE_OPPORTUNITY, SUSTAINABILITY_PATTERN
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT, NOT NULL)
+- `confidence` (DOUBLE PRECISION, NOT NULL DEFAULT 0.85)
+- `impact_score` (INT, NOT NULL DEFAULT 50) — 0 to 100
+- `supporting_observations` (INT, NOT NULL DEFAULT 1)
+- `device_category` (VARCHAR 50)
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'ACTIVE')
+- `generated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_rpi_type`, `idx_rpi_category`, `idx_rpi_status`, `idx_rpi_confidence`, `idx_rpi_impact`
+
+## RepairKnowledgeFeedback (`repair_knowledge_feedback`)
+Captures user rating and validation feedback on pattern insights.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id ON DELETE CASCADE, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE SET NULL)
+- `insight_id` (VARCHAR 36, FK → repair_pattern_insights.id ON DELETE CASCADE)
+- `feedback_type` (VARCHAR 50, NOT NULL) — HELPFUL, NOT_HELPFUL, ACCURATE, INACCURATE
+- `rating` (INT)
+- `comment` (TEXT)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_rkf_user_id`, `idx_rkf_device_id`, `idx_rkf_insight_id`, `idx_rkf_type`

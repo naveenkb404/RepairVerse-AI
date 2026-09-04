@@ -8,6 +8,7 @@ import {
   BarChart3,
   Bell,
   Bot,
+  Brain,
   ChevronRight,
   Cpu,
   History,
@@ -41,6 +42,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: Home },
+  { label: "Knowledge Graph", href: "/knowledge", icon: Brain, badge: "GRAPH", badgeColor: "cyan" },
   { label: "Repair Agent", href: "/repair-agent", icon: Bot, badge: "AUTO", badgeColor: "cyan" },
   { label: "Devices", href: "/devices", icon: Cpu, badge: "4" },
   { label: "AI Diagnosis", href: "/diagnosis", icon: Sparkles },

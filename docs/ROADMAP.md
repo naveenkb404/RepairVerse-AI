@@ -396,6 +396,31 @@
   - `ActionPlanVisualizer.tsx` — Step-by-step progress visualizer with approval badges, action icons, and inline execution buttons
   - `AgentActivityTimeline.tsx` — Chronological audit stream of executed autonomous interventions
 - [x] Full interactive `/repair-agent` dashboard page route with real-time status, live/demo fallback, and toast feedback
-- [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `AUTO` badge
 - [x] Device Passport integration (`/devices/[id]`) with "🤖 Ask Repair Agent" CTA banner and navigation header button
+- [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes
+
+---
+
+## Phase 32: AI Repair Knowledge Graph & Ecosystem Learning Intelligence [COMPLETE]
+- [x] Database migration `V17__repair_knowledge_graph.sql` (`repair_knowledge_nodes`, `repair_knowledge_relationships`, `repair_pattern_insights`, `repair_knowledge_feedback` tables with foreign keys and 16 performance indexes)
+- [x] JPA Entities (`RepairKnowledgeNode`, `RepairKnowledgeRelationship`, `RepairPatternInsight`, `RepairKnowledgeFeedback`) and Spring Data repositories (`RepairKnowledgeNodeRepository`, `RepairKnowledgeRelationshipRepository`, `RepairPatternInsightRepository`, `RepairKnowledgeFeedbackRepository`)
+- [x] Immutable DTO layer in `RepairKnowledgeGraphDto.java` (KnowledgeGraphResponse, KnowledgeNodeResponse, KnowledgeRelationshipResponse, PatternInsightResponse, DeviceKnowledgeProfileResponse, SimilarRepairCaseResponse, RepairSuccessPatternResponse, KnowledgeRecommendationResponse, KnowledgeFeedbackRequest, KnowledgeGraphStatisticsResponse)
+- [x] `RepairKnowledgeGraphService.java` — graph construction, deterministic relationship strength engine (Frequency [30%], Outcome Quality [25%], Recency [15%], Confidence [20%], Feedback [10%]), graph synchronization, and device profile lookup
+- [x] `RepairPatternDiscoveryService.java` — ecosystem pattern extractor discovering high-confidence insights (`COMMON_FAILURE`, `HIGH_SUCCESS_REPAIR`, `PREVENTIVE_OPPORTUNITY`, `SHOP_SPECIALIZATION`, `SUSTAINABILITY_PATTERN`) with observation thresholds
+- [x] `SimilarRepairCaseService.java` — 5-factor similarity matcher (Device Model/Category [25%], Component [20%], Symptom [20%], Failure [20%], Context [15%]) delivering privacy-preserving anonymized historical cases
+- [x] `KnowledgeDrivenRecommendationService.java` — evidence-backed recommendation synthesizer providing traceable reasoning and integration with Autonomous Repair Agent
+- [x] `RepairKnowledgeFeedbackService.java` — user feedback loop (`HELPFUL`, `NOT_HELPFUL`, `ACCURATE`, `INACCURATE`) deterministically refining insight weights
+- [x] REST Controller `RepairKnowledgeGraphController.java` (`/api/v1/knowledge/**`) with JWT security and admin pattern discovery triggers
+- [x] Comprehensive backend test suite (6 test classes, all 346/346 backend Maven tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/repairKnowledgeGraph.ts`) and API client (`src/lib/api/repairKnowledgeGraph.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `KnowledgeGraphHero.tsx` — Dynamic status header with entity node counters, edge counts, and graph sync button
+  - `InteractiveKnowledgeGraph.tsx` — Interactive entity matrix and relationship inspector with category filtering
+  - `PatternInsightsPanel.tsx` — Categorized ecosystem pattern insights with interactive helpful/inaccurate voting
+  - `SimilarRepairCases.tsx` — Anonymized historical case cards with match percentages and ecosystem lessons learned
+  - `KnowledgeRecommendations.tsx` — Prescriptive recommendations backed by verified repair evidence
+  - `KnowledgeStatistics.tsx` — Node type and relationship edge distribution progress bars
+- [x] Full interactive `/knowledge` dashboard page route with multi-tab navigation, graph sync triggers, and toast notifications
+- [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `GRAPH` badge
+- [x] Device Passport integration (`/devices/[id]`) with "🧠 Ecosystem Knowledge" CTA banner and navigation header button
 - [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes
