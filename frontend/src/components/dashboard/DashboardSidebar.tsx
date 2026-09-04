@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Activity,
   BarChart3,
   Bell,
   Bot,
@@ -42,6 +43,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: Home },
+  { label: "Digital Twin", href: "/digital-twin/dev-mock-01", icon: Activity, badge: "TWIN", badgeColor: "cyan" },
   { label: "Knowledge Graph", href: "/knowledge", icon: Brain, badge: "GRAPH", badgeColor: "cyan" },
   { label: "Repair Agent", href: "/repair-agent", icon: Bot, badge: "AUTO", badgeColor: "cyan" },
   { label: "Devices", href: "/devices", icon: Cpu, badge: "4" },

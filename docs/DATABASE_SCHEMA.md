@@ -724,3 +724,101 @@ Captures user rating and validation feedback on pattern insights.
 - `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
 Indexes: `idx_rkf_user_id`, `idx_rkf_device_id`, `idx_rkf_insight_id`, `idx_rkf_type`
+
+---
+
+# Module 18 — AI Repair Ecosystem Digital Twin & Predictive Optimization Engine (`V18__repair_ecosystem_digital_twin.sql`)
+
+## DigitalTwinSnapshot (`digital_twin_snapshots`)
+Stores the authoritative point-in-time state of a device's digital twin.
+- `id` (VARCHAR 36, PK)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `user_id` (VARCHAR 36, FK → users.id ON DELETE CASCADE, NOT NULL)
+- `overall_health_score` (DOUBLE, NOT NULL)
+- `performance_index` (DOUBLE, NOT NULL)
+- `reliability_index` (DOUBLE, NOT NULL)
+- `sustainability_index` (DOUBLE, NOT NULL)
+- `financial_risk_score` (DOUBLE, NOT NULL)
+- `predicted_lifespan_months` (INT, NOT NULL)
+- `repair_probability_next_6_months` (DOUBLE, NOT NULL)
+- `estimated_remaining_value` (DOUBLE, NOT NULL)
+- `carbon_debt_score` (DOUBLE, NOT NULL)
+- `twin_confidence_score` (DOUBLE, NOT NULL)
+- `recommended_action` (VARCHAR 50, NOT NULL)
+- `simulation_status` (VARCHAR 30, NOT NULL DEFAULT 'STABLE')
+- `last_refreshed` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dts_device_id`, `idx_dts_user_id`, `idx_dts_refreshed`, `idx_dts_health_score`
+
+## DigitalTwinForecast (`digital_twin_forecasts`)
+Stores multi-horizon health and reliability forecasts anchored to a snapshot.
+- `id` (VARCHAR 36, PK)
+- `snapshot_id` (VARCHAR 36, FK → digital_twin_snapshots.id ON DELETE CASCADE, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `horizon_months` (INT, NOT NULL) — 3, 6, 12, 24
+- `forecasted_health_score` (DOUBLE, NOT NULL)
+- `forecasted_reliability` (DOUBLE, NOT NULL)
+- `failure_probability` (DOUBLE, NOT NULL)
+- `estimated_repair_cost` (DOUBLE, NOT NULL)
+- `recommended_action` (VARCHAR 50, NOT NULL)
+- `confidence_score` (DOUBLE, NOT NULL)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dtf_snapshot_id`, `idx_dtf_device_id`, `idx_dtf_horizon`
+
+## DigitalTwinScenario (`digital_twin_scenarios`)
+Stores pre-built and custom future scenario simulation results.
+- `id` (VARCHAR 36, PK)
+- `snapshot_id` (VARCHAR 36, FK → digital_twin_snapshots.id ON DELETE CASCADE, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `scenario_type` (VARCHAR 50, NOT NULL) — MAINTAIN, REPAIR_OPTIMIZE, UPGRADE, REPURPOSE, RECYCLE, CUSTOM
+- `scenario_name` (VARCHAR 200, NOT NULL)
+- `projected_health_score` (DOUBLE, NOT NULL)
+- `estimated_cost` (DOUBLE, NOT NULL)
+- `estimated_lifespan_gain_months` (INT, NOT NULL)
+- `sustainability_impact` (DOUBLE, NOT NULL)
+- `financial_roi` (DOUBLE, NOT NULL)
+- `risk_level` (VARCHAR 30, NOT NULL)
+- `recommendation` (TEXT)
+- `simulation_parameters` (TEXT) — JSON
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dtsc_snapshot_id`, `idx_dtsc_device_id`, `idx_dtsc_type`
+
+## DigitalTwinOptimizationResult (`digital_twin_optimization_results`)
+Stores the output of the 6-factor deterministic strategy optimizer.
+- `id` (VARCHAR 36, PK)
+- `snapshot_id` (VARCHAR 36, FK → digital_twin_snapshots.id ON DELETE CASCADE, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `recommended_strategy` (VARCHAR 50, NOT NULL)
+- `strategy_name` (VARCHAR 200, NOT NULL)
+- `composite_score` (DOUBLE, NOT NULL)
+- `financial_score` (DOUBLE, NOT NULL) — weight 25%
+- `reliability_score` (DOUBLE, NOT NULL) — weight 20%
+- `longevity_score` (DOUBLE, NOT NULL) — weight 15%
+- `risk_reduction_score` (DOUBLE, NOT NULL) — weight 15%
+- `sustainability_score` (DOUBLE, NOT NULL) — weight 15%
+- `downtime_score` (DOUBLE, NOT NULL) — weight 10%
+- `estimated_cost` (DOUBLE, NOT NULL)
+- `estimated_roi` (DOUBLE, NOT NULL)
+- `payback_months` (INT, NOT NULL)
+- `key_recommendations` (TEXT) — newline-delimited list
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dtop_snapshot_id`, `idx_dtop_device_id`, `idx_dtop_strategy`
+
+## EcosystemSimulationEvent (`ecosystem_simulation_events`)
+Chronological audit log of all digital twin simulation events.
+- `id` (VARCHAR 36, PK)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `user_id` (VARCHAR 36, FK → users.id ON DELETE CASCADE, NOT NULL)
+- `event_type` (VARCHAR 80, NOT NULL) — TWIN_SNAPSHOT_CREATED, FORECAST_UPDATED, SCENARIO_SIMULATED, OPTIMIZATION_COMPLETED, RISK_ALERT, MAINTENANCE_TRIGGERED
+- `title` (VARCHAR 200, NOT NULL)
+- `description` (TEXT)
+- `severity` (VARCHAR 20, NOT NULL DEFAULT 'INFO') — INFO, WARNING, CRITICAL
+- `metadata` (TEXT) — JSON
+- `event_timestamp` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_ese_device_id`, `idx_ese_user_id`, `idx_ese_type`, `idx_ese_severity`, `idx_ese_timestamp`

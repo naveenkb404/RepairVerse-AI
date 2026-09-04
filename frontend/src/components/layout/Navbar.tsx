@@ -113,6 +113,9 @@ export default function Navbar({ className }: NavbarProps) {
 
           {/* Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/digital-twin/dev-mock-01" variant="secondary" size="sm">
+              Digital Twin
+            </GlassButton>
             <GlassButton href="/knowledge" variant="secondary" size="sm">
               Knowledge Graph
             </GlassButton>
@@ -243,6 +246,9 @@ export default function Navbar({ className }: NavbarProps) {
                 transition={{ duration: 0.3, ease: EASE }}
                 className="pt-3 flex flex-col gap-2"
               >
+                <GlassButton href="/digital-twin/dev-mock-01" variant="secondary" fullWidth onClick={closeMenu}>
+                  🔮 AI Digital Twin Simulation
+                </GlassButton>
                 <GlassButton href="/knowledge" variant="secondary" fullWidth onClick={closeMenu}>
                   AI Repair Knowledge Graph
                 </GlassButton>

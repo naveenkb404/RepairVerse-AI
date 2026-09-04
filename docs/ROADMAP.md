@@ -424,3 +424,32 @@
 - [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `GRAPH` badge
 - [x] Device Passport integration (`/devices/[id]`) with "🧠 Ecosystem Knowledge" CTA banner and navigation header button
 - [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes
+
+---
+
+## Phase 33: AI Repair Ecosystem Digital Twin & Predictive Optimization Engine [COMPLETE]
+- [x] Database migration `V18__repair_ecosystem_digital_twin.sql` (`digital_twin_snapshots`, `digital_twin_forecasts`, `digital_twin_scenarios`, `digital_twin_optimization_results`, `ecosystem_simulation_events` tables with foreign keys and 20 performance indexes)
+- [x] JPA Entities (`DigitalTwinSnapshot`, `DigitalTwinForecast`, `DigitalTwinScenario`, `DigitalTwinOptimizationResult`, `EcosystemSimulationEvent`) and Spring Data repositories with cascade-delete and device-scoped query methods
+- [x] Immutable DTO layer in `DigitalTwinDto.java` (DigitalTwinDashboardResponse, SnapshotResponse, ForecastResponse, TrajectoryPointResponse, ScenarioResponse, OptimizationResultResponse, SimulationInsightResponse, EcosystemMetricsResponse, RunSimulationRequest, SimulationEventResponse)
+- [x] `DigitalTwinStateService.java` — authoritative snapshot builder orchestrating Device Health, AI Diagnosis, Lifecycle, Predictive, Maintenance, and Carbon intelligence into a unified twin state; deterministic 6-index scoring (Performance, Reliability, Sustainability, Financial Risk, Confidence)
+- [x] `DeviceTrajectoryForecastService.java` — multi-horizon health forecaster projecting device state at 3, 6, 12, and 24 months with failure probability curves, repair cost escalation, and action recommendations
+- [x] `DigitalTwinScenarioSimulationService.java` — 5 pre-built and custom scenario engine (MAINTAIN, REPAIR_OPTIMIZE, UPGRADE, REPURPOSE, RECYCLE, CUSTOM) with projected ROI, lifespan gain, sustainability impact, and risk categorization
+- [x] `RepairStrategyOptimizationService.java` — 6-factor deterministic optimizer (Financial [25%], Reliability [20%], Longevity [15%], Risk Reduction [15%], Sustainability [15%], Downtime [10%]) selecting the highest composite-score action strategy
+- [x] `EcosystemSimulationService.java` — master orchestrator composing complete DigitalTwinDashboardResponse from all sub-services and persisting authorized snapshots and audit events
+- [x] `SimulationInsightService.java` — generates prioritized natural-language actionable insights derived from snapshot signals, forecast deltas, and optimization recommendations
+- [x] REST Controller `DigitalTwinController.java` (`/api/v1/digital-twin/**`) with 9 JWT-secured endpoints: dashboard, device twin, refresh, forecasts, trajectory, scenarios, custom simulation, optimization, and events
+- [x] Comprehensive backend test suite (6 test classes covering all services); 362 backend Maven tests passing (0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/digitalTwin.ts`) and API client (`src/lib/api/digitalTwin.ts`) with rich Demo Mode / MOCK fallback data for all endpoints
+- [x] Reusable Glassmorphism UI components:
+  - `DigitalTwinHero.tsx` — Dynamic twin status header with health score, simulation status badges, confidence meter, and one-click refresh trigger
+  - `DigitalTwinHealthMatrix.tsx` — 6-index health breakdown (Performance, Reliability, Sustainability, Financial Risk, Lifespan, Confidence) with animated progress bars
+  - `DeviceTrajectoryChart.tsx` — Month-by-month 24-month health trajectory chart with multi-series lines (health, reliability, cumulative cost) built with SVG
+  - `FutureScenarioSimulator.tsx` — Interactive scenario comparison cards + custom parameter simulator (usage intensity, maintenance frequency, repair budget, target lifespan)
+  - `StrategyOptimizationCard.tsx` — Highlighted optimal strategy card with 6-axis scoring breakdown and primary CTA
+  - `SimulationEventTimeline.tsx` — Chronological simulation audit stream with severity-colored event icons and timestamps
+  - `EcosystemImpactDashboard.tsx` — 4-metric ecosystem impact row (devices simulated, CO₂ avoided, financial savings, avg. confidence)
+  - `SimulationInsightsPanel.tsx` — Prioritized AI insight cards with severity badges and actionable recommendations
+- [x] Full interactive `/digital-twin/[id]` page route with 4-tab navigation (Health Matrix & Insights, 24-Month Trajectory, Future Scenario Simulator, Simulation Event Timeline), real-time twin refresh, custom scenario execution, and animated toast notifications
+- [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with `TWIN` badge
+- [x] Device Passport integration (`/devices/[id]`) with "⚡ Digital Twin" CTA banner, "Open Digital Twin" button, and navigation header shortcut
+- [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes

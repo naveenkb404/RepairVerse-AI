@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Bot,
   Brain,
+  Layers,
   Loader2,
   Sparkles,
   Wrench,
@@ -239,6 +240,14 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
               Device Intelligence
             </GlassButton>
             <GlassButton
+              href={`/digital-twin/${deviceId}`}
+              size="sm"
+              icon={<Layers className="size-3.5" />}
+              className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/40 text-cyan-300 font-bold"
+            >
+              Digital Twin
+            </GlassButton>
+            <GlassButton
               href="/diagnosis"
               size="sm"
               icon={<Sparkles className="size-3.5" />}
@@ -259,6 +268,36 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
             isDemo={true}
             onOpenQR={() => setIsQRModalOpen(true)}
           />
+
+          {/* Phase 33: AI Digital Twin & Predictive Simulation Banner */}
+          <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-slate-900/90 via-purple-950/40 to-slate-950/90 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-500 text-slate-950 font-black shadow-lg shadow-purple-500/20">
+                <Layers className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-400">
+                    Phase 33 Digital Twin
+                  </span>
+                  <span className="px-2 py-0.2 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    Predictive Simulation
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                  Run Multi-Horizon Simulations &amp; Optimize Your Device Strategy
+                </h4>
+              </div>
+            </div>
+
+            <Link
+              href={`/digital-twin/${deviceId}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-slate-950 transition-all shadow-lg hover:shadow-purple-500/25 shrink-0"
+            >
+              <span>Open Digital Twin</span>
+              <Layers className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
           {/* Phase 32: AI Repair Knowledge Graph & Ecosystem Precedent Banner */}
           <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-950/90 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
