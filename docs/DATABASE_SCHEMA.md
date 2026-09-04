@@ -531,3 +531,58 @@ Stores unlocked circular milestone badges for gamified sustainability engagement
 
 Constraints: Unique `(user_id, achievement_code)`
 Indexes: `idx_sa_user_id`, `idx_sa_achievement_code`, `idx_sa_tier`
+
+---
+
+# Phase 30: AI Repair Ecosystem Intelligence & Personalized Device Decision Engine Schema
+
+## DeviceDecisionSnapshots (`device_decision_snapshots`)
+Stores historical multi-signal decision evaluations generated for devices.
+- `id` (VARCHAR 36, PK)
+- `device_id` (VARCHAR 36, FK → devices.id, NOT NULL)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `intelligence_score` (INT, NOT NULL DEFAULT 0) — 0 to 100
+- `recommended_action` (VARCHAR 50, NOT NULL) — CONTINUE_USING, MONITOR, MAINTENANCE_REQUIRED, REPAIR_NOW, PROFESSIONAL_SERVICE, REFURBISH, REPLACE, RECYCLE
+- `decision_confidence` (INT, NOT NULL DEFAULT 85) — 0 to 100
+- `health_score` (INT, NOT NULL DEFAULT 0)
+- `failure_risk_score` (INT, NOT NULL DEFAULT 0)
+- `economic_score` (INT, NOT NULL DEFAULT 0)
+- `maintenance_score` (INT, NOT NULL DEFAULT 0)
+- `longevity_score` (INT, NOT NULL DEFAULT 0)
+- `sustainability_score` (INT, NOT NULL DEFAULT 0)
+- `repair_history_score` (INT, NOT NULL DEFAULT 0)
+- `explanation_summary` (TEXT)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dds_device_id`, `idx_dds_user_id`, `idx_dds_created_at`, `idx_dds_device_created`
+
+## DeviceDecisionScenarios (`device_decision_scenarios`)
+Stores generated alternative what-if decision scenarios.
+- `id` (VARCHAR 36, PK)
+- `device_id` (VARCHAR 36, FK → devices.id, NOT NULL)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `scenario_type` (VARCHAR 50, NOT NULL) — CONTINUE_USING, MONITOR, MAINTENANCE, REPAIR, PROFESSIONAL_SERVICE, REFURBISH, REPLACE, RECYCLE
+- `estimated_cost` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `estimated_lifespan_months` (INT, NOT NULL DEFAULT 0)
+- `estimated_co2_impact` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `estimated_savings` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `intelligence_score` (INT, NOT NULL DEFAULT 0)
+- `recommendation` (TEXT)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_ddsc_device_id`, `idx_ddsc_user_id`, `idx_ddsc_type`, `idx_ddsc_device_type`
+
+## DeviceIntelligenceAlerts (`device_intelligence_alerts`)
+Stores actionable, user-scoped intelligence and risk alerts.
+- `id` (VARCHAR 36, PK)
+- `device_id` (VARCHAR 36, FK → devices.id, NOT NULL)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `alert_type` (VARCHAR 50, NOT NULL) — FAILURE_RISK, MAINTENANCE_REQUIRED, REPAIR_RECOMMENDED, COST_ESCALATION, END_OF_LIFE, SUSTAINABILITY_OPPORTUNITY
+- `severity` (VARCHAR 20, NOT NULL DEFAULT 'MEDIUM') — INFO, LOW, MEDIUM, HIGH, CRITICAL
+- `title` (VARCHAR 255, NOT NULL)
+- `message` (TEXT, NOT NULL)
+- `recommended_action` (VARCHAR 50)
+- `is_read` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_dia_user_id`, `idx_dia_device_id`, `idx_dia_is_read`, `idx_dia_user_unread`, `idx_dia_type`

@@ -318,30 +318,56 @@
 - [x] Dedicated `/admin/network-intelligence` page route with platform health gauges, tier distribution chart, anomaly review management, and determinism guarantee banner
 - [x] Navigation item integrated in `DashboardSidebar.tsx`
 - [x] TypeScript check passing (`0 errors`) and Next.js 16 production build passing across 21 routes
-321: 
-322: ---
-323: 
-324: ## Phase 29: AI-Powered Circular Economy Intelligence & Personalized Sustainability Optimization [COMPLETE]
-325: - [x] Database migration `V14__circular_economy_intelligence.sql` (`circular_impact_events`, `sustainability_goals`, `sustainability_achievements` tables with 12 performance indexes and unique constraints)
-326: - [x] JPA Entities (`CircularImpactEvent`, `SustainabilityGoal`, `SustainabilityAchievement`) and Spring Data repositories (`CircularImpactEventRepository`, `SustainabilityGoalRepository`, `SustainabilityAchievementRepository`)
-327: - [x] Immutable DTO layer in `CircularEconomyDto.java` (CircularImpactOverview, ScoreBreakdown, FactorScore, OptimizationRecommendation, Goal, Achievement, ImpactTimelineEvent, CategoryImpact, PlatformCircularOverview, LeaderboardEntry)
-328: - [x] `CircularImpactService.java` — deterministic lifecycle event recorder, historical timeline aggregator, and cumulative user & platform metrics calculator (e-waste diverted in kg, CO₂ avoided in kg, financial savings in USD, devices restored)
-329: - [x] `CircularImpactScoreService.java` — deterministic 0–100 circular score engine across 5 weighted dimensions (Repair Actions [30], Maintenance Diligence [25], Device Longevity [20], Diversion Volume [15], Goal Progression [10]) with explainable circular tier classification (`PLANET_GUARDIAN`, `CIRCULAR_HERO`, `ECO_STEWARD`, `CONSCIOUS_USER`, `BEGINNER`)
-330: - [x] `SustainabilityOptimizationService.java` — deterministic rule-based sustainability optimization recommendations with carbon/e-waste savings potential and prioritized action paths (`PREVENTATIVE_MAINTENANCE`, `REPAIR_BEFORE_FAILURE`, `RECYCLE_RESPONSIBLY`, `UPGRADE_COMPONENT`, `CALIBRATE_BATTERY`)
-331: - [x] `SustainabilityGoalService.java` — personalized sustainability goal management (creation, deterministic progress calculation, auto-completion, status tracking) across target metrics (`CO2_AVOIDED_KG`, `EWASTE_DIVERTED_KG`, `REPAIRS_COMPLETED`, `MAINTENANCE_LOGS`, `LIFESPAN_EXTENSION_DAYS`)
-332: - [x] `SustainabilityAchievementService.java` — deterministic achievement unlocker evaluating user milestone criteria (e.g. `FIRST_REPAIR`, `CARBON_WARRIOR`, `EWASTE_CHAMPION`, `MAINTENANCE_MASTER`, `CENTURY_CLUB`, `ZERO_WASTE_CHAMPION`, `LIFESPAN_LEGEND`, `CIRCULAR_GUARDIAN`)
-333: - [x] `CircularEconomyAnalyticsService.java` — platform-wide circular aggregation, category breakdown, global environmental benchmarks, and anonymous community leaderboard
-334: - [x] REST Controllers (`CircularEconomyController`, `CircularEconomyAdminController`) with strict JWT principal ownership and `@PreAuthorize("hasRole('ADMIN')")`
-335: - [x] Comprehensive backend test suite (8 test classes, all 288/288 backend Maven tests passing with 0 failures, 0 errors)
-336: - [x] Frontend TypeScript types (`src/lib/types/circularEconomy.ts`) and API client (`src/lib/api/circularEconomy.ts`) with rich Demo Mode fallbacks
-337: - [x] Reusable Glassmorphism UI components:
-338:   - `CircularImpactHero.tsx` — Dynamic impact banner with animated metric badges (CO₂ saved, E-waste diverted, Cash saved, Devices restored)
-339:   - `CircularImpactScore.tsx` — Animated circular 0–100 score gauge, tier badge, and 5-dimension collapsible factor breakdown bars
-340:   - `ImpactMetricsGrid.tsx` — High-impact visual metric cards with tree equivalents and miles-driven offset comparisons
-341:   - `SustainabilityRecommendations.tsx` — AI-powered actionable sustainability recommendations with carbon/savings potential
-342:   - `SustainabilityGoals.tsx` — Goal management with progress bars, auto-completion badges, and interactive goal creation modal
-343:   - `AchievementGallery.tsx` — Milestone badge grid with unlocked/locked visual states, tier rarity accents, and unlock dates
-344:   - `CircularImpactTimeline.tsx` — Chronological lifecycle impact activity stream with categorical icons
-345: - [x] Full interactive `/circular-economy` page route with live/demo toggle, refresh capabilities, and comprehensive glassmorphism styling
-346: - [x] Navigation links integrated into `Navbar.tsx` and `DashboardSidebar.tsx`
-347: - [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 22 routes
+
+---
+
+## Phase 29: AI-Powered Circular Economy Intelligence & Personalized Sustainability Optimization [COMPLETE]
+- [x] Database migration `V14__circular_economy_intelligence.sql` (`circular_impact_events`, `sustainability_goals`, `sustainability_achievements` tables with 12 performance indexes and unique constraints)
+- [x] JPA Entities (`CircularImpactEvent`, `SustainabilityGoal`, `SustainabilityAchievement`) and Spring Data repositories (`CircularImpactEventRepository`, `SustainabilityGoalRepository`, `SustainabilityAchievementRepository`)
+- [x] Immutable DTO layer in `CircularEconomyDto.java` (CircularImpactOverview, ScoreBreakdown, FactorScore, OptimizationRecommendation, Goal, Achievement, ImpactTimelineEvent, CategoryImpact, PlatformCircularOverview, LeaderboardEntry)
+- [x] `CircularImpactService.java` — deterministic lifecycle event recorder, historical timeline aggregator, and cumulative user & platform metrics calculator (e-waste diverted in kg, CO₂ avoided in kg, financial savings in USD, devices restored)
+- [x] `CircularImpactScoreService.java` — deterministic 0–100 circular score engine across 5 weighted dimensions (Repair Actions [30], Maintenance Diligence [25], Device Longevity [20], Diversion Volume [15], Goal Progression [10]) with explainable circular tier classification (`PLANET_GUARDIAN`, `CIRCULAR_HERO`, `ECO_STEWARD`, `CONSCIOUS_USER`, `BEGINNER`)
+- [x] `SustainabilityOptimizationService.java` — deterministic rule-based sustainability optimization recommendations with carbon/e-waste savings potential and prioritized action paths (`PREVENTATIVE_MAINTENANCE`, `REPAIR_BEFORE_FAILURE`, `RECYCLE_RESPONSIBLY`, `UPGRADE_COMPONENT`, `CALIBRATE_BATTERY`)
+- [x] `SustainabilityGoalService.java` — personalized sustainability goal management (creation, deterministic progress calculation, auto-completion, status tracking) across target metrics (`CO2_AVOIDED_KG`, `EWASTE_DIVERTED_KG`, `REPAIRS_COMPLETED`, `MAINTENANCE_LOGS`, `LIFESPAN_EXTENSION_DAYS`)
+- [x] `SustainabilityAchievementService.java` — deterministic achievement unlocker evaluating user milestone criteria (e.g. `FIRST_REPAIR`, `CARBON_WARRIOR`, `EWASTE_CHAMPION`, `MAINTENANCE_MASTER`, `CENTURY_CLUB`, `ZERO_WASTE_CHAMPION`, `LIFESPAN_LEGEND`, `CIRCULAR_GUARDIAN`)
+- [x] `CircularEconomyAnalyticsService.java` — platform-wide circular aggregation, category breakdown, global environmental benchmarks, and anonymous community leaderboard
+- [x] REST Controllers (`CircularEconomyController`, `CircularEconomyAdminController`) with strict JWT principal ownership and `@PreAuthorize("hasRole('ADMIN')")`
+- [x] Comprehensive backend test suite (8 test classes, all 288/288 backend Maven tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/circularEconomy.ts`) and API client (`src/lib/api/circularEconomy.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `CircularImpactHero.tsx` — Dynamic impact banner with animated metric badges (CO₂ saved, E-waste diverted, Cash saved, Devices restored)
+  - `CircularImpactScore.tsx` — Animated circular 0–100 score gauge, tier badge, and 5-dimension collapsible factor breakdown bars
+  - `ImpactMetricsGrid.tsx` — High-impact visual metric cards with tree equivalents and miles-driven offset comparisons
+  - `SustainabilityRecommendations.tsx` — AI-powered actionable sustainability recommendations with carbon/savings potential
+  - `SustainabilityGoals.tsx` — Goal management with progress bars, auto-completion badges, and interactive goal creation modal
+  - `AchievementGallery.tsx` — Milestone badge grid with unlocked/locked visual states, tier rarity accents, and unlock dates
+  - `CircularImpactTimeline.tsx` — Chronological lifecycle impact activity stream with categorical icons
+- [x] Full interactive `/circular-economy` page route with live/demo toggle, refresh capabilities, and comprehensive glassmorphism styling
+- [x] Navigation links integrated into `Navbar.tsx` and `DashboardSidebar.tsx`
+- [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 22 routes
+
+---
+
+## Phase 30: AI Repair Ecosystem Intelligence & Personalized Device Decision Engine [COMPLETE]
+- [x] Database migration `V15__device_decision_intelligence.sql` (`device_decision_snapshots`, `device_decision_scenarios`, `device_intelligence_alerts` tables with foreign keys and 11 performance indexes)
+- [x] JPA Entities (`DeviceDecisionSnapshot`, `DeviceDecisionScenario`, `DeviceIntelligenceAlert`) and Spring Data repositories (`DeviceDecisionSnapshotRepository`, `DeviceDecisionScenarioRepository`, `DeviceIntelligenceAlertRepository`)
+- [x] Immutable DTO layer in `DeviceIntelligenceDto.java` (DeviceIntelligenceResponse, IntelligenceScoreBreakdown, DecisionFactor, SmartDecision, DeviceScenario, DeviceIntelligenceAlertResponse, DeviceIntelligenceTimelineItem, EvaluationRequest, SimulationRequest, SnapshotResponse)
+- [x] `DeviceIntelligenceScoringService.java` — deterministic 0–100 scoring engine across 7 weighted dimensions (Health & Reliability [25], Failure Risk [20], Repair Economics [15], Maintenance Status [15], Device Longevity [10], Sustainability Impact [10], Repair History [5]) with tier classification (`EXCEPTIONAL`, `HEALTHY`, `STABLE`, `AT_RISK`, `CRITICAL`)
+- [x] `DeviceDecisionIntelligenceService.java` — central orchestration engine combining diagnosis, health, risk, economics, maintenance, longevity, and sustainability signals into one clear authoritative recommended action (`CONTINUE_USING`, `MONITOR`, `MAINTENANCE_REQUIRED`, `REPAIR_NOW`, `PROFESSIONAL_SERVICE`, `REFURBISH`, `REPLACE`, `RECYCLE`)
+- [x] `PersonalizedDeviceAdvisorService.java` — deterministic natural language template advisor explaining device condition, major risks, financial implications, and recommended next steps
+- [x] `DeviceScenarioSimulationService.java` — What-If decision simulator estimating costs, lifespan gains, CO₂ impacts, and savings across 7 alternative scenarios with custom budget/lifespan constraint support
+- [x] `DeviceIntelligenceAlertService.java` — scoped risk, maintenance, and opportunity alerts with duplicate prevention and read/unread lifecycle management
+- [x] REST Controller `DeviceIntelligenceController.java` (`/api/v1/device-intelligence/**`) with strict JWT ownership verification
+- [x] Comprehensive backend test suite (6 test classes, all 311/311 backend Maven tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/deviceIntelligence.ts`) and API client (`src/lib/api/deviceIntelligence.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `DeviceIntelligenceHero.tsx` — Header with device info, authoritative action banner, decision confidence, and AI advisor rationale
+  - `DeviceDecisionScore.tsx` — Animated circular 0–100 score gauge, tier badge, confidence meter, and sub-score metrics
+  - `SmartDecisionCard.tsx` — Prescriptive decision blueprint with priority badge, explanation, cost/benefit breakdown, and contextual CTA
+  - `DecisionFactorBreakdown.tsx` — 7 weighted intelligence dimensions with animated progress bars, impact badges, and factor explanations
+  - `ScenarioSimulator.tsx` — Interactive What-If decision simulator with constraint tuning (budget, target lifespan, eco priority) and pros/cons comparison
+  - `DeviceIntelligenceTimeline.tsx` — Chronological stream of evaluations, vision diagnoses, and circular lifecycle milestones
+  - `IntelligenceAlerts.tsx` — Actionable alerts categorized by severity (`CRITICAL`, `HIGH`, `LOW`, `INFO`) with mark-as-read controls
+- [x] Full interactive `/device-intelligence/[id]` page route with multi-column glassmorphism layout, live re-evaluation, custom simulation, and error fallbacks
+- [x] Integrated entry points into Device Passport (`/devices/[id]`) with header CTA and feature hero banner
+- [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 23 routes

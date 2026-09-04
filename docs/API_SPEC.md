@@ -1198,6 +1198,65 @@ Returns top circular users by score and metrics with masked display names for pr
 
 ---
 
+# AI Repair Ecosystem Intelligence & Personalized Device Decision Engine (Phase 30)
+
+## 1. Get Device Decision Intelligence
+`GET /device-intelligence/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns the unified device intelligence evaluation, 0–100 score, tier (`EXCEPTIONAL`, `HEALTHY`, `STABLE`, `AT_RISK`, `CRITICAL`), authoritative recommendation (`CONTINUE_USING`, `MONITOR`, `MAINTENANCE_REQUIRED`, `REPAIR_NOW`, `PROFESSIONAL_SERVICE`, `REFURBISH`, `REPLACE`, `RECYCLE`), confidence %, AI advisor summary, 7-factor breakdown, smart decision blueprint, decision scenarios, and active alerts.
+
+## 2. Trigger Device Re-evaluation
+`POST /device-intelligence/{deviceId}/evaluate`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Request Body (optional):
+```json
+{
+  "forceReevaluation": true
+}
+```
+Re-evaluates multi-signal intelligence, generates and persists a new `DeviceDecisionSnapshot` and refreshed `DeviceDecisionScenario` items.
+
+## 3. Get Device Decision History
+`GET /device-intelligence/{deviceId}/history`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns chronological list of historical decision snapshots for trend comparison.
+
+## 4. Get What-If Decision Scenarios
+`GET /device-intelligence/{deviceId}/scenarios`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns generated alternative decision scenarios (`CONTINUE_USING`, `MAINTENANCE`, `REPAIR`, `PROFESSIONAL_SERVICE`, `REFURBISH`, `REPLACE`, `RECYCLE`) with estimated costs, lifespan gains, CO₂ impacts, financial savings, intelligence scores, pros, and cons.
+
+## 5. Simulate Custom Decision Scenarios
+`POST /device-intelligence/{deviceId}/simulate`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Request Body:
+```json
+{
+  "preferredScenario": "REPAIR",
+  "customBudget": 250.0,
+  "targetLifespanMonths": 24,
+  "prioritizeSustainability": true
+}
+```
+Returns dynamically recalculated decision scenarios tailored to user-specified budget, lifespan, and zero-waste constraints.
+
+## 6. Get Device Intelligence Timeline
+`GET /device-intelligence/{deviceId}/timeline`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns chronological intelligence stream aggregating evaluations, AI vision diagnoses, maintenance logs, and circular lifecycle milestones.
+
+## 7. Get User Intelligence Alerts
+`GET /device-intelligence/alerts`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns current user's intelligence alerts categorized by severity (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `INFO`) and alert type (`FAILURE_RISK`, `MAINTENANCE_REQUIRED`, `REPAIR_RECOMMENDED`, `COST_ESCALATION`, `END_OF_LIFE`, `SUSTAINABILITY_OPPORTUNITY`).
+
+## 8. Mark Intelligence Alert as Read
+`PUT /device-intelligence/alerts/{alertId}/read`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Marks an alert as read and returns the updated alert record.
+
+---
+
 # Response Format
 
 Success

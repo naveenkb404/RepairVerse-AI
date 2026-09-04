@@ -214,6 +214,24 @@ Sustainability Optimization & Goal Engine
 - **Explainable Circular Scoring**: Weighted multi-factor decomposition provides transparent scoring with actionable improvement paths.
 - **Gamified Milestone Engine**: Strict idempotent achievement checks prevent duplicate rewards while engaging users across repair milestones.
 
+### 14. AI Repair Ecosystem Intelligence & Personalized Device Decision Engine (Phase 30)
+```
+AI Vision & Diagnosis (Phase 15) ────────┐
+Device Health Passport (Phase 17) ──────┤
+Predictive Failure Risk (Phase 22) ─────┤
+Repair Planning & Lifecycle (Phase 24) ─┼──► UNIFIED DEVICE DECISION ENGINE (`DeviceDecisionIntelligenceService`)
+Maintenance Automation (Phase 25) ─────┤        ├─ 7-Factor Weighted Intelligence Scoring (`DeviceIntelligenceScoringService`)
+Repair Economics & Quotes (Phase 26/27) ┤        ├─ Authoritative Prescriptive Action Resolution (CONTINUE, REPAIR, REFURBISH, etc)
+Circular Impact & Carbon (Phase 29) ────┘        ├─ Personalized Advisor Explanation (`PersonalizedDeviceAdvisorService`)
+                                                 ├─ What-If Scenario Simulator (`DeviceScenarioSimulationService`)
+                                                 └─ Scoped Intelligence Alerts (`DeviceIntelligenceAlertService`)
+                                                          ↓
+                                                 Deterministic Action Blueprint & Simulator Dashboard
+```
+- **Unified Intelligence Scoring (0–100)**: Evaluates Health & Reliability (25%), Failure Risk (20%), Repair Economics (15%), Maintenance Status (15%), Device Longevity (10%), Sustainability Impact (10%), and Repair History (5%) into tiers (`EXCEPTIONAL`, `HEALTHY`, `STABLE`, `AT_RISK`, `CRITICAL`).
+- **One Clear Decision**: Resolves conflicting diagnostic and economic telemetry into one authoritative recommendation (`CONTINUE_USING`, `MONITOR`, `MAINTENANCE_REQUIRED`, `REPAIR_NOW`, `PROFESSIONAL_SERVICE`, `REFURBISH`, `REPLACE`, `RECYCLE`).
+- **What-If Decision Simulator**: Models costs, lifespan gains, CO₂ offsets, and savings across 7 scenarios with custom constraints (budget, lifespan target, zero-waste focus).
+
 ---
 
 # Security Blueprint
