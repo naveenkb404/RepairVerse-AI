@@ -1085,6 +1085,119 @@ Body:
 
 ---
 
+# Phase 28 – Repair Network Intelligence & Quality Platform
+
+## 1. Network Overview & Health Metrics
+`GET /network-intelligence/overview`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns platform-wide network stats: total repair shops, completed repairs, network success rate, average customer satisfaction, average trust score, and active anomaly count.
+
+## 2. Shop Quality & Trust Intelligence
+`GET /network-intelligence/shop/{shopId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 0–100 deterministic quality score, quality tier (`ELITE`, `EXCELLENT`, `TRUSTED`, `STANDARD`, `NEEDS_IMPROVEMENT`), reliability score, 6-factor score breakdown, trust score (0–100), trust tier (`EXCEPTIONAL`, `HIGH`, `ESTABLISHED`, `MODERATE`, `LOW`), positive signals, and risk signals.
+
+## 3. Shop Outcome Analytics
+`GET /network-intelligence/shop/{shopId}/outcomes?category={category}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns total repairs, successful vs. failed count, repeat repair rate, average cost, and turnaround days.
+
+## 4. Deterministic Network Leaderboard
+`GET /network-intelligence/leaderboard?rankingType={type}&limit={limit}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+`rankingType`: `BEST_OVERALL` | `MOST_TRUSTED` | `HIGHEST_QUALITY` | `FASTEST` | `BEST_VALUE` | `MOST_SUSTAINABLE`
+Returns ranked leaderboard with winner badges, quality scores, trust scores, and success rates.
+
+## 5. Category Quality Analytics
+`GET /network-intelligence/categories`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns repair volume, success rates, average costs, and turnaround days by device category.
+
+## 6. Historical Quality Trends
+`GET /network-intelligence/shop/{shopId}/trends`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns multi-period historical trend metrics for quality score, trust score, success rate, and customer satisfaction.
+
+## 7. Admin Platform Network Health
+`GET /admin/network-intelligence/health`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Returns platform-wide quality scores, tier distribution counts, and open/critical anomaly counts.
+
+## 8. Admin Anomaly Management
+`GET /admin/network-intelligence/anomalies?status={status}&severity={severity}`
+`PUT /admin/network-intelligence/anomalies/{id}/status`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Query and transition anomaly review statuses (`OPEN` → `UNDER_REVIEW` → `RESOLVED` / `DISMISSED`).
+
+## 9. Admin Shop Risk Profile
+`GET /admin/network-intelligence/shop/{shopId}/risk`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Returns comprehensive shop risk score, active anomaly list, and actionable recommendations.
+
+---
+
+# Circular Economy Intelligence & Personalized Sustainability (Phase 29)
+
+## 1. Circular Impact Overview
+`GET /circular-economy/overview`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns comprehensive circular overview containing aggregate metrics, circular score breakdown, optimization recommendations, active goals, recent achievements, and recent impact timeline.
+
+## 2. Circular Impact Score Breakdown
+`GET /circular-economy/score`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 0–100 deterministic circular score, circular tier (`PLANET_GUARDIAN`, `CIRCULAR_HERO`, `ECO_STEWARD`, `CONSCIOUS_USER`, `BEGINNER`), percentile, and 5 factor scores (Repair Actions [30], Maintenance Diligence [25], Device Longevity [20], Diversion Volume [15], Goal Progression [10]).
+
+## 3. Sustainability Optimization Recommendations
+`GET /circular-economy/recommendations`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns personalized, deterministic optimization recommendations with carbon/e-waste savings potential and prioritized action paths (`PREVENTATIVE_MAINTENANCE`, `REPAIR_BEFORE_FAILURE`, `RECYCLE_RESPONSIBLY`, `UPGRADE_COMPONENT`, `CALIBRATE_BATTERY`).
+
+## 4. Sustainability Goals
+- `GET /circular-economy/goals` — List user's active and completed sustainability goals with real-time calculated progress.
+- `POST /circular-economy/goals` — Create a new sustainability goal (`title`, `targetMetric`, `targetValue`, `startDate`, `targetDate`).
+- `PUT /circular-economy/goals/{goalId}/cancel` — Cancel an in-progress goal.
+Header: `Authorization: Bearer <JWT_TOKEN>`
+
+## 5. Sustainability Achievements
+`GET /circular-economy/achievements`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all system achievement definitions with user unlock status, progress percentage, unlock dates, and rarity tiers (`BRONZE`, `SILVER`, `GOLD`, `PLATINUM`, `DIAMOND`).
+
+## 6. Circular Impact Timeline
+`GET /circular-economy/timeline?limit=20`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns chronological stream of lifecycle impact events (`REPAIR_COMPLETED`, `MAINTENANCE_PERFORMED`, `DEVICE_EXTENDED`, `DEVICE_RECYCLED`, `GOAL_COMPLETED`, `ACHIEVEMENT_UNLOCKED`) with metrics and savings.
+
+## 7. Record Custom Impact Event
+`POST /circular-economy/events`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Request Body:
+```json
+{
+  "eventType": "MAINTENANCE_PERFORMED",
+  "deviceId": "optional-uuid",
+  "title": "Battery Recalibration & Port Cleaning",
+  "description": "Cleaned USB-C port and recalibrated battery controller",
+  "co2AvoidedKg": 8.5,
+  "ewasteDivertedKg": 0.2,
+  "financialSavingsUsd": 45.0,
+  "lifespanExtensionDays": 90
+}
+```
+
+## 8. Admin Platform Circular Overview
+`GET /admin/circular-economy/overview`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Returns platform-wide environmental metrics (total CO₂ avoided, e-waste diverted, money saved, devices restored, trees planted equivalent), active users count, and category breakdown.
+
+## 9. Admin Platform Leaderboard
+`GET /admin/circular-economy/leaderboard?limit=20`
+Header: `Authorization: Bearer <JWT_TOKEN>` (Requires `ROLE_ADMIN`)
+Returns top circular users by score and metrics with masked display names for privacy.
+
+---
+
 # Response Format
 
 Success

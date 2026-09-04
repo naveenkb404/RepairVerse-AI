@@ -185,6 +185,35 @@ Confident Repair Decision & Booking
 - **Quote Pricing Fairness & Risk Flagging**: `QuoteIntelligenceService` compares quoted repair costs against regional market averages, generating a 0–100 price fairness index and warning against suspiciously low or overpriced quotes.
 - **Telemetry & Platform Analytics**: `MarketplaceAnalyticsService` captures user savings insights and aggregates platform-wide conversion and category trends for administrators.
 
+### 13. Circular Economy Intelligence & Personalized Sustainability Optimization Engine (Phase 29)
+```
+Lifecycle Activity (Repair, Maintenance, Device Lifespan, Recycling)
+   ↓
+Circular Impact Event Ingestion (`CircularImpactService`)
+   ├─ Real-time CO₂ avoidance calculation (kg)
+   ├─ E-waste diverted calculation (kg)
+   ├─ Financial savings calculation (USD)
+   └─ Lifespan extension tracking (days)
+   ↓
+Deterministic Circular Impact Scoring Engine (`CircularImpactScoreService`)
+   ├─ Repair Actions Dimension (30 pts)
+   ├─ Maintenance Diligence Dimension (25 pts)
+   ├─ Device Longevity Dimension (20 pts)
+   ├─ E-Waste & Carbon Diversion Dimension (15 pts)
+   └─ Sustainability Goal Progression Dimension (10 pts)
+   ↓
+Circular Tier Classification (`PLANET_GUARDIAN`, `CIRCULAR_HERO`, `ECO_STEWARD`, `CONSCIOUS_USER`, `BEGINNER`)
+   ↓
+Sustainability Optimization & Goal Engine
+   ├─ `SustainabilityOptimizationService`: Rule-based actionable recommendations with carbon/cost saving potential
+   ├─ `SustainabilityGoalService`: Dynamic target calculation, progress tracking, and automated completion
+   ├─ `SustainabilityAchievementService`: Deterministic milestone badge unlocking with rarity tiers
+   └─ `CircularEconomyAnalyticsService`: Platform aggregates, community benchmarks & leaderboard
+```
+- **Authoritative Determinism**: All environmental calculations (CO₂ avoided, e-waste diverted, dollar savings), score components (0–100), and goal achievements are computed deterministically by backend services.
+- **Explainable Circular Scoring**: Weighted multi-factor decomposition provides transparent scoring with actionable improvement paths.
+- **Gamified Milestone Engine**: Strict idempotent achievement checks prevent duplicate rewards while engaging users across repair milestones.
+
 ---
 
 # Security Blueprint

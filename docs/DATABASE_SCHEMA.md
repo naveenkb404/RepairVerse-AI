@@ -414,3 +414,120 @@ Stores anonymized and structured marketplace events for user savings tracking an
 - `created_at` (TIMESTAMP)
 
 Indexes: `idx_mi_user_id`, `idx_mi_interaction_type`, `idx_mi_entity`, `idx_mi_created_at`
+
+---
+
+# Module 13 - Repair Network Intelligence, Quality & Trust Platform (Phase 28)
+
+## RepairServiceOutcomes
+Records repair completion outcomes, success/failure flags, repeat repairs, warranty claims, and actual repair metrics.
+- `id` (VARCHAR 36, PK)
+- `repair_shop_id` (VARCHAR 36)
+- `user_id` (VARCHAR 36)
+- `device_id` (VARCHAR 36)
+- `quote_id` (VARCHAR 36)
+- `repair_category` (VARCHAR 80)
+- `repair_successful` (BOOLEAN)
+- `repeat_repair_required` (BOOLEAN)
+- `warranty_claimed` (BOOLEAN)
+- `repair_cost` (DOUBLE PRECISION)
+- `estimated_cost` (DOUBLE PRECISION)
+- `turnaround_hours` (INT)
+- `customer_satisfaction` (INT 1–5)
+- `completed_at` (TIMESTAMP)
+- `created_at` (TIMESTAMP)
+
+Indexes: `idx_rso_shop_id`, `idx_rso_user_id`, `idx_rso_device_id`, `idx_rso_completed_at`, `idx_rso_category`
+
+## RepairShopQualitySnapshots
+Stores periodically computed deterministic quality scores and dimension breakdowns per shop.
+- `id` (VARCHAR 36, PK)
+- `repair_shop_id` (VARCHAR 36)
+- `overall_quality_score` (INT) — 0 to 100
+- `reliability_score` (INT) — 0 to 100
+- `trust_score` (INT) — 0 to 100
+- `customer_satisfaction_score` (INT) — 0 to 100
+- `repair_success_score` (INT) — 0 to 100
+- `price_fairness_score` (INT) — 0 to 100
+- `service_speed_score` (INT) — 0 to 100
+- `total_repairs` (INT)
+- `successful_repairs` (INT)
+- `failed_repairs` (INT)
+- `repeat_repairs` (INT)
+- `average_rating` (DOUBLE PRECISION)
+- `quality_tier` (VARCHAR 30) — ELITE, EXCELLENT, TRUSTED, STANDARD, NEEDS_IMPROVEMENT
+- `calculated_at` (TIMESTAMP)
+- `created_at` (TIMESTAMP)
+
+Indexes: `idx_rsqs_shop_id`, `idx_rsqs_quality_score`, `idx_rsqs_trust_score`, `idx_rsqs_tier`, `idx_rsqs_calculated_at`
+
+## MarketplaceAnomalies
+Stores deterministically detected risk signals and marketplace anomalies for admin-only review.
+- `id` (VARCHAR 36, PK)
+- `repair_shop_id` (VARCHAR 36)
+- `related_quote_id` (VARCHAR 36)
+- `related_review_id` (VARCHAR 36)
+- `anomaly_type` (VARCHAR 50) — SUSPICIOUS_PRICING, REVIEW_SPIKE, REVIEW_PATTERN, HIGH_REPEAT_REPAIRS, LOW_SUCCESS_RATE, UNUSUAL_CANCELLATION_RATE
+- `severity` (VARCHAR 20) — LOW, MEDIUM, HIGH, CRITICAL
+- `risk_score` (INT) — 0 to 100
+- `description` (TEXT)
+- `status` (VARCHAR 20) — OPEN, UNDER_REVIEW, RESOLVED, DISMISSED
+- `detected_at` (TIMESTAMP)
+- `resolved_at` (TIMESTAMP)
+
+Indexes: `idx_ma_shop_id`, `idx_ma_status`, `idx_ma_severity`
+
+---
+
+# Phase 29: Circular Economy Intelligence & Personalized Sustainability Schema
+
+## CircularImpactEvents (`circular_impact_events`)
+Stores verified lifecycle events that contribute to user and platform environmental impact metrics.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id, NULLABLE)
+- `event_type` (VARCHAR 50, NOT NULL) — REPAIR_COMPLETED, MAINTENANCE_PERFORMED, DEVICE_EXTENDED, DEVICE_RECYCLED, GOAL_COMPLETED, ACHIEVEMENT_UNLOCKED
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT)
+- `co2_avoided_kg` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `ewaste_diverted_kg` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `financial_savings_usd` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `lifespan_extension_days` (INT, NOT NULL DEFAULT 0)
+- `source_entity_type` (VARCHAR 50) — REPAIR_JOB, MAINTENANCE_LOG, DEVICE_HEALTH, MANUAL
+- `source_entity_id` (VARCHAR 36)
+- `created_at` (TIMESTAMP, NOT NULL)
+
+Indexes: `idx_cie_user_id`, `idx_cie_device_id`, `idx_cie_event_type`, `idx_cie_created_at`, `idx_cie_source`
+
+## SustainabilityGoals (`sustainability_goals`)
+Stores user-defined and AI-recommended sustainability targets with deterministic tracking.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT)
+- `target_metric` (VARCHAR 50, NOT NULL) — CO2_AVOIDED_KG, EWASTE_DIVERTED_KG, REPAIRS_COMPLETED, MAINTENANCE_LOGS, LIFESPAN_EXTENSION_DAYS
+- `target_value` (DOUBLE PRECISION, NOT NULL)
+- `current_value` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `start_date` (TIMESTAMP, NOT NULL)
+- `target_date` (TIMESTAMP, NOT NULL)
+- `completed_at` (TIMESTAMP, NULLABLE)
+- `status` (VARCHAR 30, NOT NULL) — ACTIVE, COMPLETED, EXPIRED, CANCELLED
+- `created_at` (TIMESTAMP, NOT NULL)
+- `updated_at` (TIMESTAMP, NOT NULL)
+
+Indexes: `idx_sg_user_id`, `idx_sg_status`, `idx_sg_target_metric`, `idx_sg_target_date`
+
+## SustainabilityAchievements (`sustainability_achievements`)
+Stores unlocked circular milestone badges for gamified sustainability engagement.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id, NOT NULL)
+- `achievement_code` (VARCHAR 50, NOT NULL) — FIRST_REPAIR, CARBON_WARRIOR, EWASTE_CHAMPION, MAINTENANCE_MASTER, CENTURY_CLUB, ZERO_WASTE_CHAMPION, LIFESPAN_LEGEND, CIRCULAR_GUARDIAN
+- `title` (VARCHAR 255, NOT NULL)
+- `description` (TEXT, NOT NULL)
+- `badge_icon` (VARCHAR 100, NOT NULL)
+- `tier` (VARCHAR 30, NOT NULL) — BRONZE, SILVER, GOLD, PLATINUM, DIAMOND
+- `unlocked_at` (TIMESTAMP, NOT NULL)
+- `created_at` (TIMESTAMP, NOT NULL)
+
+Constraints: Unique `(user_id, achievement_code)`
+Indexes: `idx_sa_user_id`, `idx_sa_achievement_code`, `idx_sa_tier`

@@ -113,14 +113,14 @@ export default function Navbar({ className }: NavbarProps) {
 
           {/* Action CTAs */}
           <div className="hidden items-center gap-3 lg:flex">
+            <GlassButton href="/circular-economy" variant="secondary" size="sm">
+              Circular Impact
+            </GlassButton>
             <GlassButton href="/maintenance" variant="secondary" size="sm">
               Maintenance
             </GlassButton>
-            <GlassButton href="/repair-history" variant="secondary" size="sm">
-              Repair History
-            </GlassButton>
             <GlassButton href="/devices" variant="secondary" size="sm">
-              Device Passports
+              Passports
             </GlassButton>
 
             {isLoggedIn ? (

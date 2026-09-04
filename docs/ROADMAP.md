@@ -294,3 +294,54 @@
 - [x] Full interactive 5-step `/marketplace` page route with device selection, smart matching, comparison, quote requests, and quote intelligence
 - [x] Added Marketplace navigation link in `DashboardSidebar.tsx`
 - [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing with 19 routes
+
+---
+
+## Phase 28: Repair Network Intelligence, Trust & Service Quality Platform [COMPLETE]
+- [x] Database migration `V13__repair_network_intelligence.sql` (`repair_service_outcomes`, `repair_shop_quality_snapshots`, `marketplace_anomalies` tables with 10 performance indexes)
+- [x] JPA Entities (`RepairServiceOutcome`, `RepairShopQualitySnapshot`, `MarketplaceAnomaly`) and Spring Data repositories (`RepairServiceOutcomeRepository`, `RepairShopQualitySnapshotRepository`, `MarketplaceAnomalyRepository`)
+- [x] Immutable DTO layer in `RepairNetworkIntelligenceDto.java` (Overview, Quality, Outcomes, Trust, Anomalies, Leaderboard, Categories, Trends, Health, Risk Profile)
+- [x] `RepairQualityScoringService.java` — deterministic 0–100 quality scoring engine across 6 weighted dimensions (Repair Success Rate [30], Customer Satisfaction [20], Reliability [20], Price Fairness [10], Service Speed [10], Experience & Volume [10]) with quality tier classification (`ELITE`, `EXCELLENT`, `TRUSTED`, `STANDARD`, `NEEDS_IMPROVEMENT`)
+- [x] `RepairTrustIntelligenceService.java` — deterministic trust scoring engine (0–100) with positive/risk signal attribution and transparent trust tiers (`EXCEPTIONAL`, `HIGH`, `ESTABLISHED`, `MODERATE`, `LOW`)
+- [x] `RepairOutcomeAnalyticsService.java` — shop, category, and platform network outcome analytics, success rates, failure metrics, repeat repair rates, and historical quality trends
+- [x] `MarketplaceAnomalyDetectionService.java` — deterministic anomaly detection (`SUSPICIOUS_PRICING`, `REVIEW_SPIKE`, `REVIEW_PATTERN`, `HIGH_REPEAT_REPAIRS`, `LOW_SUCCESS_RATE`, `UNUSUAL_CANCELLATION_RATE`) following strictly the `Detect → Flag → Admin Review` pattern (no automated bans)
+- [x] `RepairNetworkRankingService.java` — network leaderboards (`BEST_OVERALL`, `MOST_TRUSTED`, `HIGHEST_QUALITY`, `FASTEST`, `BEST_VALUE`, `MOST_SUSTAINABLE`) and platform health metrics
+- [x] REST Controllers (`RepairNetworkIntelligenceController`, `RepairNetworkAdminController`) with `@PreAuthorize("hasRole('ADMIN')")`
+- [x] Comprehensive backend test suite (7 test classes, all 262/262 backend tests passing with 0 failures, 0 errors)
+- [x] Frontend TypeScript types (`src/lib/types/networkIntelligence.ts`) and API client (`src/lib/api/networkIntelligence.ts`) with clear Demo Mode fallbacks
+- [x] Reusable UI components:
+  - `RepairQualityScore.tsx` — Animated circular quality gauge, quality tier badge, quick stats grid, and collapsible factor breakdown bars
+  - `TrustIntelligenceCard.tsx` — Trust score gauge, trust tier badge, score composition breakdown, and itemized positive/risk signals
+  - `RepairNetworkLeaderboard.tsx` — Category tab switcher (`BEST_OVERALL`, `MOST_TRUSTED`, `HIGHEST_QUALITY`, `FASTEST`, `BEST_VALUE`, `MOST_SUSTAINABLE`) and ranked shop rows
+  - `MarketplaceAnomalyPanel.tsx` — Expandable anomaly rows, risk bars, and admin status transition controls (`OPEN` → `UNDER_REVIEW` → `RESOLVED` / `DISMISSED`)
+- [x] Full interactive `/marketplace/intelligence` page route with network stats strip, tabbed navigation (Overview, Leaderboard, Shop Intelligence, Category Breakdown), and live/demo mode switching
+- [x] Dedicated `/admin/network-intelligence` page route with platform health gauges, tier distribution chart, anomaly review management, and determinism guarantee banner
+- [x] Navigation item integrated in `DashboardSidebar.tsx`
+- [x] TypeScript check passing (`0 errors`) and Next.js 16 production build passing across 21 routes
+321: 
+322: ---
+323: 
+324: ## Phase 29: AI-Powered Circular Economy Intelligence & Personalized Sustainability Optimization [COMPLETE]
+325: - [x] Database migration `V14__circular_economy_intelligence.sql` (`circular_impact_events`, `sustainability_goals`, `sustainability_achievements` tables with 12 performance indexes and unique constraints)
+326: - [x] JPA Entities (`CircularImpactEvent`, `SustainabilityGoal`, `SustainabilityAchievement`) and Spring Data repositories (`CircularImpactEventRepository`, `SustainabilityGoalRepository`, `SustainabilityAchievementRepository`)
+327: - [x] Immutable DTO layer in `CircularEconomyDto.java` (CircularImpactOverview, ScoreBreakdown, FactorScore, OptimizationRecommendation, Goal, Achievement, ImpactTimelineEvent, CategoryImpact, PlatformCircularOverview, LeaderboardEntry)
+328: - [x] `CircularImpactService.java` — deterministic lifecycle event recorder, historical timeline aggregator, and cumulative user & platform metrics calculator (e-waste diverted in kg, CO₂ avoided in kg, financial savings in USD, devices restored)
+329: - [x] `CircularImpactScoreService.java` — deterministic 0–100 circular score engine across 5 weighted dimensions (Repair Actions [30], Maintenance Diligence [25], Device Longevity [20], Diversion Volume [15], Goal Progression [10]) with explainable circular tier classification (`PLANET_GUARDIAN`, `CIRCULAR_HERO`, `ECO_STEWARD`, `CONSCIOUS_USER`, `BEGINNER`)
+330: - [x] `SustainabilityOptimizationService.java` — deterministic rule-based sustainability optimization recommendations with carbon/e-waste savings potential and prioritized action paths (`PREVENTATIVE_MAINTENANCE`, `REPAIR_BEFORE_FAILURE`, `RECYCLE_RESPONSIBLY`, `UPGRADE_COMPONENT`, `CALIBRATE_BATTERY`)
+331: - [x] `SustainabilityGoalService.java` — personalized sustainability goal management (creation, deterministic progress calculation, auto-completion, status tracking) across target metrics (`CO2_AVOIDED_KG`, `EWASTE_DIVERTED_KG`, `REPAIRS_COMPLETED`, `MAINTENANCE_LOGS`, `LIFESPAN_EXTENSION_DAYS`)
+332: - [x] `SustainabilityAchievementService.java` — deterministic achievement unlocker evaluating user milestone criteria (e.g. `FIRST_REPAIR`, `CARBON_WARRIOR`, `EWASTE_CHAMPION`, `MAINTENANCE_MASTER`, `CENTURY_CLUB`, `ZERO_WASTE_CHAMPION`, `LIFESPAN_LEGEND`, `CIRCULAR_GUARDIAN`)
+333: - [x] `CircularEconomyAnalyticsService.java` — platform-wide circular aggregation, category breakdown, global environmental benchmarks, and anonymous community leaderboard
+334: - [x] REST Controllers (`CircularEconomyController`, `CircularEconomyAdminController`) with strict JWT principal ownership and `@PreAuthorize("hasRole('ADMIN')")`
+335: - [x] Comprehensive backend test suite (8 test classes, all 288/288 backend Maven tests passing with 0 failures, 0 errors)
+336: - [x] Frontend TypeScript types (`src/lib/types/circularEconomy.ts`) and API client (`src/lib/api/circularEconomy.ts`) with rich Demo Mode fallbacks
+337: - [x] Reusable Glassmorphism UI components:
+338:   - `CircularImpactHero.tsx` — Dynamic impact banner with animated metric badges (CO₂ saved, E-waste diverted, Cash saved, Devices restored)
+339:   - `CircularImpactScore.tsx` — Animated circular 0–100 score gauge, tier badge, and 5-dimension collapsible factor breakdown bars
+340:   - `ImpactMetricsGrid.tsx` — High-impact visual metric cards with tree equivalents and miles-driven offset comparisons
+341:   - `SustainabilityRecommendations.tsx` — AI-powered actionable sustainability recommendations with carbon/savings potential
+342:   - `SustainabilityGoals.tsx` — Goal management with progress bars, auto-completion badges, and interactive goal creation modal
+343:   - `AchievementGallery.tsx` — Milestone badge grid with unlocked/locked visual states, tier rarity accents, and unlock dates
+344:   - `CircularImpactTimeline.tsx` — Chronological lifecycle impact activity stream with categorical icons
+345: - [x] Full interactive `/circular-economy` page route with live/demo toggle, refresh capabilities, and comprehensive glassmorphism styling
+346: - [x] Navigation links integrated into `Navbar.tsx` and `DashboardSidebar.tsx`
+347: - [x] TypeScript verification passing (`0 errors`) and Next.js 16 production build passing across 22 routes
