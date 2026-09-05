@@ -822,3 +822,87 @@ Chronological audit log of all digital twin simulation events.
 - `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
 Indexes: `idx_ese_device_id`, `idx_ese_user_id`, `idx_ese_type`, `idx_ese_severity`, `idx_ese_timestamp`
+
+---
+
+# Module 19 — AI Decision Trust, Explainability & Governance Engine (`V19__ai_decision_trust_engine.sql`)
+
+## AiDecisionRecord (`ai_decision_records`)
+Authoritative, immutable ledger of all AI recommendation and autonomous decision records.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id ON DELETE CASCADE, NOT NULL)
+- `device_id` (VARCHAR 36, FK → devices.id ON DELETE CASCADE, NOT NULL)
+- `source_system` (VARCHAR 60, NOT NULL) — AUTONOMOUS_REPAIR_AGENT, DIGITAL_TWIN, DEVICE_INTELLIGENCE, REPAIR_KNOWLEDGE_GRAPH, PROACTIVE_INTERVENTION, DIAGNOSIS
+- `decision_type` (VARCHAR 80, NOT NULL)
+- `source_record_id` (VARCHAR 36, NULLABLE)
+- `decision_output` (TEXT, NOT NULL)
+- `confidence_score` (INT, NOT NULL) — 0 to 100
+- `trust_score` (INT, NOT NULL) — 0 to 100
+- `trust_tier` (VARCHAR 30, NOT NULL) — VERIFIED, RELIABLE, CAUTION, REVIEW_REQUIRED
+- `risk_level` (VARCHAR 30, NOT NULL) — LOW, MEDIUM, HIGH, CRITICAL
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'ACTIVE') — ACTIVE, FLAGGED, OVERRIDDEN, EXECUTED, REJECTED
+- `user_reviewed` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `user_feedback` (VARCHAR 30, NULLABLE) — AGREE, DISAGREE, UNSURE
+- `why_explanation` (TEXT, NOT NULL)
+- `how_explanation` (TEXT, NOT NULL)
+- `what_if_explanation` (TEXT, NOT NULL)
+- `impact_explanation` (TEXT, NOT NULL)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aidr_user_id`, `idx_aidr_device_id`, `idx_aidr_source_system`, `idx_aidr_trust_tier`, `idx_aidr_status`, `idx_aidr_created_at`
+
+## AiDecisionEvidence (`ai_decision_evidence`)
+Discrete multi-signal evidence traces corroborating an AI decision record.
+- `id` (VARCHAR 36, PK)
+- `decision_record_id` (VARCHAR 36, FK → ai_decision_records.id ON DELETE CASCADE, NOT NULL)
+- `evidence_type` (VARCHAR 60, NOT NULL) — SENSOR_TELEMETRY, HISTORICAL_BENCHMARK, PREDICTIVE_HORIZON, CONSENT_AUTHORIZATION, KNOWLEDGE_GRAPH_LINK
+- `evidence_key` (VARCHAR 100, NOT NULL)
+- `evidence_value` (TEXT, NOT NULL)
+- `evidence_weight` (DOUBLE PRECISION, NOT NULL DEFAULT 1.0)
+- `evidence_source` (VARCHAR 80, NOT NULL)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aide_decision_id`, `idx_aide_type`, `idx_aide_source`
+
+## AiGovernanceRule (`ai_governance_rules`)
+Deterministic compliance, safety, and operational guardrail rules.
+- `id` (VARCHAR 36, PK)
+- `rule_name` (VARCHAR 120, NOT NULL)
+- `rule_category` (VARCHAR 50, NOT NULL) — SAFETY, FINANCIAL, CONSISTENCY, DATA_INTEGRITY, AUTONOMY
+- `description` (TEXT, NOT NULL)
+- `applies_to_systems` (VARCHAR 255, NOT NULL) — Comma-separated or ALL
+- `severity` (VARCHAR 20, NOT NULL) — LOW, MEDIUM, HIGH, CRITICAL
+- `threshold_value` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `is_active` (BOOLEAN, NOT NULL DEFAULT TRUE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aigr_category`, `idx_aigr_severity`, `idx_aigr_is_active`
+
+## AiGovernanceViolation (`ai_governance_violations`)
+Audit log of rule triggers and constraint breaches.
+- `id` (VARCHAR 36, PK)
+- `decision_record_id` (VARCHAR 36, FK → ai_decision_records.id ON DELETE CASCADE, NOT NULL)
+- `rule_id` (VARCHAR 36, FK → ai_governance_rules.id ON DELETE CASCADE, NOT NULL)
+- `rule_name` (VARCHAR 120, NOT NULL)
+- `violation_message` (TEXT, NOT NULL)
+- `severity` (VARCHAR 20, NOT NULL)
+- `auto_resolved` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_aigv_decision_id`, `idx_aigv_rule_id`, `idx_aigv_severity`, `idx_aigv_resolved`
+
+## UserAutonomyPreference (`user_autonomy_preferences`)
+User-configured governance thresholds and autonomous execution limits.
+- `id` (VARCHAR 36, PK)
+- `user_id` (VARCHAR 36, FK → users.id ON DELETE CASCADE, NOT NULL, UNIQUE)
+- `allow_autonomous_interventions` (BOOLEAN, NOT NULL DEFAULT TRUE)
+- `allow_auto_scheduling` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `allow_proactive_alerts` (BOOLEAN, NOT NULL DEFAULT TRUE)
+- `min_confidence_threshold` (INT, NOT NULL DEFAULT 75)
+- `require_approval_above_cost` (DOUBLE PRECISION, NOT NULL DEFAULT 3500.0)
+- `notification_style` (VARCHAR 30, NOT NULL DEFAULT 'VERBOSE')
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_uap_user_id`

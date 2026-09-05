@@ -1368,6 +1368,116 @@ Triggers ecosystem pattern discovery across aggregate repair observations.
 
 ---
 
+# AI Repair Ecosystem Digital Twin & Predictive Optimization Engine (Phase 33)
+
+Base URL: `/api/v1/digital-twin`
+
+## 1. Get Ecosystem Dashboard
+`GET /digital-twin/dashboard`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns aggregate metrics for all monitored digital twins.
+
+## 2. Get Device Digital Twin
+`GET /digital-twin/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns device snapshot, multi-horizon forecasts, scenario evaluations, optimal strategy, and insights.
+
+## 3. Refresh / Recalibrate Digital Twin
+`POST /digital-twin/{deviceId}/refresh`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Recalibrates twin state and regenerates predictions.
+
+## 4. Get Forecasts
+`GET /digital-twin/{deviceId}/forecasts`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 3, 6, 12, and 24-month horizon forecasts.
+
+## 5. Get Trajectory Data Points
+`GET /digital-twin/{deviceId}/trajectory`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 24-month trajectory data points for SVG charting.
+
+## 6. Get Alternative Scenarios
+`GET /digital-twin/{deviceId}/scenarios`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns evaluated counterfactual scenarios (REPAIR_NOW, PREVENTIVE_MAINTENANCE, REPLACE, etc.).
+
+## 7. Run Custom Simulation
+`POST /digital-twin/{deviceId}/simulate`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "usageIntensity": 1.2, "maintenanceFrequency": "HIGH", "repairBudget": 5000, "targetLifespanMonths": 36 }`
+Runs custom constraint simulation.
+
+## 8. Optimize Strategy
+`POST /digital-twin/{deviceId}/optimize`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Evaluates 6-factor deterministic optimization and returns recommended action.
+
+## 9. Get Simulation Events
+`GET /digital-twin/{deviceId}/events`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns chronological simulation and degradation event predictions.
+
+---
+
+# AI Decision Trust, Explainability & Governance Engine (Phase 34)
+
+Base URL: `/api/v1/trust`
+
+## 1. Get Trust Dashboard
+`GET /trust/dashboard`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns user's trust metrics, verified counts, system accuracy stats, active violations, and recent decision audits.
+
+## 2. Get Decision Audit Log
+`GET /trust/decisions`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all AI decision summaries with trust tiers, confidence scores, and feedback status.
+
+## 3. Get Device Decisions
+`GET /trust/decisions/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all AI decision records logged for a specific device.
+
+## 4. Get Decision Detail & Explainability
+`GET /trust/decisions/{decisionId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns 4-dimension explainability (Why, How, What-If, Impact), evidence traces, deterministic trust breakdown, and governance violations.
+
+## 5. Mark Decision as Reviewed
+`POST /trust/decisions/{decisionId}/review`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Marks decision as confirmed/reviewed by user.
+
+## 6. Submit Decision Feedback
+`POST /trust/decisions/{decisionId}/feedback`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "feedback": "AGREE" | "DISAGREE" | "UNSURE" }`
+Records human-in-the-loop validation of decision accuracy.
+
+## 7. Get Accuracy Statistics
+`GET /trust/accuracy`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns system reliability accuracy based on aggregate user feedback.
+
+## 8. Get Governance Rules
+`GET /trust/governance/rules`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns active safety and compliance rules enforced across AI models.
+
+## 9. Get User Autonomy Preferences
+`GET /trust/autonomy`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns human-in-the-loop thresholds, minimum confidence, max cost approval limits, and action toggles.
+
+## 10. Update User Autonomy Preferences
+`PUT /trust/autonomy`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "allowAutonomousInterventions": true, "allowAutoScheduling": false, "allowProactiveAlerts": true, "minConfidenceThreshold": 75, "requireApprovalAboveCost": 3500.0, "notificationStyle": "VERBOSE" }`
+Updates user autonomy constraints.
+
+---
+
 # Response Format
 
 Success

@@ -453,3 +453,34 @@
 - [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with `TWIN` badge
 - [x] Device Passport integration (`/devices/[id]`) with "⚡ Digital Twin" CTA banner, "Open Digital Twin" button, and navigation header shortcut
 - [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes
+
+---
+
+## Phase 34: AI Decision Trust, Explainability & Governance Engine [COMPLETE]
+- [x] Database migration `V19__ai_decision_trust_engine.sql` (`ai_decision_records`, `ai_decision_evidence`, `ai_governance_rules`, `ai_governance_violations`, `user_autonomy_preferences` tables with foreign keys and 18 performance indexes)
+- [x] JPA Entities (`AiDecisionRecord`, `AiDecisionEvidence`, `AiGovernanceRule`, `AiGovernanceViolation`, `UserAutonomyPreference`) and Spring Data repositories with cascade-delete and user/device-scoped query methods
+- [x] Immutable DTO layer in `TrustEngineDto.java` (TrustDashboardResponse, SystemTrustStats, DecisionSummaryResponse, DecisionAuditResponse, TrustScoreBreakdown, EvidenceTraceResponse, GovernanceRuleResponse, GovernanceViolationResponse, DecisionFeedbackRequest, UserAutonomyPreferencesResponse, UpdateAutonomyPreferencesRequest)
+- [x] `TrustScoreService.java` — deterministic 5-factor composite trust calculator (AI Confidence [35%], Evidence Density [20%], System Historical Reliability [20%], Governance Compliance [15%], Data Freshness [10%]) with 4 trust tiers (`VERIFIED`, `RELIABLE`, `CAUTION`, `REVIEW_REQUIRED`)
+- [x] `EvidenceTraceService.java` — multi-signal provenance aggregator collecting and weighting evidence from Autonomous Repair Agent, Digital Twin, Device Intelligence, Knowledge Graph, and Proactive Intervention engines
+- [x] `ExplainabilityService.java` — 4-dimension causal explainer generating structured human-readable rationales: **Why** (causal triggers & sensor deltas), **How** (corroborating graph & model evidence), **What-If** (counterfactual risk trajectory), and **Impact** (financial ROI & carbon savings)
+- [x] `GovernanceRuleService.java` — automated safety & compliance validator evaluating 6 deterministic rules (Confidence Threshold Check, High Financial Impact Review, Conflicting Signals Safeguard, Outdated Data Quarantine, Autonomous Action Guardrail, Critical Risk Escalation)
+- [x] `DecisionAuditService.java` — immutable decision logger recording complete decision lifecycles, evidence traces, governance violations, and human review status
+- [x] `UserConsentControlService.java` — manages user-governed autonomy constraints (autonomous intervention permissions, direct auto-booking toggles, proactive degradation alerts, minimum confidence threshold, maximum cost sign-off limits)
+- [x] `DecisionFeedbackService.java` — human-in-the-loop accuracy scoring and feedback ingestion (`AGREE`, `DISAGREE`, `UNSURE`)
+- [x] `TrustEngineDashboardService.java` — orchestrates aggregated user trust metrics, system reliability ratings, and recent decision streams
+- [x] REST Controller `DecisionTrustController.java` (`/api/v1/trust/**`) with 8 JWT-secured endpoints: dashboard, decisions, device decisions, decision detail, mark reviewed, submit feedback, accuracy stats, governance rules, and autonomy preferences
+- [x] Comprehensive backend test suite (6 test classes: `TrustScoreServiceTest`, `ExplainabilityServiceTest`, `EvidenceTraceServiceTest`, `GovernanceRuleServiceTest`, `DecisionAuditServiceTest`, `UserConsentControlServiceTest`)
+- [x] Frontend TypeScript types (`src/lib/types/trustEngine.ts`) and API client (`src/lib/api/trustEngine.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `TrustEngineHero.tsx` — Status header with overall trust index, system trust chips, verified percentage, and refresh trigger
+  - `TrustScoreBreakdownCard.tsx` — Visual 5-component weighted trust breakdown card with deterministic computation notice
+  - `EvidenceTraceViewer.tsx` — Provenance viewer detailing telemetry signals, knowledge graph precedents, and weightings
+  - `ActiveViolationsAlert.tsx` — Actionable alert banner highlighting triggered safety and compliance rules
+  - `UserAutonomyControls.tsx` — Interactive sliders and toggles configuring minimum confidence, maximum cost threshold, and action permissions
+  - `GovernanceRulesPanel.tsx` — Active deterministic guardrails catalog with severity badges and target system tags
+  - `DecisionAuditTable.tsx` — Filterable decision audit log with search, system filters, trust tiers, and risk levels
+  - `DecisionDetailModal.tsx` — Full explainability drawer showcasing 4-factor explanations, evidence trace, trust breakdown, and user feedback buttons
+- [x] Full interactive `/trust-engine` and `/trust-engine/[deviceId]` page routes with real-time audit inspection and autonomy settings
+- [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `TRUST` badge
+- [x] Device Passport integration (`/devices/[id]`) with "🛡️ Phase 34 Trust Engine" CTA banner and navigation header button
+- [x] TypeScript verification passing (`0 errors`)
