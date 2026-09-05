@@ -241,6 +241,14 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
               Device Intelligence
             </GlassButton>
             <GlassButton
+              href={`/learning/${deviceId}`}
+              size="sm"
+              icon={<Brain className="size-3.5" />}
+              className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-indigo-500/40 text-indigo-300 font-bold"
+            >
+              Learning Insights
+            </GlassButton>
+            <GlassButton
               href={`/trust-engine/${deviceId}`}
               size="sm"
               icon={<ShieldCheck className="size-3.5" />}
@@ -277,6 +285,36 @@ export default function DevicePassportDetailPage({ params }: PageParams) {
             isDemo={true}
             onOpenQR={() => setIsQRModalOpen(true)}
           />
+
+          {/* Phase 35: Federated Repair Intelligence & Continuous Learning Banner */}
+          <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-slate-900/90 via-indigo-950/40 to-slate-950/90 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-slate-950 font-black shadow-lg shadow-indigo-500/20">
+                <Brain className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                    Phase 35 Federated Learning
+                  </span>
+                  <span className="px-2 py-0.2 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    Zero-PII Continuous Intelligence
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                  Explore Anonymized Ecosystem Insights &amp; Validated Repair Signals
+                </h4>
+              </div>
+            </div>
+
+            <Link
+              href={`/learning/${deviceId}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-indigo-500 to-cyan-400 hover:from-indigo-400 hover:to-cyan-300 text-slate-950 transition-all shadow-lg hover:shadow-indigo-500/25 shrink-0"
+            >
+              <span>View Learning Insights</span>
+              <Brain className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
           {/* Phase 34: AI Decision Trust & Explainability Engine Banner */}
           <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-slate-900/90 via-emerald-950/40 to-slate-950/90 p-4 sm:p-5 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">

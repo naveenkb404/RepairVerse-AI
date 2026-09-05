@@ -905,4 +905,104 @@ User-configured governance thresholds and autonomous execution limits.
 - `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 - `updated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
 
-Indexes: `idx_uap_user_id`
+Indexes: `idx_uap_user_id`
+
+---
+
+# Module 20 — Privacy-Preserving Federated Repair Intelligence & Continuous Learning Engine (`V20__federated_repair_learning.sql`)
+
+## FederatedLearningBatch (`federated_learning_batches`)
+Stores federated learning cycle aggregation batches.
+- `id` (VARCHAR 36, PK)
+- `batch_reference` (VARCHAR 80, NOT NULL, UNIQUE)
+- `source_scope` (VARCHAR 50, NOT NULL DEFAULT 'ECOSYSTEM_GLOBAL')
+- `anonymized_device_count` (INT, NOT NULL DEFAULT 0)
+- `anonymized_repair_count` (INT, NOT NULL DEFAULT 0)
+- `generated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'AGGREGATED') — COLLECTING, AGGREGATED, VALIDATING, APPROVED, ACTIVE, SUPERSEDED, REJECTED, QUARANTINED
+- `privacy_level` (VARCHAR 30, NOT NULL DEFAULT 'STRICT') — STRICT, STANDARD, AGGREGATED
+- `validation_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `model_version` (VARCHAR 50, NOT NULL)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_flb_status`, `idx_flb_model_version`, `idx_flb_created_at`
+
+## RepairLearningSignal (`repair_learning_signals`)
+Aggregated bounded learning signals synthesized across failure modes and actions.
+- `id` (VARCHAR 36, PK)
+- `batch_id` (VARCHAR 36, FK → federated_learning_batches.id ON DELETE CASCADE, NOT NULL)
+- `signal_type` (VARCHAR 60, NOT NULL) — REPAIR_SUCCESS_RATE, PREVENTIVE_MAINTENANCE, REPAIR_OUTCOME_LEARNING
+- `device_category` (VARCHAR 50, NOT NULL)
+- `component_type` (VARCHAR 60, NOT NULL)
+- `failure_mode` (VARCHAR 80, NOT NULL)
+- `repair_action` (VARCHAR 80, NOT NULL)
+- `outcome_class` (VARCHAR 40, NOT NULL DEFAULT 'SUCCESSFUL_REPAIR')
+- `aggregated_frequency` (INT, NOT NULL DEFAULT 1)
+- `success_rate` (DOUBLE PRECISION, NOT NULL DEFAULT 0.85)
+- `average_cost` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `average_lifespan_gain` (INT, NOT NULL DEFAULT 0)
+- `sustainability_score` (DOUBLE PRECISION, NOT NULL DEFAULT 85.0)
+- `confidence` (DOUBLE PRECISION, NOT NULL DEFAULT 0.85)
+- `observation_count` (INT, NOT NULL DEFAULT 5)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_rls_batch_id`, `idx_rls_category`, `idx_rls_component`, `idx_rls_action`, `idx_rls_confidence`
+
+## IntelligenceModelVersion (`intelligence_model_versions`)
+Versioned intelligence models capturing learning lifecycle iterations.
+- `id` (VARCHAR 36, PK)
+- `model_name` (VARCHAR 100, NOT NULL)
+- `version` (VARCHAR 50, NOT NULL, UNIQUE) — e.g. R35.4
+- `parent_version` (VARCHAR 50, NULLABLE)
+- `status` (VARCHAR 30, NOT NULL DEFAULT 'COLLECTING') — COLLECTING, AGGREGATED, VALIDATING, APPROVED, ACTIVE, SUPERSEDED, REJECTED, QUARANTINED
+- `training_observations` (INT, NOT NULL DEFAULT 0)
+- `validation_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `trust_score` (INT, NOT NULL DEFAULT 85)
+- `improvement_percentage` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `activated_at` (TIMESTAMP, NULLABLE)
+- `retired_at` (TIMESTAMP, NULLABLE)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_imv_status`, `idx_imv_version`, `idx_imv_activated`
+
+## LearningValidationResult (`learning_validation_results`)
+Multi-dimensional candidate model validation checks.
+- `id` (VARCHAR 36, PK)
+- `model_version_id` (VARCHAR 36, FK → intelligence_model_versions.id ON DELETE CASCADE, NOT NULL)
+- `validation_type` (VARCHAR 60, NOT NULL) — RECOMMENDATION_ACCURACY, COST_ESTIMATION_STABILITY, TRUST_ALIGNMENT, GOVERNANCE_COMPLIANCE
+- `baseline_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `candidate_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `improvement_score` (DOUBLE PRECISION, NOT NULL DEFAULT 0.0)
+- `regression_detected` (BOOLEAN, NOT NULL DEFAULT FALSE)
+- `confidence` (DOUBLE PRECISION, NOT NULL DEFAULT 0.90)
+- `decision` (VARCHAR 30, NOT NULL DEFAULT 'ACCEPTED') — ACCEPTED, REJECTED, QUARANTINED
+- `validated_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_lvr_model_id`, `idx_lvr_decision`, `idx_lvr_regression`
+
+## PrivacyAuditEvent (`privacy_audit_events`)
+Audit trail of data scrubbing, PII stripping, and group threshold checks.
+- `id` (VARCHAR 36, PK)
+- `batch_id` (VARCHAR 36, FK → federated_learning_batches.id ON DELETE SET NULL, NULLABLE)
+- `event_type` (VARCHAR 60, NOT NULL) — BATCH_PRIVACY_AUDIT, PII_SCRUBBING, THRESHOLD_ENFORCEMENT
+- `privacy_rule` (VARCHAR 100, NOT NULL)
+- `records_processed` (INT, NOT NULL DEFAULT 0)
+- `records_filtered` (INT, NOT NULL DEFAULT 0)
+- `records_aggregated` (INT, NOT NULL DEFAULT 0)
+- `sensitive_fields_removed` (INT, NOT NULL DEFAULT 0)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_pae_batch_id`, `idx_pae_event_type`, `idx_pae_created_at`
+
+## LearningFeedback (`learning_feedback`)
+Community outcome consensus and feedback weights.
+- `id` (VARCHAR 36, PK)
+- `model_version_id` (VARCHAR 36, FK → intelligence_model_versions.id ON DELETE CASCADE, NOT NULL)
+- `decision_reference` (VARCHAR 80, NOT NULL)
+- `feedback_type` (VARCHAR 30, NOT NULL DEFAULT 'AGREE') — AGREE, DISAGREE, UNSURE
+- `outcome_quality` (DOUBLE PRECISION, NOT NULL DEFAULT 1.0)
+- `feedback_weight` (DOUBLE PRECISION, NOT NULL DEFAULT 1.0)
+- `created_at` (TIMESTAMP, NOT NULL DEFAULT CURRENT_TIMESTAMP)
+
+Indexes: `idx_lfb_model_id`, `idx_lfb_type`
+

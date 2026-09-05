@@ -44,6 +44,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: Home },
+  { label: "Learning Engine", href: "/learning", icon: Brain, badge: "LEARN", badgeColor: "cyan" },
   { label: "Trust & Governance", href: "/trust-engine", icon: ShieldCheck, badge: "TRUST", badgeColor: "cyan" },
   { label: "Digital Twin", href: "/digital-twin/dev-mock-01", icon: Activity, badge: "TWIN", badgeColor: "cyan" },
   { label: "Knowledge Graph", href: "/knowledge", icon: Brain, badge: "GRAPH", badgeColor: "cyan" },

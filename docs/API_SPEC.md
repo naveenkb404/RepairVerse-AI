@@ -1478,6 +1478,79 @@ Updates user autonomy constraints.
 
 ---
 
+# Federated Repair Intelligence & Continuous Learning Engine (Phase 35)
+
+Base URL: `/api/v1/learning`
+
+## 1. Get Learning Dashboard
+`GET /learning/dashboard`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns top-level federated model metrics, active signals, privacy compliance rate, and impact gains.
+
+## 2. Get Learning Batches
+`GET /learning/batches`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all federated outcome aggregation batches.
+
+## 3. Get Aggregated Signals
+`GET /learning/signals`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns bounded learning signals across component types and failure modes.
+
+## 4. Get Model Versions
+`GET /learning/models`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns all intelligence model iterations (`R35.1` → `R35.4`).
+
+## 5. Get Model Version Detail
+`GET /learning/models/{version}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns single model version metadata and validation score.
+
+## 6. Compare Model Candidate
+`GET /learning/models/{version}/comparison`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns comparative regression and improvement breakdown between candidate and active baseline.
+
+## 7. Get Privacy Audit Log
+`GET /learning/privacy/audit`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns cryptographic PII scrubbing and $N \ge 5$ threshold enforcement events.
+
+## 8. Get Impact Metrics
+`GET /learning/impact`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns macro-level recommendation accuracy gains, repair success gains, cost stability, and CO₂ savings.
+
+## 9. Get Learning Trends
+`GET /learning/trends`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns historical trajectory points and category distributions.
+
+## 10. Get Device Learning Profile
+`GET /learning/device/{deviceId}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Returns privacy-filtered ecosystem outcome intelligence and relevant signals for a specific device.
+
+## 11. Run Continuous Learning Cycle
+`POST /learning/run`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `[{ "category": "SMARTPHONE", "component": "BATTERY", "action": "REPLACE_BATTERY", "successful": true, "cost": 1850 }]`
+Triggers federated collection, privacy filter, signal extraction, and candidate validation.
+
+## 12. Activate Validated Model Version
+`POST /learning/activate/{version}`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Atomically promotes approved candidate model to `ACTIVE` and sets previous models to `SUPERSEDED`.
+
+## 13. Submit Learning Feedback
+`POST /learning/feedback`
+Header: `Authorization: Bearer <JWT_TOKEN>`
+Body: `{ "modelVersion": "R35.4", "decisionReference": "dec-001", "feedbackType": "AGREE", "outcomeQuality": 1.0 }`
+Records community outcome consensus without individual user bias.
+
+---
+
 # Response Format
 
 Success
@@ -1492,4 +1565,4 @@ Failure
 {
   "success": false,
   "message": ""
-}
+}

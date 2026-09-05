@@ -84,6 +84,13 @@ const PLATFORM_ITEMS: NavDropdownItem[] = [
     icon: Layers,
     badge: "TWIN",
   },
+  {
+    title: "Federated Learning",
+    description: "Privacy-preserving continuous intelligence",
+    href: "/learning",
+    icon: Brain,
+    badge: "LEARN",
+  },
 ];
 
 const SOLUTIONS_ITEMS: NavDropdownItem[] = [

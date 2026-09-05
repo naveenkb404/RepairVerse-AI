@@ -484,3 +484,36 @@
 - [x] Navigation links integrated into `Navbar.tsx` (desktop + mobile) and `DashboardSidebar.tsx` with glowing `TRUST` badge
 - [x] Device Passport integration (`/devices/[id]`) with "🛡️ Phase 34 Trust Engine" CTA banner and navigation header button
 - [x] TypeScript verification passing (`0 errors`)
+
+---
+
+## Phase 35: Privacy-Preserving Federated Repair Intelligence & Continuous Learning Engine [COMPLETE]
+- [x] Database migration `V20__federated_repair_learning.sql` (`federated_learning_batches`, `repair_learning_signals`, `intelligence_model_versions`, `learning_validation_results`, `privacy_audit_events`, `learning_feedback` tables with foreign keys and 16 performance indexes)
+- [x] JPA Entities (`FederatedLearningBatch`, `RepairLearningSignal`, `IntelligenceModelVersion`, `LearningValidationResult`, `PrivacyAuditEvent`, `LearningFeedback`) and Spring Data repositories
+- [x] Immutable DTO layer in `FederatedLearningDto.java` (LearningDashboardResponse, LearningBatchResponse, LearningSignalResponse, ModelVersionResponse, ValidationResultResponse, PrivacyAuditResponse, LearningImpactResponse, LearningTrendResponse, LearningFeedbackRequest, LearningRunResponse, LearningModelComparisonResponse, DeviceLearningProfileResponse)
+- [x] `PrivacyPreservationService.java` — zero-PII scrubbing engine enforcing cryptographic salt-hashing of identifiers and strict group aggregation thresholds ($N \ge 5$) before signal exposure
+- [x] `RepairLearningSignalService.java` — bounded moving-average learning synthesizer ($80\%$ prior, $20\%$ new evidence, $\pm 15\%$ max rate shift) across component failure modes and actions
+- [x] `LearningValidationService.java` — multi-dimensional regression detection engine validating recommendation accuracy, cost prediction stability, trust alignment, and governance compliance
+- [x] `LearningModelVersionService.java` — version lifecycle manager controlling atomic promotion of approved models (`R35.1` → `R35.4 ACTIVE` → `R35.5`) and retirement of superseded versions
+- [x] `ContinuousRepairLearningService.java` — master orchestrator managing the full federated learning cycle: collection → privacy filtering → signal extraction → candidate validation → governance verification → activation
+- [x] `LearningKnowledgeGraphIntegrationService.java` — updates Knowledge Graph relationship strengths ($75\%$ prior, $25\%$ validated signal) and discovers high-success pattern insights upon model approval
+- [x] `LearningDecisionIntelligenceService.java` — provides device-scoped privacy-preserving learning profiles and enriched recommendation parameters
+- [x] `LearningImpactService.java` — evaluates macro-level accuracy gains, cost stability, and sustainability footprint improvements
+- [x] `LearningFeedbackService.java` — captures and aggregates user outcome feedback (`AGREE`, `DISAGREE`, `UNSURE`) to calibrate model confidence without single-user bias
+- [x] `FederatedLearningDashboardService.java` — synthesizes top-level learning statistics, active models, signals, and audits
+- [x] REST Controller `FederatedLearningController.java` (`/api/v1/learning/**`) with 13 JWT-secured endpoints
+- [x] Comprehensive backend test suite (9 test classes covering all services and controller)
+- [x] Frontend TypeScript types (`src/lib/types/federatedLearning.ts`) and API client (`src/lib/api/federatedLearning.ts`) with rich Demo Mode fallbacks
+- [x] Reusable Glassmorphism UI components:
+  - `FederatedLearningHero.tsx` — Status header with active model version, trust score, privacy score, and run trigger
+  - `LearningImpactDashboard.tsx` — 4-metric impact grid showing accuracy, success rate, cost stability, and CO₂ gains
+  - `LearningSignalExplorer.tsx` — Filterable list of learned component patterns with observation counts and confidence
+  - `ModelVersionTimeline.tsx` — Visual lineage showing model versions and activation metadata
+  - `ModelComparisonPanel.tsx` — Candidate vs active baseline comparison with promotion trigger
+  - `PrivacyAuditPanel.tsx` — Audit log of records processed, filtered, and aggregated
+  - `LearningValidationPanel.tsx` — Multi-dimension validation checklist and regression status
+  - `LearningFeedbackPanel.tsx` — Aggregated community agreement and outcome quality distribution
+  - `LearningTimeline.tsx` — Chronological event stream of federated learning events
+- [x] Full interactive `/learning` dashboard and device-scoped `/learning/[deviceId]` page routes
+- [x] Navigation links integrated into `Navbar.tsx` (Platform dropdown & mobile drawer), `DashboardSidebar.tsx` (`LEARN` badge), and Device Passport (`/devices/[id]`)
+- [x] TypeScript verification passing (`0 errors`) and Next.js production build passing across all routes
